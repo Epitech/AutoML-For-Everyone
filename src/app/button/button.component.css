@@ -1,6 +1,6 @@
 .button {
   border-radius: 20px;
-  background-color: #4376da;
+  background-color: var(--docaposte-blue);
   padding: 10px 50px;
 }
 

@@ -1,7 +1,18 @@
+.table {
+  margin: 10px auto;
+}
+
 .buttons {
-    display: flex;
-    align-content: space-around;
-    /* margin: auto; */
-    width: 100%;
-    background-color: black;
+  display: flex;
+  align-content: space-around;
+  width: 100%;
+  background-color: black;
+}
+
+th {
+  color: var(--docaposte-darkblue);
+}
+
+td {
+  text-align: center;
 }

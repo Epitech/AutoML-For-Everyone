@@ -9,6 +9,7 @@ import { ModelSelectionComponent } from './model-selection/model-selection.compo
 import { PredictionComponent } from './prediction/prediction.component';
 import { TrainComponent } from './train/train.component';
 import { ButtonComponent } from './button/button.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ButtonComponent } from './button/button.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NoopAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

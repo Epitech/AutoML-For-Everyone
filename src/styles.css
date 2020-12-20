@@ -1,8 +1,9 @@
 :root {
-  --topbar-color: #ffd913;
+  --docaposte-yellow: #ffd913;
+  --docaposte-blue: #4376da;
+  --docaposte-darkblue: #00ff;
 }
 
-body {
-  margin: 0;
-  font-family: sans-serif;
-}
+/* angular material */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
