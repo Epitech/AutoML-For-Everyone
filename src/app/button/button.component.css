@@ -1,0 +1,10 @@
+.button {
+  border-radius: 20px;
+  background-color: #4376da;
+  padding: 10px 50px;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}

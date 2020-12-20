@@ -1,0 +1,9 @@
+.topbar {
+  height: 150px;
+  background-color: var(--topbar-color);
+  display: flex;
+}
+
+.logo {
+  margin: auto;
+}

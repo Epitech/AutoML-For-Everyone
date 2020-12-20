@@ -1,0 +1,7 @@
+.buttons {
+    display: flex;
+    align-content: space-around;
+    /* margin: auto; */
+    width: 100%;
+    background-color: black;
+}
