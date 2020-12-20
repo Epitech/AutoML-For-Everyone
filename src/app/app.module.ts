@@ -11,6 +11,7 @@ import { TrainComponent } from './train/train.component';
 import { ButtonComponent } from './button/button.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
+import { SliderComponent } from './slider/slider.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { MatSliderModule } from '@angular/material/slider';
     ModelSelectionComponent,
     PredictionComponent,
     TrainComponent,
-    ButtonComponent
+    ButtonComponent,
+    SliderComponent
   ],
   imports: [
     BrowserModule,

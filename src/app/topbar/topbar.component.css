@@ -1,9 +1,14 @@
 .topbar {
-  height: 150px;
+  height: 100px;
   background-color: var(--docaposte-yellow);
   display: flex;
 }
 
-.logo {
+.link {
   margin: auto;
+}
+
+.logo {
+  width: auto;
+  height: 70px;
 }

@@ -1,43 +1,60 @@
+<h1>My dataset</h1>
+
 <table class="table">
     <thead>
         <tr>
-            <th>Column</th>
-            <th>Coefficient</th>
-            <th>Data type</th>
-            <th>Example</th>
+            <th>
+                <h2>Column</h2>
+            </th>
+            <th>
+                <h2>Coefficient</h2>
+            </th>
+            <th>
+                <h2>Data type</h2>
+            </th>
+            <th>
+                <h2>Example</h2>
+            </th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>Name</td>
             <td>
-                <mat-slider class="mat-app-background slider" max="1" step="0.01" thumbLabel>
-                </mat-slider>
+                <app-slider [value]='0.00'></app-slider>
             </td>
             <td>String</td>
             <td>Ugo</td>
         </tr>
         <tr>
             <td>Age</td>
-            <td>TODO</td>
+            <td>
+                <app-slider [value]='0.50'></app-slider>
+            </td>
             <td>Integer</td>
             <td>20</td>
         </tr>
         <tr>
             <td>Id</td>
-            <td>TODO</td>
+            <td>
+                <app-slider [value]='0.00'></app-slider>
+            </td>
             <td>Integer</td>
             <td>1</td>
         </tr>
         <tr>
             <td>Grade</td>
-            <td>TODO</td>
+            <td>
+                <app-slider [value]='0.75'></app-slider>
+            </td>
             <td>Float</td>
             <td>17.3</td>
         </tr>
         <tr>
             <td>Graduated</td>
-            <td>TODO</td>
+            <td>
+                <app-slider [value]='1.00'></app-slider>
+            </td>
             <td>Boolean</td>
             <td>true</td>
         </tr>
