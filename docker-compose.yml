@@ -4,9 +4,11 @@ services:
     build: .
     volumes:
       - ./app:/app
+      - ./datasets:/datasets
     environment:
       - FLASK_ENV=development
       - FLASK_APP=app
+      - DATASETS_DIRECTORY=/datasets
     ports:
       - "5000:5000"
     command: ["flask", "run", "--host=0.0.0.0"]
