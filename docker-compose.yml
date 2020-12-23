@@ -1,0 +1,12 @@
+version: "2.4"
+services:
+  flask:
+    build: .
+    volumes:
+      - ./app:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app
+    ports:
+      - "5000:5000"
+    command: ["flask", "run", "--host=0.0.0.0"]
