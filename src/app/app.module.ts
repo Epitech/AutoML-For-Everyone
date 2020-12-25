@@ -12,6 +12,7 @@ import { ButtonComponent } from './button/button.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { SliderComponent } from './slider/slider.component';
+import { DatasetsComponent } from './datasets/datasets.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { SliderComponent } from './slider/slider.component';
     PredictionComponent,
     TrainComponent,
     ButtonComponent,
-    SliderComponent
+    SliderComponent,
+    DatasetsComponent
   ],
   imports: [
     BrowserModule,

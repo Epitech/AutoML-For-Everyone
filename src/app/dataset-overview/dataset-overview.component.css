@@ -5,17 +5,25 @@
 .buttons {
   display: flex;
   justify-content: space-around;
-  width: 800px;
+  width: 815px;
   margin: auto;
+}
+
+.config {
+  background-color: var(--docaposte-blue);
+  padding: 10px 50px;
+  border: none;
+  margin: 1px;
+  cursor: pointer;
+  color: white;
 }
 
 table {
   border-collapse: collapse;
 }
 
-h1,
-h2 {
-  color: var(--docaposte-darkblue);
+.table {
+  margin-bottom: 35px;
 }
 
 th {

@@ -1,68 +1,34 @@
 <h1>My dataset</h1>
 
+<button *ngFor="let config of dataset.configs; let index = index" (click)="change_config(index)" class="config">
+    Config {{index}}
+</button>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                <h2>Column</h2>
-            </th>
-            <th>
-                <h2>Coefficient</h2>
-            </th>
-            <th>
-                <h2>Data type</h2>
-            </th>
-            <th>
-                <h2>Example</h2>
+            <th *ngFor="let title of ['Column', 'Coefficient', 'Data type', 'Example']">
+                <h2>{{title}}</h2>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Name</td>
+        <tr *ngFor="let o of dataset.values[0] | keyvalue">
+            <td>{{o.key}}</td>
             <td>
-                <app-slider [value]='0.00'></app-slider>
+                <app-slider [value]='dataset.configs[config_nb][o.key]'></app-slider>
             </td>
-            <td>String</td>
-            <td>Ugo</td>
+            <td>{{o.value.constructor.name}}</td>
+            <td>{{o.value}}</td>
         </tr>
         <tr>
-            <td>Age</td>
-            <td>
-                <app-slider [value]='0.50'></app-slider>
-            </td>
-            <td>Integer</td>
-            <td>20</td>
-        </tr>
-        <tr>
-            <td>Id</td>
-            <td>
-                <app-slider [value]='0.00'></app-slider>
-            </td>
-            <td>Integer</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <td>Grade</td>
-            <td>
-                <app-slider [value]='0.75'></app-slider>
-            </td>
-            <td>Float</td>
-            <td>17.3</td>
-        </tr>
-        <tr>
-            <td>Graduated</td>
-            <td>
-                <app-slider [value]='1.00'></app-slider>
-            </td>
-            <td>Boolean</td>
-            <td>true</td>
         </tr>
     </tbody>
 </table>
 
 <div class="buttons">
-    <app-button url="model">Model</app-button>
-    <app-button url="predict">Prediction</app-button>
-    <app-button url="train">Train</app-button>
+    <app-button>tpot classic</app-button>
+    <app-button url="/model">Model (deprecated)</app-button>
+    <app-button url="/predict">Prediction (deprecated)</app-button>
+    <app-button url="/train">Train (deprecated)</app-button>
 </div>

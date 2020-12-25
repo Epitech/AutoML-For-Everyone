@@ -1,0 +1,7 @@
+<h1>My datasets</h1>
+
+<div class="buttons">
+    <app-button *ngFor="let d of datasets" url='/dataset/{{d}}'>
+        {{d}}
+    </app-button>
+</div>

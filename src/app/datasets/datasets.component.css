@@ -1,0 +1,12 @@
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: auto;
+}
+
+app-button {
+  width: 500px;
+  text-align: center;
+  margin: 20px auto;
+}
