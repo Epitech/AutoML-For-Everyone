@@ -8,6 +8,7 @@ flask = "*"
 pymongo = "*"
 pandas = "*"
 flask-executor = "*"
+tpot = "*"
 
 [dev-packages]
 
