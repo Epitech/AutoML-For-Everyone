@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
 
 from flask import Flask, request, abort
+from flask_executor import Executor
 from flask_cors import CORS
 import os
 from flask.json import jsonify
 from pymongo import MongoClient
 from pathlib import Path
+from tpot import TPOTClassifier
 
 import app.dataset as dataset
 
 app = Flask(__name__)
+executor = Executor(app)
 CORS(app)
 
 
@@ -56,3 +59,20 @@ def set_dataset_config(id):
     app.logger.debug(f"Inserting {dataset}")
     db.datasets.replace_one({"name": id}, dataset, upsert=True)
     return ""
+
+
+@app.route("/dataset/<id>/train", methods=["POST"])
+def start_training(id):
+    app.logger.debug(f"Starting training dataset {id}")
+    result = db.datasets.find_one({"name": id})
+    config = result["config"]
+    app.logger.debug(f"Found configuration {config}")
+    executor.submit(train_model, id, config)
+    return ""
+
+
+def train_model(id, config):
+    app.logger.debug(f"Starting training on dataset {id}")
+    classifier = TPOTClassifier()
+    X, y = dataset.get_dataset(Path(DATASETS_DIRETORY) / id, config)
+    classifier.fit(X, y)
