@@ -40,7 +40,9 @@ const DATASETS = [
   },
 ];
 
-export const get_datasets = async () => DATASETS.map((e) => e.id);
+export const get_datasets = async () => {
+  return DATASETS.map((e) => e.id);
+};
 
 export const get_dataset = async (id: string) => {
   const d = DATASETS.find((e) => e.id === id);
