@@ -4,6 +4,9 @@ from flask import Flask, request, abort
 import os
 from flask.json import jsonify
 from pymongo import MongoClient
+from pathlib import Path
+
+import app.dataset as dataset
 
 app = Flask(__name__)
 
@@ -37,7 +40,8 @@ def get_dataset_config(id):
     result = db.datasets.find_one({"name": id})
     app.logger.debug(f"Result for dataset {id}: {result}")
     if not result:
-        return {}
+        return dataset.create_initial_dataset_config(
+            Path(DATASETS_DIRECTORY) / id)
     return jsonify(result["config"])
 
 
