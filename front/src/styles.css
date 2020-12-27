@@ -1,0 +1,20 @@
+:root {
+  --docaposte-yellow: #ffd913;
+  --docaposte-blue: #4376da;
+  --docaposte-darkblue: #00ff;
+}
+
+/* angular material */
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+h1,
+h2 {
+  color: var(--docaposte-darkblue);
+}

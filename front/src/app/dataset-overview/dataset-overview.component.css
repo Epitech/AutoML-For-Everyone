@@ -1,0 +1,44 @@
+.table {
+  margin: 10px auto;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 815px;
+  margin: auto;
+}
+
+.config {
+  background-color: var(--docaposte-blue);
+  padding: 10px 50px;
+  border: none;
+  margin: 1px;
+  cursor: pointer;
+  color: white;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+.table {
+  margin-bottom: 35px;
+}
+
+th {
+  width: 200px;
+}
+
+th {
+  color: var(--docaposte-darkblue);
+}
+
+td {
+  text-align: center;
+}
+
+td, th {
+  border: black solid 1px;
+  margin: 0;
+}

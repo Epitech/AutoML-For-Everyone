@@ -1,0 +1,17 @@
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 1000px;
+  margin: auto;
+  margin-top: 50px;
+}
+
+app-button {
+    width: 250px;
+    text-align: center;
+}
+
+h1,
+h2 {
+  color: var(--docaposte-darkblue);
+}

@@ -1,0 +1,15 @@
+.button {
+  border-radius: 20px;
+  background-color: var(--docaposte-blue);
+  padding: 10px 30px;
+}
+
+.link {
+  text-decoration: none;
+  color: white;
+}
+
+.logo {
+  width: 50%;
+  height: auto;
+}
