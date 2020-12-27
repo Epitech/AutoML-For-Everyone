@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from flask import Flask, request, abort
+from flask_cors import CORS
 import os
 from flask.json import jsonify
 from pymongo import MongoClient
@@ -9,6 +10,7 @@ from pathlib import Path
 import app.dataset as dataset
 
 app = Flask(__name__)
+CORS(app)
 
 
 def getenv(key) -> str:

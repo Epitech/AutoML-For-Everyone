@@ -9,6 +9,7 @@ pymongo = "*"
 pandas = "*"
 flask-executor = "*"
 tpot = "*"
+flask-cors = "*"
 
 [dev-packages]
 
