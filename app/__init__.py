@@ -8,12 +8,14 @@ from flask.json import jsonify
 from pymongo import MongoClient
 from pathlib import Path
 from tpot import TPOTClassifier
+import logging
 
 import app.dataset as dataset
 
 app = Flask(__name__)
 executor = Executor(app)
 CORS(app)
+logging.basicConfig(level=logging.DEBUG)
 
 
 def getenv(key) -> str:
@@ -23,7 +25,7 @@ def getenv(key) -> str:
     return value
 
 
-DATASETS_DIRECTORY = getenv("DATASETS_DIRECTORY")
+DATASETS_DIRECTORY = Path(getenv("DATASETS_DIRECTORY"))
 MONGO_HOST = getenv("MONGO_HOST")
 
 client = MongoClient(MONGO_HOST)
@@ -40,13 +42,18 @@ def get_datasets():
     return jsonify(os.listdir(DATASETS_DIRECTORY))
 
 
+@app.route("/dataset/<id>/sweetviz")
+def get_dataset_visualization(id):
+    return dataset.get_dataset_visualization(DATASETS_DIRECTORY / id)
+
+
 @app.route("/dataset/<id>/config")
 def get_dataset_config(id):
     result = db.datasets.find_one({"name": id})
     app.logger.debug(f"Result for dataset {id}: {result}")
     if not result:
         return dataset.create_initial_dataset_config(
-            Path(DATASETS_DIRECTORY) / id)
+            DATASETS_DIRECTORY / id)
     return jsonify(result["config"])
 
 
