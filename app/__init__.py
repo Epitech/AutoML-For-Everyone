@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, request, abort
+from flask import Flask, request, abort, send_from_directory
 from flask_executor import Executor
 from flask_cors import CORS
 import os
@@ -9,10 +9,13 @@ from pymongo import MongoClient
 from pathlib import Path
 from tpot import TPOTClassifier
 import logging
+import numpy as np
+import pickle
 
 import app.dataset as dataset
 
 app = Flask(__name__)
+app.config['EXECUTOR_PROPAGATE_EXCEPTIONS'] = True
 executor = Executor(app)
 CORS(app)
 logging.basicConfig(level=logging.DEBUG)
@@ -79,7 +82,29 @@ def start_training(id):
 
 
 def train_model(id, config):
+    dataset_path = DATASETS_DIRECTORY / id
     app.logger.debug(f"Starting training on dataset {id}")
-    classifier = TPOTClassifier()
-    X, y = dataset.get_dataset(Path(DATASETS_DIRETORY) / id, config)
-    classifier.fit(X, y)
+    classifier = TPOTClassifier(
+        verbosity=2, generations=10, population_size=10)
+    app.logger.debug("Created classifier")
+    X, y = dataset.get_dataset(dataset_path, config)
+    app.logger.debug(f"Loaded dataset: {X} {y}")
+    classifier.fit(X.to_numpy().astype(np.float64),
+                   y.to_numpy().astype(np.float64))
+    app.logger.debug("Finished training")
+    pipeline_path = dataset_path.with_suffix(".pipeline.pickle")
+    app.logger.debug(f"Best pipeline : {classifier.fitted_pipeline_}")
+    app.logger.debug(f"Saving best pipeline to {pipeline_path}")
+    with open(pipeline_path, "wb") as f:
+        pickle.dump(classifier.fitted_pipeline_, f)
+    code_path = dataset_path.with_suffix(".pipeline.py")
+    app.logger.debug(f"Saving pipeline code to {code_path}")
+    classifier.export(code_path)
+    app.logger.debug("Finished exporting")
+
+
+@app.route("/dataset/<id>/export")
+def export_result(id):
+    code_path = Path(id).with_suffix(".pipeline.py")
+    return send_from_directory(str(DATASETS_DIRECTORY),
+                               str(code_path), as_attachment=True)
