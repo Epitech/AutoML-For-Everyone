@@ -9,6 +9,15 @@
   margin: auto;
 }
 
+.button {
+  cursor: pointer;
+  border: none;
+  color: white;
+  border-radius: 20px;
+  background-color: var(--docaposte-blue);
+  padding: 10px 30px;
+}
+
 .config {
   background-color: var(--docaposte-blue);
   padding: 10px 50px;

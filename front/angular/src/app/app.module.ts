@@ -13,6 +13,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
 import { SliderComponent } from './slider/slider.component';
 import { DatasetsComponent } from './datasets/datasets.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -24,15 +25,16 @@ import { DatasetsComponent } from './datasets/datasets.component';
     TrainComponent,
     ButtonComponent,
     SliderComponent,
-    DatasetsComponent
+    DatasetsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NoopAnimationsModule,
     MatSliderModule,
+    MatCheckboxModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

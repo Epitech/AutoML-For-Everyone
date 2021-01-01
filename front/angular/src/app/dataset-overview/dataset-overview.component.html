@@ -1,25 +1,21 @@
 <h1>My dataset</h1>
 
-<button *ngFor="let config of dataset.configs; let index = index" (click)="change_config(index)" class="config">
-    Config {{index}}
-</button>
+<button class="config" (click)="save_config()">Save config</button>
 
-<table class="table">
+<table class="table" *ngIf="dataset !== undefined">
     <thead>
         <tr>
-            <th *ngFor="let title of ['Column', 'Coefficient', 'Data type', 'Example']">
+            <th *ngFor="let title of ['Column', 'Enable ?']">
                 <h2>{{title}}</h2>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let o of dataset.values[0] | keyvalue">
+        <tr *ngFor="let o of dataset.columns | keyvalue">
             <td>{{o.key}}</td>
             <td>
-                <app-slider [value]='dataset.configs[config_nb][o.key]'></app-slider>
+                <mat-checkbox [checked]="o.value" (change)="changeCheck(o.key, $event.checked)"></mat-checkbox>
             </td>
-            <td>{{o.value.constructor.name}}</td>
-            <td>{{o.value}}</td>
         </tr>
         <tr>
         </tr>
@@ -27,8 +23,5 @@
 </table>
 
 <div class="buttons">
-    <app-button>tpot classic</app-button>
-    <app-button url="/model">Model (deprecated)</app-button>
-    <app-button url="/predict">Prediction (deprecated)</app-button>
-    <app-button url="/train">Train (deprecated)</app-button>
+    <button class="button" (click)='train()'>tpot classic</button>
 </div>
