@@ -9,7 +9,9 @@ log = logging.getLogger(__name__)
 
 
 def create_initial_dataset_config(path: Path):
-    data = pd.read_csv(path, sep=",")
+    # TODO: detect separator once, store it, and give it explicitely
+    # It would allow pandas to use the faster C csv engine.
+    data = pd.read_csv(path, sep=None)
     return {
         "columns": {
             column: True for column in data.columns
@@ -19,7 +21,7 @@ def create_initial_dataset_config(path: Path):
 
 
 def get_dataset(path: Path, config: dict):
-    data = pd.read_csv(path, sep=",")
+    data = pd.read_csv(path, sep=None)
     columns = [k for k, v in config["columns"].items() if v]
     label = config["label"]
     columns.remove(label)
@@ -37,7 +39,7 @@ def get_dataset_visualization(path: Path):
         return open(viz_path).read()
     else:
         log.debug("Viz not found. Loading dataset")
-        data = pd.read_csv(path, sep=",")
+        data = pd.read_csv(path, sep=None)
         data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
         log.debug("Generating viz")
         viz = sv.analyze(data)
