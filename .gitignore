@@ -14,3 +14,6 @@ instance/
 .coverage
 dist/
 *.egg-info/
+
+datasets
+!datasets/*.csv
