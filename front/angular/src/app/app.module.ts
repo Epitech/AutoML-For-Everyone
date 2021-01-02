@@ -5,9 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TopbarComponent } from './topbar/topbar.component';
 import { DatasetOverviewComponent } from './dataset-overview/dataset-overview.component';
-import { ModelSelectionComponent } from './model-selection/model-selection.component';
-import { PredictionComponent } from './prediction/prediction.component';
-import { TrainComponent } from './train/train.component';
 import { ButtonComponent } from './button/button.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
@@ -20,9 +17,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     AppComponent,
     TopbarComponent,
     DatasetOverviewComponent,
-    ModelSelectionComponent,
-    PredictionComponent,
-    TrainComponent,
     ButtonComponent,
     SliderComponent,
     DatasetsComponent,

@@ -5,3 +5,11 @@
         {{d}}
     </app-button>
 </div>
+
+
+<form onsubmit="return false">
+    <label for="file">Choose File</label>
+    <input type="file" id="file" (change)="handleChange($event)">
+
+    <button (click)="upload()">Upload</button>
+</form>

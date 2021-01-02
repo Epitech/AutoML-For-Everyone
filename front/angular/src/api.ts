@@ -18,6 +18,21 @@ export const put_config = async (id: string, config: any) => {
   return fetch(URL + `/${id}/config`, {
     method: 'PUT',
     body: JSON.stringify(config),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
+  });
+};
+
+export const post_predict = async (id: string, data: any) => {
+  console.log('posting train', id, data);
+
+  return fetch(URL + `/${id}/predict`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+    }),
   });
 };
 
@@ -36,7 +51,14 @@ export const launch_export = (id: string) => {
 };
 
 export const get_sweetviz = (id: string) => {
-  return 'https://' + URL + `/${id}/sweetviz`;
+  return URL + `/${id}/sweetviz`;
+};
+
+export const upload_dataset = (file: File) => {
+  if (!file) return;
+  const formData: FormData = new FormData();
+  formData.append('file', file, file.name);
+  fetch(URL, { method: 'POST', body: formData });
 };
 
 // type config = {};//key:boolean
