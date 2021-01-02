@@ -42,7 +42,8 @@ def home():
 
 @app.route("/dataset")
 def get_datasets():
-    return jsonify(os.listdir(DATASETS_DIRECTORY))
+    return jsonify([d for d in os.listdir(DATASETS_DIRECTORY)
+                    if Path(d).suffix == ".csv"])
 
 
 @app.route("/dataset/<id>/sweetviz")
