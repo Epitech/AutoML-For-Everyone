@@ -130,6 +130,8 @@ def predict_result(id):
     app.logger.debug(f"predicting for dataset {id}")
     data = request.json
     app.logger.debug(f"got data {data}")
+    data = [data[k] for k in sorted(data.keys())]
+    app.logger.debug(f"sorted data {data}")
     code_path = DATASETS_DIRECTORY / Path(id).with_suffix(".pipeline.pickle")
     with open(code_path, "rb") as f:
         pipeline = pickle.load(f)
