@@ -128,9 +128,16 @@ def export_result(id):
 @app.route("/dataset/<id>/predict", methods=["POST"])
 def predict_result(id):
     app.logger.debug(f"predicting for dataset {id}")
+    result = db.datasets.find_one({"name": id})
+    config = result["config"]
+    app.logger.debug(f"Found configuration {config}")
     data = request.json
     app.logger.debug(f"got data {data}")
-    data = [float(data[k]) for k in sorted(data.keys())]
+    data = [float(data[k])
+            for k in sorted(data.keys())
+            if k in config["columns"]
+            and config["columns"][k]
+            and config["label"] != k]
     app.logger.debug(f"sorted data {data}")
     code_path = DATASETS_DIRECTORY / Path(id).with_suffix(".pipeline.pickle")
     with open(code_path, "rb") as f:
