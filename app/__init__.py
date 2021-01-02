@@ -3,6 +3,7 @@
 from flask import Flask, request, abort, send_from_directory
 from flask_executor import Executor
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 import os
 from flask.json import jsonify
 from pymongo import MongoClient
@@ -44,6 +45,19 @@ def home():
 def get_datasets():
     return jsonify([d for d in os.listdir(DATASETS_DIRECTORY)
                     if Path(d).suffix == ".csv"])
+
+
+@app.route("/dataset", methods=["POST"])
+def upload_dataset():
+    if "file" in request.files:
+        file = request.files["file"]
+        if file.filename == "":
+            abort(400)
+        filename = secure_filename(file.filename)
+        file.save(DATASETS_DIRECTORY / filename)
+        return {"status": "ok"}
+    else:
+        abort(400)
 
 
 @app.route("/dataset/<id>/sweetviz")
