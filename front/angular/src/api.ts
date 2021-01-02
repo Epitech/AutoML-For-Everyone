@@ -31,6 +31,14 @@ export const launch_train = async (id: string) => {
   return res;
 };
 
+export const launch_export = (id: string) => {
+  window.open(URL + `/${id}/export`, '_blank');
+};
+
+export const get_sweetviz = (id: string) => {
+  return 'https://' + URL + `/${id}/sweetviz`;
+};
+
 // type config = {};//key:boolean
 
 // type Dataset = {

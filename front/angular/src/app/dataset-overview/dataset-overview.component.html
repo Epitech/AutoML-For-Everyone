@@ -25,3 +25,11 @@
 <div class="buttons">
     <button class="button" (click)='train()'>tpot classic</button>
 </div>
+
+<h2>Train result</h2>
+
+<div>
+    <button class="button export" (click)='export()'>export</button>
+</div>
+
+<iframe [src]="getSweetVizUrl()"></iframe>

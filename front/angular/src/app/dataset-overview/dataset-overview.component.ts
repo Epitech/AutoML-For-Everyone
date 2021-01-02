@@ -1,6 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { get_config, launch_train, put_config } from '../../api';
+import {
+  get_config,
+  launch_train,
+  put_config,
+  get_sweetviz,
+  launch_export,
+} from '../../api';
 
 @Component({
   selector: 'app-dataset-overview',
@@ -42,6 +48,14 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
 
   train(): void {
     put_config(this.id, this.dataset).then(() => launch_train(this.id));
+  }
+
+  export(): void {
+    launch_export(this.id);
+  }
+
+  getSweetVizUrl(): string {
+    return get_sweetviz(this.id);
   }
 
   ngOnDestroy() {
