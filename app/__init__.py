@@ -12,6 +12,7 @@ from tpot import TPOTClassifier
 import logging
 import numpy as np
 import pickle
+import shap
 
 import app.dataset as dataset
 
@@ -106,6 +107,12 @@ def train_model(id, config):
     app.logger.debug(f"Loaded dataset: {X} {y}")
     classifier.fit(X.to_numpy().astype(np.float64),
                    y.to_numpy().astype(np.float64))
+
+    #explainer = shap.KernelExplainer(classifier.predict_proba, X.to_numpy().astype(np.float64), link="logit")
+    #shap_values = explainer.shap_values(X.to_numpy().astype(np.float64), nsamples=100)
+    #shap.summary_plot(shap_values, X.to_numpy().astype(np.float64), plot_type="bar", show=False)
+    #plt.savefig('save.png')
+
     app.logger.debug("Finished training")
     pipeline_path = dataset_path.with_suffix(".pipeline.pickle")
     app.logger.debug(f"Best pipeline : {classifier.fitted_pipeline_}")
