@@ -7,9 +7,10 @@ services:
       - ./datasets:/datasets
     environment:
       FLASK_ENV: development
-      FLASK_APP: app
+      FLASK_APP: "app:create_app()"
       DATASETS_DIRECTORY: /datasets
       MONGO_HOST: mongo
+      DASK_SCHEDULER_HOST: dask-scheduler:8786
     ports:
       - "5000:5000"
     command: ["flask", "run", "--host=0.0.0.0"]
@@ -17,3 +18,19 @@ services:
   mongo:
     image: mongo
     restart: always
+
+  dask-scheduler:
+    build: .
+    ports:
+      - "8787:8787"
+    command: ["dask-scheduler"]
+
+  dask-worker:
+    build: .
+    volumes:
+      - ./app:/app
+      - ./datasets:/datasets
+    environment:
+      PYTHONPATH: /
+    working_dir: /
+    command: ["dask-worker", "dask-scheduler:8786"]

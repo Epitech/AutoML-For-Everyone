@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 import sweetviz as sv
 import logging
+import dask
 
 log = logging.getLogger(__name__)
 
@@ -31,6 +32,7 @@ def get_dataset(path: Path, config: dict):
     return X, y
 
 
+@dask.delayed
 def get_dataset_visualization(path: Path):
     viz_path = path.with_suffix(".sweetviz.html")
     log.debug(f"Searching viz file {viz_path}")
