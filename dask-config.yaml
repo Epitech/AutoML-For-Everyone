@@ -1,0 +1,4 @@
+distributed:
+  logging:
+    distributed: info
+    bokeh: error

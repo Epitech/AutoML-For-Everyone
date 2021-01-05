@@ -35,17 +35,17 @@ def get_dataset(path: Path, config: dict):
 @dask.delayed
 def get_dataset_visualization(path: Path):
     viz_path = path.with_suffix(".sweetviz.html")
-    log.debug(f"Searching viz file {viz_path}")
+    log.info(f"Searching viz file {viz_path}")
     if viz_path.exists():
-        log.debug("Viz found")
+        log.info("Viz found")
         return open(viz_path).read()
     else:
-        log.debug("Viz not found. Loading dataset")
+        log.info("Viz not found. Loading dataset")
         data = pd.read_csv(path, sep=None)
         data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
-        log.debug("Generating viz")
+        log.info("Generating viz")
         viz = sv.analyze(data)
-        log.debug(f"Saving viz to {viz_path}")
+        log.info(f"Saving viz to {viz_path}")
         viz.show_html(filepath=viz_path, open_browser=False)
-        log.debug("Returning viz")
+        log.info("Returning viz")
         return open(viz_path).read()

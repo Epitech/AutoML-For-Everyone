@@ -30,13 +30,15 @@ def create_app():
     # app.config['EXECUTOR_PROPAGATE_EXCEPTIONS'] = True
     # executor = Executor(app)
     CORS(app)
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     DATASETS_DIRECTORY = Path(getenv("DATASETS_DIRECTORY"))
     MONGO_HOST = getenv("MONGO_HOST")
 
     mongo_client = MongoClient(MONGO_HOST)
     db = mongo_client.datasets
+
+    app.logger.info(dask.config.config)
 
     @app.route("/")
     def home():
@@ -66,7 +68,7 @@ def create_app():
     @app.route("/dataset/<id>/config")
     def get_dataset_config(id):
         result = db.datasets.find_one({"name": id})
-        app.logger.debug(f"Result for dataset {id}: {result}")
+        app.logger.info(f"Result for dataset {id}: {result}")
         if not result:
             return dataset.create_initial_dataset_config(
                 DATASETS_DIRECTORY / id)
@@ -78,16 +80,16 @@ def create_app():
             "name": id,
             "config": request.json
         }
-        app.logger.debug(f"Inserting {dataset}")
+        app.logger.info(f"Inserting {dataset}")
         db.datasets.replace_one({"name": id}, dataset, upsert=True)
         return ""
 
     @app.route("/dataset/<id>/train", methods=["POST"])
     def start_training(id):
-        app.logger.debug(f"Starting training dataset {id}")
+        app.logger.info(f"Starting training dataset {id}")
         result = db.datasets.find_one({"name": id})
         config = result["config"]
-        app.logger.debug(f"Found configuration {config}")
+        app.logger.info(f"Found configuration {config}")
         fut = client.submit(training.train_model, id,
                             config, DATASETS_DIRECTORY)
         fire_and_forget(fut)
@@ -106,25 +108,25 @@ def create_app():
 
     @app.route("/dataset/<id>/predict", methods=["POST"])
     def predict_result(id):
-        app.logger.debug(f"predicting for dataset {id}")
+        app.logger.info(f"predicting for dataset {id}")
         result = db.datasets.find_one({"name": id})
         config = result["config"]
-        app.logger.debug(f"Found configuration {config}")
+        app.logger.info(f"Found configuration {config}")
         data = request.json
-        app.logger.debug(f"got data {data}")
+        app.logger.info(f"got data {data}")
         data = [float(data[k])
                 for k in sorted(data.keys())
                 if k in config["columns"]
                 and config["columns"][k]
                 and config["label"] != k]
-        app.logger.debug(f"sorted data {data}")
+        app.logger.info(f"sorted data {data}")
         code_path = DATASETS_DIRECTORY / \
             Path(id).with_suffix(".pipeline.pickle")
         with open(code_path, "rb") as f:
             pipeline = pickle.load(f)
-        app.logger.debug("loaded pipeline")
+        app.logger.info("loaded pipeline")
         result = pipeline.predict([data])
-        app.logger.debug(f"Predicted {result}")
+        app.logger.info(f"Predicted {result}")
         return jsonify(result[0])
 
     return app

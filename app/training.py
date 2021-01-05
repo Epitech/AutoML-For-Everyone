@@ -15,32 +15,32 @@ log = logging.getLogger(__name__)
 def tpot_training(X: np.array, y: np.array) -> TPOTClassifier:
     classifier = TPOTClassifier(
         verbosity=2, generations=10, population_size=10, use_dask=True)
-    log.debug("Created classifier")
+    log.info("Created classifier")
     classifier.fit(X, y)
-    log.debug("Finished training")
+    log.info("Finished training")
     return classifier
 
 
 def save_pipeline(classifier, path):
     pipeline = classifier.fitted_pipeline_
-    log.debug(f"Best pipeline : {pipeline}")
-    log.debug(f"Saving best pipeline to {path}")
+    log.info(f"Best pipeline : {pipeline}")
+    log.info(f"Saving best pipeline to {path}")
     with open(path, "wb") as f:
         pickle.dump(pipeline, f)
-    log.debug("Pipeline saved")
+    log.info("Pipeline saved")
 
 
 def export_pipeline_code(classifier, path):
-    log.debug(f"Saving pipeline code to {path}")
+    log.info(f"Saving pipeline code to {path}")
     classifier.export(path)
-    log.debug("Finished exporting")
+    log.info("Finished exporting")
 
 
 def train_model(id, config, directory):
-    log.debug(f"Starting training on dataset {id}")
+    log.error(f"Starting training on dataset {id}")
     dataset_path = directory / id
     X, y = dataset.get_dataset(dataset_path, config)
-    log.debug(f"Loaded dataset: {X} {y}")
+    log.error(f"Loaded dataset: {X} {y}")
 
     # Convert to types TPOT understands
     X = X.to_numpy().astype(np.float64)

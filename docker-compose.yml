@@ -5,6 +5,7 @@ services:
     volumes:
       - ./app:/app
       - ./datasets:/datasets
+      - ./dask-config.yaml:/root/dask/dask-config.yaml
     environment:
       FLASK_ENV: development
       FLASK_APP: "app:create_app()"
@@ -30,6 +31,7 @@ services:
     volumes:
       - ./app:/app
       - ./datasets:/datasets
+      - ./dask-config.yaml:/root/.config/dask/dask-config.yaml
     environment:
       PYTHONPATH: /
     working_dir: /
