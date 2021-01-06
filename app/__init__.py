@@ -38,8 +38,6 @@ def create_app():
     mongo_client = MongoClient(MONGO_HOST)
     db = mongo_client.datasets
 
-    app.logger.info(dask.config.config)
-
     @app.route("/")
     def home():
         return "Home"
