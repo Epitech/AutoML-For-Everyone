@@ -74,24 +74,28 @@ def create_app():
 
     @app.route("/dataset/<id>/config", methods=["PUT"])
     def set_dataset_config(id):
-        dataset = {
-            "name": id,
-            "config": request.json
+        update = {
+            "$set": {
+                "config": request.json
+            }
         }
-        app.logger.info(f"Inserting {dataset}")
-        db.datasets.replace_one({"name": id}, dataset, upsert=True)
+        app.logger.info(f"Inserting {update}")
+        db.datasets.update_one({"name": id}, update, upsert=True)
         return ""
 
     @app.route("/dataset/<id>/train", methods=["POST"])
     def start_training(id):
         app.logger.info(f"Starting training dataset {id}")
         result = db.datasets.find_one({"name": id})
+        # if result["status"] == "done":
+        #     app.logger.info("Model already trained")
+        #     return {"status": result["status"]}
         config = result["config"]
         app.logger.info(f"Found configuration {config}")
         fut = client.submit(training.train_model, id,
-                            config, DATASETS_DIRECTORY)
+                            config, DATASETS_DIRECTORY, MONGO_HOST)
         fire_and_forget(fut)
-        return ""
+        return {"status": result["status"]}
 
     # explainer = shap.KernelExplainer(classifier.predict_proba, X.to_numpy().astype(np.float64), link="logit")
     # shap_values = explainer.shap_values(X.to_numpy().astype(np.float64), nsamples=100)
@@ -126,5 +130,11 @@ def create_app():
         result = pipeline.predict([data])
         app.logger.info(f"Predicted {result}")
         return jsonify(result[0])
+
+    @app.route("/dataset/<id>/status")
+    def dataset_status(id):
+        return jsonify({
+            "status": db.datasets.find_one({"name": id}).get("status", None)
+        })
 
     return app
