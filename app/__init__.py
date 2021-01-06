@@ -139,7 +139,7 @@ def create_app():
             "status": db.datasets.find_one({"name": id}).get("status", None)
         })
 
-    @app.route("/dataset/<id>/config/lint")
+    @app.route("/dataset/<id>/config/lint", methods=["POST"])
     def lint_config(id):
         result = db.datasets.find_one({"name": id})
         config = result["config"]
