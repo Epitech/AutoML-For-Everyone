@@ -12,9 +12,11 @@ import logging
 import pickle
 import shap
 from dask.distributed import Client, fire_and_forget
+import pandas as pd
 
 import app.dataset as dataset
 import app.training as training
+import app.linter as linter
 
 
 def create_app():
@@ -136,5 +138,15 @@ def create_app():
         return jsonify({
             "status": db.datasets.find_one({"name": id}).get("status", None)
         })
+
+    @app.route("/dataset/<id>/config/lint")
+    def lint_config(id):
+        result = db.datasets.find_one({"name": id})
+        config = result["config"]
+        app.logger.info(f"Config: {config}")
+        df = pd.read_csv(DATASETS_DIRECTORY / id, sep=None)
+        df = df[[k for k, v in config["columns"].items() if v]]
+        app.logger.info(f"Dataset columns: {df.columns}")
+        return linter.lint_dataframe(df)
 
     return app
