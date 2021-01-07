@@ -40,3 +40,11 @@ def index_column(col: pd.Series):
 def unnamed_column(col: pd.Series):
     if "Unnamed" in col.name:
         return f"This column is unnamed: '{col.name}'"
+
+
+if __name__ == "__main__":
+    import sys
+    import json
+
+    df = pd.read_csv(sys.argv[1], sep=None, engine="python")
+    print(json.dumps(lint_dataframe(df), indent=4))
