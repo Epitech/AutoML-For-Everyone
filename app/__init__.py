@@ -145,6 +145,10 @@ def create_app():
         app.logger.info(f"Dataset columns: {df.columns}")
         return linter.lint_dataframe(df)
 
+    @app.route("/dataset/pic")
+    def export_explaination():
+        return send_from_directory(str("/datasets"), str("save.png"), as_attachment=True)
+
     return app
 
 #####TODO : PROBLEME AU NIVEAU DE LA DATA####
@@ -152,7 +156,3 @@ def create_app():
 #shap_values = explainer.shap_values(X.to_numpy().astype(np.float64), nsamples=100)
 #shap.summary_plot(shap_values, X.to_numpy().astype(np.float64), plot_type="bar", show=False)
 #plt.savefig('datasets/save.png')
-
-@app.route("/dataset/pic")
-def export_explaination():
-    return send_from_directory(str("/datasets"), str("save.png"), as_attachment=True)
