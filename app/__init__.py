@@ -11,12 +11,9 @@ from pathlib import Path
 import logging
 import pickle
 import shap
-<<<<<<< HEAD
 import matplotlib.pyplot as plt
-=======
 from dask.distributed import Client, fire_and_forget
 import pandas as pd
->>>>>>> 78e68b57d03821c480728bab22ef07e8df400e0f
 
 import app.dataset as dataset
 import app.training as training
