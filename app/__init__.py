@@ -1,160 +1,161 @@
 #!/usr/bin/env python3
 
 from flask import Flask, request, abort, send_from_directory
-from flask_executor import Executor
+# from flask_executor import Executor
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 from flask.json import jsonify
 from pymongo import MongoClient
 from pathlib import Path
-from tpot import TPOTClassifier
 import logging
-import numpy as np
 import pickle
 import shap
+<<<<<<< HEAD
 import matplotlib.pyplot as plt
+=======
+from dask.distributed import Client, fire_and_forget
+import pandas as pd
+>>>>>>> 78e68b57d03821c480728bab22ef07e8df400e0f
 
 import app.dataset as dataset
-
-app = Flask(__name__)
-app.config['EXECUTOR_PROPAGATE_EXCEPTIONS'] = True
-executor = Executor(app)
-CORS(app)
-logging.basicConfig(level=logging.DEBUG)
+import app.training as training
+import app.linter as linter
 
 
-def getenv(key) -> str:
-    value = os.getenv(key)
-    if value is None:
-        raise ValueError(f"Missing environment variable {key}")
-    return value
+def create_app():
+    def getenv(key) -> str:
+        value = os.getenv(key)
+        if value is None:
+            raise ValueError(f"Missing environment variable {key}")
+        return value
 
+    client = Client(getenv("DASK_SCHEDULER_HOST"))
 
-DATASETS_DIRECTORY = Path(getenv("DATASETS_DIRECTORY"))
-MONGO_HOST = getenv("MONGO_HOST")
+    app = Flask(__name__)
+    # app.config['EXECUTOR_PROPAGATE_EXCEPTIONS'] = True
+    # executor = Executor(app)
+    CORS(app)
+    logging.basicConfig(level=logging.INFO)
 
-client = MongoClient(MONGO_HOST)
-db = client.datasets
+    DATASETS_DIRECTORY = Path(getenv("DATASETS_DIRECTORY"))
+    MONGO_HOST = getenv("MONGO_HOST")
 
+    mongo_client = MongoClient(MONGO_HOST)
+    db = mongo_client.datasets
 
-@app.route("/")
-def home():
-    return "Home"
+    @app.route("/")
+    def home():
+        return "Home"
 
+    @app.route("/dataset")
+    def get_datasets():
+        return jsonify([d for d in os.listdir(DATASETS_DIRECTORY)
+                        if Path(d).suffix == ".csv"])
 
-@app.route("/dataset")
-def get_datasets():
-    return jsonify([d for d in os.listdir(DATASETS_DIRECTORY)
-                    if Path(d).suffix == ".csv"])
-
-
-@app.route("/dataset", methods=["POST"])
-def upload_dataset():
-    if "file" in request.files:
-        file = request.files["file"]
-        if file.filename == "":
+    @app.route("/dataset", methods=["POST"])
+    def upload_dataset():
+        if "file" in request.files:
+            file = request.files["file"]
+            if file.filename == "":
+                abort(400)
+            filename = secure_filename(file.filename)
+            file.save(DATASETS_DIRECTORY / filename)
+            return {"status": "ok"}
+        else:
             abort(400)
-        filename = secure_filename(file.filename)
-        file.save(DATASETS_DIRECTORY / filename)
-        return {"status": "ok"}
-    else:
-        abort(400)
 
+    @app.route("/dataset/<id>/sweetviz")
+    def get_dataset_visualization(id):
+        return dataset.get_dataset_visualization(DATASETS_DIRECTORY / id).compute()
 
-@app.route("/dataset/<id>/sweetviz")
-def get_dataset_visualization(id):
-    return dataset.get_dataset_visualization(DATASETS_DIRECTORY / id)
+    @app.route("/dataset/<id>/config")
+    def get_dataset_config(id):
+        result = db.datasets.find_one({"name": id})
+        app.logger.info(f"Result for dataset {id}: {result}")
+        if not result:
+            return dataset.create_initial_dataset_config(
+                DATASETS_DIRECTORY / id)
+        return jsonify(result["config"])
 
+    @app.route("/dataset/<id>/config", methods=["PUT"])
+    def set_dataset_config(id):
+        update = {
+            "$set": {
+                "config": request.json
+            }
+        }
+        app.logger.info(f"Inserting {update}")
+        db.datasets.update_one({"name": id}, update, upsert=True)
+        return ""
 
-@app.route("/dataset/<id>/config")
-def get_dataset_config(id):
-    result = db.datasets.find_one({"name": id})
-    app.logger.debug(f"Result for dataset {id}: {result}")
-    if not result:
-        return dataset.create_initial_dataset_config(
-            DATASETS_DIRECTORY / id)
-    return jsonify(result["config"])
+    @app.route("/dataset/<id>/train", methods=["POST"])
+    def start_training(id):
+        app.logger.info(f"Starting training dataset {id}")
+        result = db.datasets.find_one({"name": id})
+        # if result["status"] == "done":
+        #     app.logger.info("Model already trained")
+        #     return {"status": result["status"]}
+        config = result["config"]
+        app.logger.info(f"Found configuration {config}")
+        fut = client.submit(training.train_model, id,
+                            config, DATASETS_DIRECTORY, MONGO_HOST)
+        fire_and_forget(fut)
+        return {"status": result["status"]}
 
+    @app.route("/dataset/<id>/export")
+    def export_result(id):
+        code_path = Path(id).with_suffix(".pipeline.py")
+        return send_from_directory(str(DATASETS_DIRECTORY),
+                                   str(code_path), as_attachment=True)
 
-@app.route("/dataset/<id>/config", methods=["PUT"])
-def set_dataset_config(id):
-    dataset = {
-        "name": id,
-        "config": request.json
-    }
-    app.logger.debug(f"Inserting {dataset}")
-    db.datasets.replace_one({"name": id}, dataset, upsert=True)
-    return ""
+    @app.route("/dataset/<id>/predict", methods=["POST"])
+    def predict_result(id):
+        app.logger.info(f"predicting for dataset {id}")
+        result = db.datasets.find_one({"name": id})
+        config = result["config"]
+        app.logger.info(f"Found configuration {config}")
+        data = request.json
+        app.logger.info(f"got data {data}")
+        data = [float(data[k])
+                for k in sorted(data.keys())
+                if k in config["columns"]
+                and config["columns"][k]
+                and config["label"] != k]
+        app.logger.info(f"sorted data {data}")
+        code_path = DATASETS_DIRECTORY / \
+            Path(id).with_suffix(".pipeline.pickle")
+        with open(code_path, "rb") as f:
+            pipeline = pickle.load(f)
+        app.logger.info("loaded pipeline")
+        result = pipeline.predict([data])
+        app.logger.info(f"Predicted {result}")
+        return jsonify(result[0])
 
+    @app.route("/dataset/<id>/status")
+    def dataset_status(id):
+        return jsonify({
+            "status": db.datasets.find_one({"name": id}).get("status", None)
+        })
 
-@app.route("/dataset/<id>/train", methods=["POST"])
-def start_training(id):
-    app.logger.debug(f"Starting training dataset {id}")
-    result = db.datasets.find_one({"name": id})
-    config = result["config"]
-    app.logger.debug(f"Found configuration {config}")
-    executor.submit(train_model, id, config)
-    return ""
+    @app.route("/dataset/<id>/config/lint", methods=["POST"])
+    def lint_config(id):
+        result = db.datasets.find_one({"name": id})
+        config = result["config"]
+        app.logger.info(f"Config: {config}")
+        df = pd.read_csv(DATASETS_DIRECTORY / id, sep=None)
+        df = df[[k for k, v in config["columns"].items() if v]]
+        app.logger.info(f"Dataset columns: {df.columns}")
+        return linter.lint_dataframe(df)
 
+    return app
 
-def train_model(id, config):
-    dataset_path = DATASETS_DIRECTORY / id
-    app.logger.debug(f"Starting training on dataset {id}")
-    classifier = TPOTClassifier(
-        verbosity=2, generations=10, population_size=10)
-    app.logger.debug("Created classifier")
-    X, y = dataset.get_dataset(dataset_path, config)
-    app.logger.debug(f"Loaded dataset: {X} {y}")
-    classifier.fit(X.to_numpy().astype(np.float64),
-                   y.to_numpy().astype(np.float64))
-
-    ####TODO : PROBLEME AU NIVEAU DE LA DATA####
-    explainer = shap.KernelExplainer(classifier.predict_proba, X.to_numpy().astype(np.float64), link="logit")
-    shap_values = explainer.shap_values(X.to_numpy().astype(np.float64), nsamples=100)
-    shap.summary_plot(shap_values, X.to_numpy().astype(np.float64), plot_type="bar", show=False)
-    plt.savefig('datasets/save.png')
-
-    app.logger.debug("Finished training")
-    pipeline_path = dataset_path.with_suffix(".pipeline.pickle")
-    app.logger.debug(f"Best pipeline : {classifier.fitted_pipeline_}")
-    app.logger.debug(f"Saving best pipeline to {pipeline_path}")
-    with open(pipeline_path, "wb") as f:
-        pickle.dump(classifier.fitted_pipeline_, f)
-    code_path = dataset_path.with_suffix(".pipeline.py")
-    app.logger.debug(f"Saving pipeline code to {code_path}")
-    classifier.export(code_path)
-    app.logger.debug("Finished exporting")
-
-
-@app.route("/dataset/<id>/export")
-def export_result(id):
-    code_path = Path(id).with_suffix(".pipeline.py")
-    return send_from_directory(str(DATASETS_DIRECTORY),
-                               str(code_path), as_attachment=True)
+#####TODO : PROBLEME AU NIVEAU DE LA DATA####
+#explainer = shap.KernelExplainer(classifier.predict_proba, X.to_numpy().astype(np.float64), link="logit")
+#shap_values = explainer.shap_values(X.to_numpy().astype(np.float64), nsamples=100)
+#shap.summary_plot(shap_values, X.to_numpy().astype(np.float64), plot_type="bar", show=False)
+#plt.savefig('datasets/save.png')
 
 @app.route("/dataset/pic")
 def export_explaination():
     return send_from_directory(str("/datasets"), str("save.png"), as_attachment=True)
-
-@app.route("/dataset/<id>/predict", methods=["POST"])
-def predict_result(id):
-    app.logger.debug(f"predicting for dataset {id}")
-    result = db.datasets.find_one({"name": id})
-    config = result["config"]
-    app.logger.debug(f"Found configuration {config}")
-    data = request.json
-    app.logger.debug(f"got data {data}")
-    data = [float(data[k])
-            for k in sorted(data.keys())
-            if k in config["columns"]
-            and config["columns"][k]
-            and config["label"] != k]
-    app.logger.debug(f"sorted data {data}")
-    code_path = DATASETS_DIRECTORY / Path(id).with_suffix(".pipeline.pickle")
-    with open(code_path, "rb") as f:
-        pipeline = pickle.load(f)
-    app.logger.debug("loaded pipeline")
-    result = pipeline.predict([data])
-    app.logger.debug(f"Predicted {result}")
-    return jsonify(result[0])
