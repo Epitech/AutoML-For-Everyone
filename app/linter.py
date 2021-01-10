@@ -5,7 +5,7 @@ import pandas as pd
 linters_list = []
 
 
-def lint_column(col):
+def lint_column(col, df):
     return [res for linter in linters_list
             if (res := linter(df[col])) is not None]
 
@@ -15,7 +15,7 @@ def lint_dataframe(df: pd.DataFrame, *, use_dask=False):
         "lints": {
             col: lints
             for col in df.columns
-            if (lints := lint_column(col))
+            if (lints := lint_column(col, df))
         }
     }
 
