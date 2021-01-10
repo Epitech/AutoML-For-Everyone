@@ -51,7 +51,20 @@ td {
   text-align: center;
 }
 
-td, th {
+td,
+th {
   border: black solid 1px;
   margin: 0;
+}
+
+.lint {
+  color: red;
+  border: none;
+  background-color: transparent;
+}
+
+::ng-deep .mat-tooltip{
+  white-space: pre-line;
+  font-size: small;
+  text-align: center;
 }

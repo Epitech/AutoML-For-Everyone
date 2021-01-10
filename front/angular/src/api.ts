@@ -13,9 +13,7 @@ export const get_config = async (id: string) => {
 };
 
 export const put_config = async (id: string, config: any) => {
-  console.log('putting config', id, config);
-
-  return fetch(URL + `/${id}/config`, {
+  const res = await fetch(URL + `/${id}/config`, {
     method: 'PUT',
     body: JSON.stringify(config),
     headers: new Headers({
@@ -24,16 +22,26 @@ export const put_config = async (id: string, config: any) => {
   });
 };
 
+export const get_lint = async (id: string) => {
+  const res = await fetch(URL + `/${id}/config/lint`, {
+    method: 'POST',
+  });
+
+  return res.json();
+};
+
 export const post_predict = async (id: string, data: any) => {
   console.log('posting train', id, data);
 
-  return fetch(URL + `/${id}/predict`, {
+  const res = await fetch(URL + `/${id}/predict`, {
     method: 'POST',
     body: JSON.stringify(data),
     headers: new Headers({
       'Content-Type': 'application/json',
     }),
   });
+
+  return res.json();
 };
 
 export const launch_train = async (id: string) => {

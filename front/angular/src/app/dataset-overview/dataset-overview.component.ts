@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import {
   get_config,
   launch_train,
@@ -8,6 +9,7 @@ import {
   get_sweetviz,
   launch_export,
   post_predict,
+  get_lint,
 } from '../../api';
 
 type Fields = { [key: string]: boolean };
@@ -25,8 +27,13 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
   id: string;
   train_data: TrainFields | undefined;
   predict_result: any;
+  lints: { [key: string]: string[] } | undefined;
 
-  constructor(private route: ActivatedRoute, private sanitizer: DomSanitizer) {
+  constructor(
+    private route: ActivatedRoute,
+    private sanitizer: DomSanitizer,
+    public dialog: MatDialog
+  ) {
     this.id = '';
   }
 
@@ -41,14 +48,12 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
           if (col === dataset.label) continue;
           if (dataset.columns[col]) this.train_data![col] = '';
         }
-        console.log(this.train_data);
-        this.predict_result="none";
+        this.predict_result = 'none';
       });
     });
   }
 
   changeCheck(key: string, checked: boolean) {
-    console.log('set', key, checked);
     if (this.dataset) this.dataset.columns[key] = checked;
   }
 
@@ -64,19 +69,30 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
   }
 
   save_config() {
-    put_config(this.id, this.dataset);
+    put_config(this.id, this.dataset)
+      .then(() => get_lint(this.id))
+      .then(({ lints }) => {
+        this.lints = lints;
+      });
   }
 
   train(): void {
-    put_config(this.id, this.dataset).then(() => launch_train(this.id));
+    put_config(this.id, this.dataset)
+      .then(() => get_lint(this.id))
+      .then(({ lints }) => {
+        this.lints = lints;
+        if (Object.keys(lints).length) {
+          this.dialog.open(DialogContentConfirm);
+        } else {
+          launch_train(this.id);
+        }
+      });
   }
 
   predict(): void {
-    post_predict(this.id, this.train_data)
-      .then((res) => res.json())
-      .then((nb) => {
-        this.predict_result = nb;
-      });
+    post_predict(this.id, this.train_data).then((nb) => {
+      this.predict_result = nb;
+    });
   }
 
   export(): void {
@@ -87,7 +103,34 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
     return this.sanitizer.bypassSecurityTrustResourceUrl(get_sweetviz(this.id));
   }
 
+  openLintDialog(column: string) {
+    if (this.lints) {
+      this.dialog.open(DialogContentLints, {
+        data: { column, lints: this.lints[column] },
+      });
+    }
+  }
+
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
+}
+
+@Component({
+  selector: 'dialog-content-confirm',
+  templateUrl: 'dialog-content-confirm.html',
+})
+export class DialogContentConfirm {}
+
+export interface DialogData {
+  column: string;
+  lints: string[];
+}
+
+@Component({
+  selector: 'dialog-content-lints',
+  templateUrl: 'dialog-content-lints.html',
+})
+export class DialogContentLints {
+  constructor(@Inject(MAT_DIALOG_DATA) public data: DialogData) {}
 }
