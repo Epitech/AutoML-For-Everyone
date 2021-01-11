@@ -30,6 +30,12 @@ export const get_lint = async (id: string) => {
   return res.json();
 };
 
+export const get_train_status = async (id: string) => {
+  const res = await fetch(URL + `/${id}/status`);
+
+  return res.json();
+};
+
 export const post_predict = async (id: string, data: any) => {
   console.log('posting train', id, data);
 

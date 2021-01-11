@@ -10,6 +10,7 @@ import {
   launch_export,
   post_predict,
   get_lint,
+  get_train_status,
 } from '../../api';
 
 type Fields = { [key: string]: boolean };
@@ -28,6 +29,7 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
   train_data: TrainFields | undefined;
   predict_result: any;
   lints: { [key: string]: string[] } | undefined;
+  status: 'started' | 'done' | null;
 
   constructor(
     private route: ActivatedRoute,
@@ -35,6 +37,7 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
     public dialog: MatDialog
   ) {
     this.id = '';
+    this.status = null;
   }
 
   ngOnInit(): void {
@@ -49,6 +52,7 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
           if (dataset.columns[col]) this.train_data![col] = '';
         }
         this.predict_result = 'none';
+        this.checkStatus();
       });
     });
   }
@@ -84,7 +88,10 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
         if (Object.keys(lints).length) {
           this.dialog.open(DialogContentConfirm);
         } else {
-          launch_train(this.id);
+          launch_train(this.id).then(() => {
+            this.status = 'started';
+            setTimeout(this.checkStatus, 5000);
+          });
         }
       });
   }
@@ -109,6 +116,15 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
         data: { column, lints: this.lints[column] },
       });
     }
+  }
+
+  checkStatus(id: string | undefined = undefined) {
+    get_train_status(id || this.id).then(({ status }) => {
+      if (this.status !== status) this.status = status;
+      if (status === 'started') {
+        setTimeout(({ id }) => this.checkStatus(id), 5000, this);
+      }
+    });
   }
 
   ngOnDestroy() {

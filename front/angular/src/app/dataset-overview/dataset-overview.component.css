@@ -63,7 +63,12 @@ th {
   background-color: transparent;
 }
 
-::ng-deep .mat-tooltip{
+.running {
+  background-color: grey;
+  cursor: wait;
+}
+
+::ng-deep .mat-tooltip {
   white-space: pre-line;
   font-size: small;
   text-align: center;
