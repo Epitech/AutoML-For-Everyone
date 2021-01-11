@@ -1,0 +1,8 @@
+version: "3"
+services:
+  angular:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 4200:4200
