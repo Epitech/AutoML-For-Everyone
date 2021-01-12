@@ -98,7 +98,7 @@ def create_app():
         fut = client.submit(training.train_model, id,
                             config, DATASETS_DIRECTORY, MONGO_HOST)
         fire_and_forget(fut)
-        return {"status": result["status"]}
+        return {"status": result.get("status", None)}
 
     @app.route("/dataset/<id>/export")
     def export_result(id):
@@ -131,9 +131,9 @@ def create_app():
 
     @app.route("/dataset/<id>/status")
     def dataset_status(id):
-        return jsonify({
-            "status": db.datasets.find_one({"name": id}).get("status", None)
-        })
+        dataset = db.datasets.find_one({"name": id})
+        status = dataset.get("status", None) if dataset else None
+        return jsonify({"status": status})
 
     @app.route("/dataset/<id>/config/lint", methods=["POST"])
     def lint_config(id):
