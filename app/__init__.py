@@ -14,10 +14,12 @@ import shap
 import matplotlib.pyplot as plt
 from dask.distributed import Client, fire_and_forget
 import pandas as pd
+import mongoengine
 
 import app.dataset as dataset
 import app.training as training
 import app.linter as linter
+from app.model.dataset import Dataset
 
 
 def create_app():
@@ -38,8 +40,10 @@ def create_app():
     DATASETS_DIRECTORY = Path(getenv("DATASETS_DIRECTORY"))
     MONGO_HOST = getenv("MONGO_HOST")
 
-    mongo_client = MongoClient(MONGO_HOST)
-    db = mongo_client.datasets
+    # mongo_client = MongoClient(MONGO_HOST)
+    # db = mongo_client.datasets
+
+    mongoengine.connect("datasets", host=MONGO_HOST)
 
     @app.route("/")
     def home():
@@ -68,37 +72,33 @@ def create_app():
 
     @app.route("/dataset/<id>/config")
     def get_dataset_config(id):
-        result = db.datasets.find_one({"name": id})
-        app.logger.info(f"Result for dataset {id}: {result}")
+        # result = db.datasets.find_one({"name": id})
+        result = next(Dataset.objects(name=id), None)
         if not result:
-            return dataset.create_initial_dataset_config(
-                DATASETS_DIRECTORY / id)
-        return jsonify(result["config"])
+            app.logger.info(f"No result for dataset {id}. Generating config")
+            result = Dataset.create_from_path(DATASETS_DIRECTORY / id)
+            result.save()
+        app.logger.info(f"Result for dataset {id}: {result.config}")
+        return jsonify(result.config)
 
     @app.route("/dataset/<id>/config", methods=["PUT"])
     def set_dataset_config(id):
-        update = {
-            "$set": {
-                "config": request.json
-            }
-        }
-        app.logger.info(f"Inserting {update}")
-        db.datasets.update_one({"name": id}, update, upsert=True)
-        return ""
+        result = Dataset.from_id(id)
+        result.config = request.json
+        app.logger.info(f"Inserting config {request.json}")
+        result.save()
+        return jsonify(result.config)
 
     @app.route("/dataset/<id>/train", methods=["POST"])
     def start_training(id):
-        app.logger.info(f"Starting training dataset {id}")
-        result = db.datasets.find_one({"name": id})
-        # if result["status"] == "done":
-        #     app.logger.info("Model already trained")
-        #     return {"status": result["status"]}
+        result = Dataset.from_id(id)
+        app.logger.info(f"Starting training dataset {id} {result}")
         config = result["config"]
         app.logger.info(f"Found configuration {config}")
         fut = client.submit(training.train_model, id,
                             config, DATASETS_DIRECTORY, MONGO_HOST)
         fire_and_forget(fut)
-        return {"status": result.get("status", None)}
+        return {"status": result.status}
 
     @app.route("/dataset/<id>/export")
     def export_result(id):
@@ -109,7 +109,7 @@ def create_app():
     @app.route("/dataset/<id>/predict", methods=["POST"])
     def predict_result(id):
         app.logger.info(f"predicting for dataset {id}")
-        result = db.datasets.find_one({"name": id})
+        result = Dataset.from_id(id)
         config = result["config"]
         app.logger.info(f"Found configuration {config}")
         data = request.json
@@ -131,13 +131,12 @@ def create_app():
 
     @app.route("/dataset/<id>/status")
     def dataset_status(id):
-        dataset = db.datasets.find_one({"name": id})
-        status = dataset.get("status", None) if dataset else None
-        return jsonify({"status": status})
+        dataset = Dataset.from_id(id)
+        return jsonify({"status": dataset.status})
 
     @app.route("/dataset/<id>/config/lint", methods=["POST"])
     def lint_config(id):
-        result = db.datasets.find_one({"name": id})
+        result = Dataset.from_id(id)
         config = result["config"]
         app.logger.info(f"Config: {config}")
         df = pd.read_csv(DATASETS_DIRECTORY / id, sep=None)
@@ -155,4 +154,4 @@ def create_app():
 #explainer = shap.KernelExplainer(classifier.predict_proba, X.to_numpy().astype(np.float64), link="logit")
 #shap_values = explainer.shap_values(X.to_numpy().astype(np.float64), nsamples=100)
 #shap.summary_plot(shap_values, X.to_numpy().astype(np.float64), plot_type="bar", show=False)
-#plt.savefig('datasets/save.png')
+# plt.savefig('datasets/save.png')
