@@ -142,7 +142,7 @@ def create_app():
         df = pd.read_csv(DATASETS_DIRECTORY / id, sep=None)
         df = df[[k for k, v in config["columns"].items() if v]]
         app.logger.info(f"Dataset columns: {df.columns}")
-        return linter.lint_dataframe(df)
+        return linter.lint_dataframe(df, "label")
 
     @app.route("/dataset/pic")
     def export_explaination():
