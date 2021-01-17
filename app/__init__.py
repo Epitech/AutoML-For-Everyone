@@ -6,12 +6,9 @@ from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
 from flask.json import jsonify
-from pymongo import MongoClient
 from pathlib import Path
 import logging
 import pickle
-import shap
-import matplotlib.pyplot as plt
 from dask.distributed import Client, fire_and_forget
 import pandas as pd
 import mongoengine
@@ -20,6 +17,7 @@ import app.dataset as dataset
 import app.training as training
 import app.linter as linter
 from app.model.dataset import Dataset
+from app.model.config import DatasetConfig
 
 
 def create_app():
@@ -45,14 +43,16 @@ def create_app():
 
     mongoengine.connect("datasets", host=MONGO_HOST)
 
+    # Initializa the database with all datasets that can be found
+    dataset.load_all_datasets(DATASETS_DIRECTORY)
+
     @app.route("/")
     def home():
         return "Home"
 
     @app.route("/dataset")
     def get_datasets():
-        return jsonify([d for d in os.listdir(DATASETS_DIRECTORY)
-                        if Path(d).suffix == ".csv"])
+        return jsonify([d.name for d in Dataset.objects])
 
     @app.route("/dataset", methods=["POST"])
     def upload_dataset():
@@ -66,30 +66,47 @@ def create_app():
         else:
             abort(400)
 
+    @app.route("/dataset/<id>")
+    def get_dataset(id):
+        dataset = Dataset.from_id(id)
+        return dataset.to_json()
+
     @app.route("/dataset/<id>/sweetviz")
     def get_dataset_visualization(id):
         return dataset.get_dataset_visualization(DATASETS_DIRECTORY / id).compute()
 
     @app.route("/dataset/<id>/config")
-    def get_dataset_config(id):
-        # result = db.datasets.find_one({"name": id})
-        result = next(Dataset.objects(name=id), None)
-        if not result:
-            app.logger.info(f"No result for dataset {id}. Generating config")
-            result = Dataset.create_from_path(DATASETS_DIRECTORY / id)
-            result.save()
-        app.logger.info(f"Result for dataset {id}: {result.config}")
-        return jsonify(result.config)
+    def get_dataset_config_list(id):
+        result = Dataset.from_id(id)
+        return jsonify([str(c.id) for c in result.configs])
 
-    @app.route("/dataset/<id>/config", methods=["PUT"])
+    @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
         result = Dataset.from_id(id)
-        result.config = request.json
+        columns = request.json["columns"]
+        label = request.json["label"]
+        config = DatasetConfig(columns=columns, label=label)
+        result.configs.append(config)
         app.logger.info(f"Inserting config {request.json}")
+        app.logger.info(result.configs)
         result.save()
-        return jsonify(result.config)
+        return config.to_json()
 
-    @app.route("/dataset/<id>/train", methods=["POST"])
+    @app.route("/config/<id>")
+    def get_dataset_config(id):
+        config, _ = Dataset.config_from_id(id)
+        return config.to_json()
+
+    @app.route("/config/<id>/lint", methods=["GET"])
+    def lint_config(id):
+        config, dataset = Dataset.config_from_id(id)
+        app.logger.info(f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
+        df = pd.read_csv(dataset.path, sep=None)
+        df = df[[k for k, v in config["columns"].items() if v]]
+        app.logger.info(f"Dataset columns: {df.columns}")
+        return linter.lint_dataframe(df)
+
+    @app.route("/config/<id>/train", methods=["POST"])
     def start_training(id):
         result = Dataset.from_id(id)
         app.logger.info(f"Starting training dataset {id} {result}")
@@ -133,16 +150,6 @@ def create_app():
     def dataset_status(id):
         dataset = Dataset.from_id(id)
         return jsonify({"status": dataset.status})
-
-    @app.route("/dataset/<id>/config/lint", methods=["POST"])
-    def lint_config(id):
-        result = Dataset.from_id(id)
-        config = result["config"]
-        app.logger.info(f"Config: {config}")
-        df = pd.read_csv(DATASETS_DIRECTORY / id, sep=None)
-        df = df[[k for k, v in config["columns"].items() if v]]
-        app.logger.info(f"Dataset columns: {df.columns}")
-        return linter.lint_dataframe(df)
 
     @app.route("/dataset/pic")
     def export_explaination():
