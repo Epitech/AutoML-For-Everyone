@@ -11,6 +11,7 @@ from bson.objectid import ObjectId
 import logging
 
 from .config import DatasetConfig
+from .model import DatasetModel
 
 
 log = logging.getLogger(__name__)
@@ -24,6 +25,11 @@ class DatasetNotFound(NotFound):
 class ConfigNotFound(NotFound):
     def __init__(self, id):
         super().__init__(f"Dataset config not found: {id}")
+
+
+class ModelNotFound(NotFound):
+    def __init__(self, id):
+        super().__init__(f"Model not found: {id}")
 
 
 class Dataset(Document):
@@ -58,6 +64,20 @@ class Dataset(Document):
             return res.configs[0], res
         except (StopIteration, KeyError):
             raise ConfigNotFound(id)
+
+    @staticmethod
+    def model_from_id(id: str) -> (DatasetModel, DatasetConfig, Dataset):
+        try:
+            res = next(Dataset.objects
+                       .filter(configs__models__id=id)
+                       .fields(path=1, name=1, columns=1,
+                               configs={"$elemMatch": {"models.id": ObjectId(id)}}))
+            log.debug(res.to_json())
+            log.debug([c.to_json() for c in res.configs])
+            assert str(res.configs[0].models[0].id) == id
+            return res.configs[0].models[0], res.configs[0], res
+        except (StopIteration, KeyError):
+            raise ModelNotFound(id)
 
     def to_json(self):
         return {

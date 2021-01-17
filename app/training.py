@@ -41,12 +41,14 @@ def export_pipeline_code(classifier, path):
 
 
 def train_model(id, config, directory, mongo_host):
-    mongo_client = MongoClient(mongo_host)
-    db = mongo_client.datasets
+    # mongo_client = MongoClient(mongo_host)
+    # db = mongo_client.datasets
 
     def set_status(status):
-        logger.info(f"Setting status of {id} to: {status}")
-        db.datasets.update_one({"name": id}, {"$set": {"status": status}})
+        # TODO: Add back status
+        pass
+        # logger.info(f"Setting status of {id} to: {status}")
+        # db.datasets.update_one({"name": id}, {"$set": {"status": status}})
 
     set_status("started")
     dataset_path = directory / id

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask, request, abort, send_from_directory
+from flask import Flask, request, abort, send_file, send_from_directory
 # from flask_executor import Executor
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -18,6 +18,7 @@ import app.training as training
 import app.linter as linter
 from app.model.dataset import Dataset
 from app.model.config import DatasetConfig
+from app.model.model import DatasetModel
 
 
 def create_app():
@@ -75,11 +76,6 @@ def create_app():
     def get_dataset_visualization(id):
         return dataset.get_dataset_visualization(DATASETS_DIRECTORY / id).compute()
 
-    @app.route("/dataset/<id>/config")
-    def get_dataset_config_list(id):
-        result = Dataset.from_id(id)
-        return jsonify([str(c.id) for c in result.configs])
-
     @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
         result = Dataset.from_id(id)
@@ -100,56 +96,79 @@ def create_app():
     @app.route("/config/<id>/lint", methods=["GET"])
     def lint_config(id):
         config, dataset = Dataset.config_from_id(id)
-        app.logger.info(f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
+        app.logger.info(
+            f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
         df = pd.read_csv(dataset.path, sep=None)
         df = df[[k for k, v in config["columns"].items() if v]]
         app.logger.info(f"Dataset columns: {df.columns}")
         return linter.lint_dataframe(df)
 
-    @app.route("/config/<id>/train", methods=["POST"])
-    def start_training(id):
-        result = Dataset.from_id(id)
-        app.logger.info(f"Starting training dataset {id} {result}")
-        config = result["config"]
+    @app.route("/config/<id>/model", methods=["POST"])
+    def create_model(id):
+        config, dataset = Dataset.config_from_id(id)
+        accepted_keys = ["generations"]
+        model_kwargs = {k: v for k, v in request.json.items()
+                        for k in accepted_keys}
+        app.logger.info(f"Creating model with config: {model_kwargs}")
+        model = DatasetModel(**model_kwargs)
+        config.models.append(model)
+        dataset.save()
+        return model.to_json()
+
+    @app.route("/model/<id>")
+    def get_model(id):
+        model, config, dataset = Dataset.model_from_id(id)
+        return model.to_json()
+
+    @app.route("/model/<id>/train", methods=["POST"])
+    def train_model(id):
+        model, config, dataset = Dataset.model_from_id(id)
+        app.logger.info(f"Starting training dataset {dataset.name}")
+        app.logger.info(f"config: {config.to_json()}")
+        app.logger.info(f"model: {model.to_json()}")
         app.logger.info(f"Found configuration {config}")
-        fut = client.submit(training.train_model, id,
-                            config, DATASETS_DIRECTORY, MONGO_HOST)
+        fut = client.submit(training.train_model, dataset.name,
+                            config.to_json(), DATASETS_DIRECTORY, MONGO_HOST)
         fire_and_forget(fut)
-        return {"status": result.status}
+        # HACK: Set the path after the file has been created
+        dataset_path = Path(dataset.path)
+        model.pickled_model_path = str(
+            dataset_path.with_suffix(".pipeline.pickle"))
+        model.exported_model_path = str(
+            dataset_path.with_suffix(".pipeline.py"))
+        dataset.save()
+        return {"status": "starting"}
 
-    @app.route("/dataset/<id>/export")
+    @app.route("/model/<id>/export")
     def export_result(id):
-        code_path = Path(id).with_suffix(".pipeline.py")
-        return send_from_directory(str(DATASETS_DIRECTORY),
-                                   str(code_path), as_attachment=True)
+        model, _, _ = Dataset.model_from_id(id)
+        return send_file(model.exported_model_path, as_attachment=True)
 
-    @app.route("/dataset/<id>/predict", methods=["POST"])
+    @app.route("/model/<id>/predict", methods=["POST"])
     def predict_result(id):
-        app.logger.info(f"predicting for dataset {id}")
-        result = Dataset.from_id(id)
-        config = result["config"]
+        model, config, dataset = Dataset.model_from_id(id)
+        app.logger.info(f"predicting for dataset {dataset.name}")
         app.logger.info(f"Found configuration {config}")
         data = request.json
         app.logger.info(f"got data {data}")
         data = [float(data[k])
                 for k in sorted(data.keys())
-                if k in config["columns"]
-                and config["columns"][k]
-                and config["label"] != k]
+                if k in config.columns
+                and config.columns[k]
+                and config.label != k]
         app.logger.info(f"sorted data {data}")
-        code_path = DATASETS_DIRECTORY / \
-            Path(id).with_suffix(".pipeline.pickle")
-        with open(code_path, "rb") as f:
+        with open(model.pickled_model_path, "rb") as f:
             pipeline = pickle.load(f)
         app.logger.info("loaded pipeline")
         result = pipeline.predict([data])
         app.logger.info(f"Predicted {result}")
         return jsonify(result[0])
 
-    @app.route("/dataset/<id>/status")
-    def dataset_status(id):
-        dataset = Dataset.from_id(id)
-        return jsonify({"status": dataset.status})
+    # TODO: Add back status
+    # @app.route("/dataset/<id>/status")
+    # def dataset_status(id):
+    #     dataset = Dataset.from_id(id)
+    #     return jsonify({"status": dataset.status})
 
     @app.route("/dataset/pic")
     def export_explaination():
