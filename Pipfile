@@ -17,6 +17,7 @@ fsspec = ">=0.3.3"
 distributed = ">=2.10.0"
 bokeh = ">=0.13.0"
 mongoengine = "*"
+shap = "==0.37"
 
 [dev-packages]
 
