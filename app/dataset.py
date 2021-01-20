@@ -5,8 +5,21 @@ import pandas as pd
 import sweetviz as sv
 import logging
 import dask
+import os
+
+from app.model.dataset import Dataset
 
 log = logging.getLogger(__name__)
+
+
+def load_all_datasets(datasets_directory):
+    datasets_already_loaded = [Path(d.path) for d in Dataset.objects]
+
+    for path in map(Path, os.listdir(datasets_directory)):
+        path = datasets_directory / path
+        if path.suffix == ".csv" and path not in datasets_already_loaded:
+            log.info(path)
+            Dataset.create_from_path(path).save()
 
 
 def create_initial_dataset_config(path: Path):
