@@ -1,11 +1,10 @@
 version: "3"
 services:
   flask:
-    build: .
+    build: server
     volumes:
-      - ./app:/app
+      - ./server/app:/app
       - ./datasets:/datasets
-      - ./dask-config.yaml:/root/dask/dask-config.yaml
     environment:
       FLASK_ENV: development
       FLASK_APP: "app:create_app()"
@@ -21,17 +20,16 @@ services:
     restart: always
 
   dask-scheduler:
-    build: .
+    build: server
     ports:
       - "8787:8787"
     command: ["dask-scheduler"]
 
   dask-worker:
-    build: .
+    build: server
     volumes:
-      - ./app:/app
+      - ./server/app:/app
       - ./datasets:/datasets
-      - ./dask-config.yaml:/root/.config/dask/dask-config.yaml
     environment:
       PYTHONPATH: /
     working_dir: /

@@ -6,4 +6,6 @@ COPY requirements.txt /
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+COPY dask-config.yaml /root/dask/dask-config.yaml
+
 CMD ["flask", "run"]
