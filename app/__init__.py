@@ -127,6 +127,11 @@ def create_app():
         app.logger.info(f"config: {config.to_json()}")
         app.logger.info(f"model: {model.to_json()}")
         app.logger.info(f"Found configuration {config}")
+
+        # update status
+        model.status = "starting"
+        dataset.save()
+
         fut = client.submit(training.train_model, dataset.name,
                             config.to_json(), DATASETS_DIRECTORY, MONGO_HOST)
         fire_and_forget(fut)
@@ -137,7 +142,7 @@ def create_app():
         model.exported_model_path = str(
             dataset_path.with_suffix(".pipeline.py"))
         dataset.save()
-        return {"status": "starting"}
+        return {"status": model.status}
 
     @app.route("/model/<id>/export")
     def export_result(id):
@@ -164,11 +169,10 @@ def create_app():
         app.logger.info(f"Predicted {result}")
         return jsonify(result[0])
 
-    # TODO: Add back status
-    # @app.route("/dataset/<id>/status")
-    # def dataset_status(id):
-    #     dataset = Dataset.from_id(id)
-    #     return jsonify({"status": dataset.status})
+    @app.route("/model/<id>/status")
+    def dataset_status(id):
+        model, _, _ = Dataset.model_from_id(id)
+        return jsonify({"status": model.status})
 
     @app.route("/dataset/pic")
     def export_explaination():
