@@ -1,22 +1,21 @@
 #!/usr/bin/env python3
 
-import logging
 from tpot import TPOTClassifier
 import numpy as np
-from dask.distributed import get_client, fire_and_forget, secede, rejoin
 from distributed.worker import logger
 import dask
 import pickle
-from pymongo import MongoClient
+from pathlib import Path
 # import pandas as pd
 
-import app.dataset as dataset
+from app.dataset import get_dataset
+from app.model.dataset import Dataset
 
 
 @dask.delayed
 def tpot_training(X: np.array, y: np.array) -> TPOTClassifier:
     classifier = TPOTClassifier(
-        verbosity=2, generations=10, population_size=10, use_dask=True)
+        verbosity=2, generations=2, population_size=10, use_dask=True)
     logger.info("Created classifier")
     classifier.fit(X, y)
     logger.info("Finished training")
@@ -25,6 +24,11 @@ def tpot_training(X: np.array, y: np.array) -> TPOTClassifier:
 
 @dask.delayed
 def save_pipeline(classifier, path):
+    """
+    Pickle the best pipeline found by TPOT and save it
+
+    The saved pipeline is used to make predictions after training
+    """
     pipeline = classifier.fitted_pipeline_
     logger.info(f"Best pipeline : {pipeline}")
     logger.info(f"Saving best pipeline to {path}")
@@ -40,49 +44,48 @@ def export_pipeline_code(classifier, path):
     logger.info("Finished exporting")
 
 
-def train_model(id, config, directory, mongo_host):
-    # mongo_client = MongoClient(mongo_host)
-    # db = mongo_client.datasets
+def train_model(model_id):
+    model, config, dataset = Dataset.model_from_id(model_id)
 
     def set_status(status):
-        # TODO: Add back status
-        pass
-        # logger.info(f"Setting status of {id} to: {status}")
-        # db.datasets.update_one({"name": id}, {"$set": {"status": status}})
+        logger.info(f"Setting status of {model.id} to: {status}")
+        model.status = status
+        dataset.save()
 
     set_status("started")
-    dataset_path = directory / id
-    X, y = dataset.get_dataset(dataset_path, config)
+
+    # Create the different assets path
+    dataset_path = Path(dataset.path)
+    pickled_model_path = dataset_path.with_suffix(".pipeline.pickle")
+    exported_model_path = dataset_path.with_suffix(".pipeline.py")
+
+    # Load the dataset
+    X, y = get_dataset(dataset_path, config)
     logger.info(f"Loaded dataset: {X} {y}")
 
     # Convert to types TPOT understands
     X = X.to_numpy().astype(np.float64)
     y = y.to_numpy().astype(np.float64)
 
-    # Get the Dask client
-    client = get_client()
-
     # Train the model
     classifier = tpot_training(X, y)
 
     # Save best pipeline
-    save_res = save_pipeline(
-        classifier, dataset_path.with_suffix(".pipeline.pickle"))
+    save_res = save_pipeline(classifier, pickled_model_path)
 
     # Export best pipeline code
-    export_res = export_pipeline_code(
-        classifier, dataset_path.with_suffix(".pipeline.py"))
+    export_res = export_pipeline_code(classifier, exported_model_path)
 
-    # Secede from the Thread pool
-    # Needed to not block a slot when sending new tasks
-    secede()
+    # Try to get the results of the exportation and model saving
+    try:
+        dask.compute(save_res, export_res)
+    except Exception as e:
+        logger.warn(f"Got exception while running pipeline: {e}")
+        set_status("error")
 
-    # Get the results of the futures
-    save_fut = client.compute(save_res)
-    export_fut = client.compute(export_res)
-    client.gather(save_fut, export_fut)
-
-    # Rejoin the Thread Pool to set the status
-    rejoin()
-
-    set_status("done")
+    # Update the model with the exported paths
+    # and set the status as done
+    model.pickled_model_path = str(pickled_model_path)
+    model.exported_model_path = str(exported_model_path)
+    model.status = "done"
+    dataset.save()

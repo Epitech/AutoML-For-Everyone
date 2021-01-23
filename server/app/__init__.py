@@ -132,16 +132,8 @@ def create_app():
         model.status = "starting"
         dataset.save()
 
-        fut = client.submit(training.train_model, dataset.name,
-                            config.to_json(), DATASETS_DIRECTORY, MONGO_HOST)
+        fut = client.submit(training.train_model, id)
         fire_and_forget(fut)
-        # HACK: Set the path after the file has been created
-        dataset_path = Path(dataset.path)
-        model.pickled_model_path = str(
-            dataset_path.with_suffix(".pipeline.pickle"))
-        model.exported_model_path = str(
-            dataset_path.with_suffix(".pipeline.py"))
-        dataset.save()
         return {"status": model.status}
 
     @app.route("/model/<id>/export")

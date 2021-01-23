@@ -4,7 +4,7 @@ from mongoengine import EmbeddedDocument, ObjectIdField, IntField, \
     StringField
 from bson.objectid import ObjectId
 
-STATUS = ["not started", "starting",  "started", "exporting", "done"]
+STATUS = ["not started", "starting",  "started", "exporting", "done", "error"]
 
 
 class DatasetModel(EmbeddedDocument):
