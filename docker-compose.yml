@@ -34,3 +34,10 @@ services:
       PYTHONPATH: /
     working_dir: /
     command: ["dask-worker", "dask-scheduler:8786"]
+
+  angular:
+    build: front
+    volumes:
+      - ./front:/app
+    ports:
+      - 4200:4200
