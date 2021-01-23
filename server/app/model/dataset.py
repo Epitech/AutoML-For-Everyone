@@ -59,13 +59,13 @@ class Dataset(Document):
     def config_from_id(id: str) -> tuple[DatasetConfig, Dataset]:
         """Load a config from its id"""
         try:
-            res = next(Dataset.objects
-                       .filter(configs__id=id)
-                       .fields(path=1, name=1, columns=1,
-                               configs={"$elemMatch": {"id": ObjectId(id)}}))
-            log.debug(res)
-            assert str(res.configs[0].id) == id
-            return res.configs[0], res
+            res = next(Dataset.objects.filter(configs__id=id))
+            config = next(c for c in res.configs if str(c.id) == id)
+            log.info(res)
+            log.info(res.configs)
+            log.info(config.to_json())
+            assert str(config.id) == id
+            return config, res
         except (StopIteration, KeyError):
             raise ConfigNotFound(id)
 
@@ -73,14 +73,16 @@ class Dataset(Document):
     def model_from_id(id: str) -> tuple[DatasetModel, DatasetConfig, Dataset]:
         """Load a model from its id"""
         try:
-            res = next(Dataset.objects
-                       .filter(configs__models__id=id)
-                       .fields(path=1, name=1, columns=1,
-                               configs={"$elemMatch": {"models.id": ObjectId(id)}}))
+            res = next(Dataset.objects.filter(configs__models__id=id))
+            config, model = next(
+                (c, m)
+                for c in res.configs
+                for m in c.models
+                if str(m.id) == id)
             log.debug(res.to_json())
             log.debug([c.to_json() for c in res.configs])
-            assert str(res.configs[0].models[0].id) == id
-            return res.configs[0].models[0], res.configs[0], res
+            assert str(model.id) == id
+            return model, config, res
         except (StopIteration, KeyError):
             raise ModelNotFound(id)
 
