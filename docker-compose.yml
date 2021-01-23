@@ -30,7 +30,9 @@ services:
     volumes:
       - ./server/app:/app
       - ./datasets:/datasets
+      - ./server/worker_setup.py:/worker_setup.py
     environment:
       PYTHONPATH: /
+      MONGO_HOST: mongo
     working_dir: /
-    command: ["dask-worker", "dask-scheduler:8786"]
+    command: ["dask-worker", "dask-scheduler:8786", "--preload", "worker_setup"]
