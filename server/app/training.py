@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from tpot import TPOTClassifier
+from tpot import TPOTClassifier, TPOTRegressor
 import numpy as np
 from distributed.worker import logger
 import dask
@@ -14,10 +14,12 @@ from app.model.dataset import Dataset
 
 
 @dask.delayed
-def tpot_training(X: np.array, y: np.array, log_file=None) -> TPOTClassifier:
-    classifier = TPOTClassifier(
+def tpot_training(X: np.array, y: np.array, log_file=None,
+                  model_type="classification"):
+    model = TPOTClassifier if model_type == "classification" else TPOTRegressor
+    classifier = model(
         verbosity=2, generations=2, population_size=10, use_dask=True)
-    logger.info("Created classifier")
+    logger.info(f"Created {model_type}")
     if log_file:
         with open(log_file, "w") as f, redirect_stdout(f):
             classifier.fit(X, y)
@@ -76,8 +78,10 @@ def train_model(model_id):
     X = X.to_numpy().astype(np.float64)
     y = y.to_numpy().astype(np.float64)
 
+    logger.info(config.to_json())
+
     # Train the model
-    classifier = tpot_training(X, y, log_path)
+    classifier = tpot_training(X, y, log_path, config.model_type)
 
     # Save best pipeline
     save_res = save_pipeline(classifier, pickled_model_path)

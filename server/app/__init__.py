@@ -83,7 +83,9 @@ def create_app():
         result = Dataset.from_id(id)
         columns = request.json["columns"]
         label = request.json["label"]
-        config = DatasetConfig(columns=columns, label=label)
+        model_type = request.json["model_type"]
+        config = DatasetConfig(
+            columns=columns, label=label, model_type=model_type)
         result.configs.append(config)
         app.logger.info(f"Inserting config {request.json}")
         app.logger.info(result.configs)

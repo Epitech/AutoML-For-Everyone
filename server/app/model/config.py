@@ -20,11 +20,14 @@ class DatasetConfig(EmbeddedDocument):
     label: str = StringField(required=True)
     models: list[DatasetModel] = ListField(
         EmbeddedDocumentField(DatasetModel), default=list)
+    model_type: str = StringField(
+        required=True, choices=MODEL_TYPES, default=MODEL_TYPES[0])
 
     def to_json(self):
         return {
             "id": str(self.id),
             "columns": self.columns,
             "label": self.label,
-            "models": [str(m.id) for m in self.models]
+            "models": [str(m.id) for m in self.models],
+            "model_type": self.model_type
         }
