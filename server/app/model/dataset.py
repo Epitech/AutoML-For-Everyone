@@ -33,10 +33,11 @@ class ModelNotFound(NotFound):
 
 
 class Dataset(Document):
-    path = StringField(required=True)
-    name = StringField(required=True, unique=True)
-    columns = ListField(StringField(), required=True)
-    configs = ListField(EmbeddedDocumentField(DatasetConfig), default=list)
+    path: str = StringField(required=True)
+    name: str = StringField(required=True, unique=True)
+    columns: list[str] = ListField(StringField(), required=True)
+    configs: list[DatasetConfig] = ListField(
+        EmbeddedDocumentField(DatasetConfig), default=list)
 
     meta = {"collection": "datasets"}
 
