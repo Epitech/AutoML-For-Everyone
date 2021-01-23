@@ -4,16 +4,17 @@ from mongoengine import EmbeddedDocument, ObjectIdField, IntField, \
     StringField
 from bson.objectid import ObjectId
 
-STATUS = ["not started", "starting",  "started", "exporting", "done"]
+STATUS = ["not started", "starting",  "started", "exporting", "done", "error"]
 
 
 class DatasetModel(EmbeddedDocument):
     id = ObjectIdField(required=True, default=lambda: ObjectId())
-    generations = IntField(required=True, default=10)
-    status = StringField(choices=STATUS, default="not started")
+    generations: int = IntField(required=True, default=10)
+    status: str = StringField(choices=STATUS, default="not started")
 
-    pickled_model_path = StringField()
-    exported_model_path = StringField()
+    pickled_model_path: str = StringField()
+    exported_model_path: str = StringField()
+    log_path: str = StringField()
 
     def to_json(self):
         return {

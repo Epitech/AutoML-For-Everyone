@@ -44,6 +44,8 @@ def create_app():
 
     mongoengine.connect("datasets", host=MONGO_HOST)
 
+    # Repair the database
+    dataset.repair_all_datasets()
     # Initializa the database with all datasets that can be found
     dataset.load_all_datasets(DATASETS_DIRECTORY)
 
@@ -63,7 +65,7 @@ def create_app():
                 abort(400)
             filename = secure_filename(file.filename)
             file.save(DATASETS_DIRECTORY / filename)
-            return {"status": "ok"}
+            return {"status": "ok"}, 201
         else:
             abort(400)
 
@@ -72,21 +74,19 @@ def create_app():
         dataset = Dataset.from_id(id)
         return dataset.to_json()
 
-    @app.route("/dataset/<id>/sweetviz")
-    def get_dataset_visualization(id):
-        return dataset.get_dataset_visualization(DATASETS_DIRECTORY / id).compute()
-
     @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
         result = Dataset.from_id(id)
         columns = request.json["columns"]
         label = request.json["label"]
-        config = DatasetConfig(columns=columns, label=label)
+        model_type = request.json["model_type"]
+        config = DatasetConfig(
+            columns=columns, label=label, model_type=model_type)
         result.configs.append(config)
         app.logger.info(f"Inserting config {request.json}")
         app.logger.info(result.configs)
         result.save()
-        return config.to_json()
+        return config.to_json(), 201
 
     @app.route("/config/<id>")
     def get_dataset_config(id):
@@ -103,6 +103,11 @@ def create_app():
         app.logger.info(f"Dataset columns: {df.columns}")
         return linter.lint_dataframe(df, config["label"])
 
+    @app.route("/config/<id>/sweetviz")
+    def get_dataset_visualization(id):
+        _, d = Dataset.config_from_id(id)
+        return dataset.get_dataset_visualization(Path(d.path)).compute()
+
     @app.route("/config/<id>/model", methods=["POST"])
     def create_model(id):
         config, dataset = Dataset.config_from_id(id)
@@ -113,7 +118,7 @@ def create_app():
         model = DatasetModel(**model_kwargs)
         config.models.append(model)
         dataset.save()
-        return model.to_json()
+        return model.to_json(), 201
 
     @app.route("/model/<id>")
     def get_model(id):
@@ -123,6 +128,13 @@ def create_app():
     @app.route("/model/<id>/train", methods=["POST"])
     def train_model(id):
         model, config, dataset = Dataset.model_from_id(id)
+
+        # Check if training is already done or in progress
+        if model.status == "done":
+            return {"error": "Model is already trained"}, 409
+        if model.status not in ["not started", "error"]:
+            return {"error": "Model is currently training"}, 409
+
         app.logger.info(f"Starting training dataset {dataset.name}")
         app.logger.info(f"config: {config.to_json()}")
         app.logger.info(f"model: {model.to_json()}")
@@ -132,26 +144,25 @@ def create_app():
         model.status = "starting"
         dataset.save()
 
-        fut = client.submit(training.train_model, dataset.name,
-                            config.to_json(), DATASETS_DIRECTORY, MONGO_HOST)
+        fut = client.submit(training.train_model, id)
         fire_and_forget(fut)
-        # HACK: Set the path after the file has been created
-        dataset_path = Path(dataset.path)
-        model.pickled_model_path = str(
-            dataset_path.with_suffix(".pipeline.pickle"))
-        model.exported_model_path = str(
-            dataset_path.with_suffix(".pipeline.py"))
-        dataset.save()
-        return {"status": model.status}
+        return {"status": model.status}, 202
 
     @app.route("/model/<id>/export")
     def export_result(id):
         model, _, _ = Dataset.model_from_id(id)
+        if model.status != "done":
+            return {"error": "Model is not trained"}, 409
         return send_file(model.exported_model_path, as_attachment=True)
 
     @app.route("/model/<id>/predict", methods=["POST"])
     def predict_result(id):
         model, config, dataset = Dataset.model_from_id(id)
+
+        # Check if model is trained
+        if model.status != "done":
+            return {"error": "Model is not trained"}, 409
+
         app.logger.info(f"predicting for dataset {dataset.name}")
         app.logger.info(f"Found configuration {config}")
         data = request.json
@@ -171,8 +182,16 @@ def create_app():
 
     @app.route("/model/<id>/status")
     def dataset_status(id):
+        model: DatasetModel
         model, _, _ = Dataset.model_from_id(id)
-        return jsonify({"status": model.status})
+
+        reply = {"status": model.status}
+
+        if model.log_path:
+            with open(model.log_path) as f:
+                reply["logs"] = f.read()
+
+        return reply
 
     @app.route("/dataset/pic")
     def export_explaination():

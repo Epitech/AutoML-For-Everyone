@@ -33,49 +33,56 @@ class ModelNotFound(NotFound):
 
 
 class Dataset(Document):
-    path = StringField(required=True)
-    name = StringField(required=True, unique=True)
-    columns = ListField(StringField(), required=True)
-    configs = ListField(EmbeddedDocumentField(DatasetConfig), default=list)
+    path: str = StringField(required=True)
+    name: str = StringField(required=True, unique=True)
+    columns: list[str] = ListField(StringField(), required=True)
+    configs: list[DatasetConfig] = ListField(
+        EmbeddedDocumentField(DatasetConfig), default=list)
 
     meta = {"collection": "datasets"}
 
     @staticmethod
-    def create_from_path(path: Path):
+    def create_from_path(path: Path) -> Dataset:
+        """Create a dataset object from a csv dataset on disk"""
         df = pd.read_csv(path, sep=None, engine="python")
         return Dataset(path=str(path), name=path.name, columns=df.columns)
 
     @staticmethod
     def from_id(id: str) -> Dataset:
+        """Load a dataset from its id"""
         try:
             return next(Dataset.objects(name=id))
         except StopIteration:
             raise DatasetNotFound(id)
 
     @staticmethod
-    def config_from_id(id: str) -> (DatasetConfig, Dataset):
+    def config_from_id(id: str) -> tuple[DatasetConfig, Dataset]:
+        """Load a config from its id"""
         try:
-            res = next(Dataset.objects
-                       .filter(configs__id=id)
-                       .fields(path=1, name=1, columns=1,
-                               configs={"$elemMatch": {"id": ObjectId(id)}}))
-            log.debug(res)
-            assert str(res.configs[0].id) == id
-            return res.configs[0], res
+            res = next(Dataset.objects.filter(configs__id=id))
+            config = next(c for c in res.configs if str(c.id) == id)
+            log.info(res)
+            log.info(res.configs)
+            log.info(config.to_json())
+            assert str(config.id) == id
+            return config, res
         except (StopIteration, KeyError):
             raise ConfigNotFound(id)
 
     @staticmethod
-    def model_from_id(id: str) -> (DatasetModel, DatasetConfig, Dataset):
+    def model_from_id(id: str) -> tuple[DatasetModel, DatasetConfig, Dataset]:
+        """Load a model from its id"""
         try:
-            res = next(Dataset.objects
-                       .filter(configs__models__id=id)
-                       .fields(path=1, name=1, columns=1,
-                               configs={"$elemMatch": {"models.id": ObjectId(id)}}))
+            res = next(Dataset.objects.filter(configs__models__id=id))
+            config, model = next(
+                (c, m)
+                for c in res.configs
+                for m in c.models
+                if str(m.id) == id)
             log.debug(res.to_json())
             log.debug([c.to_json() for c in res.configs])
-            assert str(res.configs[0].models[0].id) == id
-            return res.configs[0].models[0], res.configs[0], res
+            assert str(model.id) == id
+            return model, config, res
         except (StopIteration, KeyError):
             raise ModelNotFound(id)
 
@@ -85,3 +92,38 @@ class Dataset(Document):
             "columns": self.columns,
             "configs": [str(c.id) for c in self.configs]
         }
+
+    def repair(self):
+        """Repair dangling paths in the Dataset"""
+
+        updated = False
+        for config in self.configs:
+            for model in config.models:
+
+                def is_dangling(path: str):
+                    return path and not Path(path).exists()
+
+                # If the path are not valid anymore, reset them and set
+                # the status back to "not started"
+                if is_dangling(model.exported_model_path) \
+                   or is_dangling(model.pickled_model_path):
+                    model.exported_model_path = None
+                    model.pickled_model_path = None
+                    model.log_path = None
+                    model.status = "not started"
+                    updated = True
+
+                # If the log file is dangling, reset it, but do not change the
+                # status
+                if is_dangling(model.log_path):
+                    model.log_path = None
+                    updated = True
+
+                # If the status is not "not started" or "done", reset it
+                if model.status not in ["not started", "done"]:
+                    model.status = "not started"
+                    updated = True
+
+        # If any property was modified, save the dataset
+        if updated:
+            self.save()
