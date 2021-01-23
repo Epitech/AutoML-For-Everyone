@@ -74,10 +74,6 @@ def create_app():
         dataset = Dataset.from_id(id)
         return dataset.to_json()
 
-    @app.route("/dataset/<id>/sweetviz")
-    def get_dataset_visualization(id):
-        return dataset.get_dataset_visualization(DATASETS_DIRECTORY / id).compute()
-
     @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
         result = Dataset.from_id(id)
@@ -106,6 +102,11 @@ def create_app():
         df = df[[k for k, v in config["columns"].items() if v]]
         app.logger.info(f"Dataset columns: {df.columns}")
         return linter.lint_dataframe(df, config["label"])
+
+    @app.route("/config/<id>/sweetviz")
+    def get_dataset_visualization(id):
+        _, d = Dataset.config_from_id(id)
+        return dataset.get_dataset_visualization(Path(d.path)).compute()
 
     @app.route("/config/<id>/model", methods=["POST"])
     def create_model(id):
