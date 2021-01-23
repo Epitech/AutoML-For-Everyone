@@ -6,6 +6,7 @@ from distributed.worker import logger
 import dask
 import pickle
 from pathlib import Path
+from contextlib import redirect_stdout
 # import pandas as pd
 
 from app.dataset import get_dataset
@@ -13,11 +14,15 @@ from app.model.dataset import Dataset
 
 
 @dask.delayed
-def tpot_training(X: np.array, y: np.array) -> TPOTClassifier:
+def tpot_training(X: np.array, y: np.array, log_file=None) -> TPOTClassifier:
     classifier = TPOTClassifier(
         verbosity=2, generations=2, population_size=10, use_dask=True)
     logger.info("Created classifier")
-    classifier.fit(X, y)
+    if log_file:
+        with open(log_file, "w") as f, redirect_stdout(f):
+            classifier.fit(X, y)
+    else:
+        classifier.fit(X, y)
     logger.info("Finished training")
     return classifier
 
@@ -52,12 +57,14 @@ def train_model(model_id):
         model.status = status
         dataset.save()
 
-    set_status("started")
-
     # Create the different assets path
     dataset_path = Path(dataset.path)
+    log_path = dataset_path.with_suffix(".training.log")
     pickled_model_path = dataset_path.with_suffix(".pipeline.pickle")
     exported_model_path = dataset_path.with_suffix(".pipeline.py")
+
+    model.log_path = str(log_path)
+    set_status("started")
 
     # Load the dataset
     X, y = get_dataset(dataset_path, config)
@@ -68,7 +75,7 @@ def train_model(model_id):
     y = y.to_numpy().astype(np.float64)
 
     # Train the model
-    classifier = tpot_training(X, y)
+    classifier = tpot_training(X, y, log_path)
 
     # Save best pipeline
     save_res = save_pipeline(classifier, pickled_model_path)

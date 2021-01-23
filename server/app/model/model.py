@@ -12,8 +12,9 @@ class DatasetModel(EmbeddedDocument):
     generations: int = IntField(required=True, default=10)
     status: str = StringField(choices=STATUS, default="not started")
 
-    pickled_model_path = StringField()
-    exported_model_path = StringField()
+    pickled_model_path: str = StringField()
+    exported_model_path: str = StringField()
+    log_path: str = StringField()
 
     def to_json(self):
         return {
