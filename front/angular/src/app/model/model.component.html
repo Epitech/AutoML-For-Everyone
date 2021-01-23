@@ -1,0 +1,8 @@
+<ng-container *ngIf="model">
+    <p>model with {{model.generations}} generations</p>
+
+    <button [disabled]="status && status !== 'done'" (click)="launchTrain()">train ({{status ||
+        "not started"}})</button>
+    <button>export (TODO)</button>
+    <button>predict (TODO)</button>
+</ng-container>

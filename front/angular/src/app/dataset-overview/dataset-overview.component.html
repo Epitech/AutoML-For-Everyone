@@ -7,4 +7,7 @@
         <button class="button add" (click)="openDialog()">+</button>
     </div>
     <app-config *ngIf="config" [id]="config"></app-config>
+
+    <h2>Data Viz</h2>
+    <iframe [src]="sweetviz()" width="100%"></iframe>
 </ng-container>

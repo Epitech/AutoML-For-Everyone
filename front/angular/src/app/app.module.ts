@@ -16,6 +16,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ConfigComponent } from './config/config.component';
 import { TableComponent } from './table/table.component';
 import { DialogContentNewConfig } from './dialog-new-config/dialog-new-config';
+import { ModelComponent } from './model/model.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { DialogContentNewConfig } from './dialog-new-config/dialog-new-config';
     ConfigComponent,
     TableComponent,
     DialogContentNewConfig,
+    ModelComponent,
   ],
   imports: [
     BrowserModule,

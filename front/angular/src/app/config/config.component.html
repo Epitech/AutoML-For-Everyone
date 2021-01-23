@@ -9,6 +9,5 @@
         <button class="button add" (click)="openDialog()">+</button>
     </div>
 
-    <h2>Data Viz</h2>
-    <iframe [src]="sweetviz()" width="100%"></iframe>
+    <app-model *ngIf="model" [id]="model"></app-model>
 </ng-container>

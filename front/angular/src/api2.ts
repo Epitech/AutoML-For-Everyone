@@ -26,6 +26,12 @@ export const post_dataset = (file: File) => {
   formData.append('file', file, file.name);
   return api('/dataset', { method: 'POST', body: formData }, true);
 };
+// export const upload_dataset = (file: File) => {
+//   if (!file) return;
+//   const formData: FormData = new FormData();
+//   formData.append('file', file, file.name);
+//   fetch(URL, { method: 'POST', body: formData });
+// };
 
 // CONFIG
 
@@ -37,9 +43,13 @@ export const get_config = (id: string) => api(`/config/${id}`);
 export const get_lint = (id: string) =>
   api(`/config/${id}/lint`, { method: 'POST' });
 
-export const get_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
+export const get_sweetviz_url = (id: string) => `${URL}/dataset/${id}/sweetviz`;
 
 // MODEL
+
+export type ModelType = {
+  generations: number;
+};
 
 export const post_model = (id: string, config: any) =>
   api(`/config/${id}/model`, with_body(config), true);

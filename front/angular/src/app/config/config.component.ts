@@ -1,7 +1,6 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 
-import { get_config, get_sweetviz_url, post_model } from '../../api2';
-import { DomSanitizer } from '@angular/platform-browser';
+import { get_config, post_model, ModelType } from '../../api2';
 
 type Fields = { [key: string]: boolean };
 type Config = {
@@ -20,14 +19,11 @@ export class ConfigComponent implements OnChanges {
   config?: Config;
   model?: string;
 
-  constructor(private sanitizer: DomSanitizer) {}
-
-  ngOnChanges(changes: { id: SimpleChange }) {
-    this.refresh(changes.id.currentValue);
+  ngOnChanges({ id }: { id: SimpleChange }) {
+    this.refresh(id.currentValue);
   }
 
   changeModel(model: string) {
-    console.log('model', model);
     this.model = model;
   }
 
@@ -40,9 +36,7 @@ export class ConfigComponent implements OnChanges {
   }
 
   openDialog() {
-    post_model(this.id, { generations: 0 }).then(() => this.refresh(this.id));
+    const model: ModelType = { generations: 2 };
+    post_model(this.id, model).then(() => this.refresh(this.id));
   }
-
-  sweetviz = () =>
-    this.sanitizer.bypassSecurityTrustResourceUrl(get_sweetviz_url(this.id));
 }

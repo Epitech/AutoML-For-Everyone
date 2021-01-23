@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { upload_dataset } from '../../api';
-import { get_datasets } from '../../api2';
+import { get_datasets, post_dataset } from '../../api2';
 
 @Component({
   selector: 'app-datasets',
@@ -22,7 +21,7 @@ export class DatasetsComponent implements OnInit {
   }
 
   upload() {
-    if (this.fileToUpload) upload_dataset(this.fileToUpload);
+    if (this.fileToUpload) post_dataset(this.fileToUpload);
   }
 
   handleChange(event: Event) {
