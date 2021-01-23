@@ -38,9 +38,16 @@
 </table>
 
 <div class="buttons">
-    <button [class]="status==='started'?'button running':'button'" (click)='train()'
-        [disabled]="status==='started'">tpot classic ({{status || 'not started' }})</button>
-    <button [disabled]="status!=='done'" [class]="status!=='done'?'button running':'button'" (click)='predict()'>predict</button>
+    <div>
+        <div>Classifier
+            <mat-slide-toggle [checked]="regression" (change)="changeRegression($event)">Regressor</mat-slide-toggle>
+        </div>
+        <button [class]="status==='started'?'button running':'button'" (click)='train()'
+            [disabled]="status==='started'">tpot classic ({{status || 'not started' }}) with
+            ({{regression?'regressor':'classifier'}})</button>
+    </div>
+    <button [disabled]="status!=='done'" [class]="status!=='done'?'button running':'button'"
+        (click)='predict()'>predict</button>
 </div>
 
 <h2>Train result</h2>

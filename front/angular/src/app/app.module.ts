@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TopbarComponent } from './topbar/topbar.component';
-import { DatasetOverviewComponent } from './dataset-overview/dataset-overview.component';
+import { DatasetOverviewComponent, DialogContentConfirm, DialogContentLints } from './dataset-overview/dataset-overview.component';
 import { ButtonComponent } from './button/button.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
@@ -14,6 +14,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,8 @@ import { MatMenuModule } from '@angular/material/menu';
     ButtonComponent,
     SliderComponent,
     DatasetsComponent,
+    DialogContentConfirm,
+    DialogContentLints,
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatTooltipModule,
     MatDialogModule,
     MatMenuModule,
+    MatSlideToggleModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

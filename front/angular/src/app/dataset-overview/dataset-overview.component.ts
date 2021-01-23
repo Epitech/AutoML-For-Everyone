@@ -30,6 +30,7 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
   predict_result: any;
   lints: { [key: string]: string[] } | undefined;
   status: 'started' | 'done' | null;
+  regression: boolean;
 
   constructor(
     private route: ActivatedRoute,
@@ -38,6 +39,8 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
   ) {
     this.id = '';
     this.status = null;
+    this.predict_result = 'none';
+    this.regression = true;
   }
 
   ngOnInit(): void {
@@ -51,7 +54,6 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
           if (col === dataset.label) continue;
           if (dataset.columns[col]) this.train_data![col] = '';
         }
-        this.predict_result = 'none';
         this.checkStatus();
       });
     });
@@ -122,9 +124,17 @@ export class DatasetOverviewComponent implements OnInit, OnDestroy {
     get_train_status(id || this.id).then(({ status }) => {
       if (this.status !== status) this.status = status;
       if (status === 'started') {
-        setTimeout(({ id }) => this.checkStatus(id), 5000, this);
+        setTimeout(
+          ({ id }: { id: string }) => this.checkStatus(id),
+          5000,
+          this
+        );
       }
     });
+  }
+
+  changeRegression({ checked }: { checked: boolean }) {
+    this.regression = checked;
   }
 
   ngOnDestroy() {
