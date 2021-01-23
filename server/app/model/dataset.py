@@ -97,16 +97,30 @@ class Dataset(Document):
         updated = False
         for config in self.configs:
             for model in config.models:
-                # If path exist, check that they are still valid
-                if model.exported_model_path and model.pickled_model_path:
-                    if not Path(model.exported_model_path).exists() \
-                       or not Path(model.pickled_model_path).exists():
-                        # If the path are not valid anymore, reset them and set
-                        # the status back to "not started"
-                        model.exported_model_path = None
-                        model.pickled_model_path = None
-                        model.status = "not started"
-                        updated = True
+
+                def is_dangling(path: str):
+                    return path and not Path(path).exists()
+
+                # If the path are not valid anymore, reset them and set
+                # the status back to "not started"
+                if is_dangling(model.exported_model_path) \
+                   or is_dangling(model.pickled_model_path):
+                    model.exported_model_path = None
+                    model.pickled_model_path = None
+                    model.log_path = None
+                    model.status = "not started"
+                    updated = True
+
+                # If the log file is dangling, reset it, but do not change the
+                # status
+                if is_dangling(model.log_path):
+                    model.log_path = None
+                    updated = True
+
+                # If the status is not "not started" or "done", reset it
+                if model.status not in ["not started", "done"]:
+                    model.status = "not started"
+                    updated = True
 
         # If any property was modified, save the dataset
         if updated:
