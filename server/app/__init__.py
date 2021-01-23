@@ -125,6 +125,13 @@ def create_app():
     @app.route("/model/<id>/train", methods=["POST"])
     def train_model(id):
         model, config, dataset = Dataset.model_from_id(id)
+
+        # Check if training is already done or in progress
+        if model.status == "done":
+            return {"error": "Model is already trained"}, 409
+        if model.status not in ["not started", "error"]:
+            return {"error": "Model is currently training"}, 409
+
         app.logger.info(f"Starting training dataset {dataset.name}")
         app.logger.info(f"config: {config.to_json()}")
         app.logger.info(f"model: {model.to_json()}")
@@ -141,11 +148,18 @@ def create_app():
     @app.route("/model/<id>/export")
     def export_result(id):
         model, _, _ = Dataset.model_from_id(id)
+        if model.status != "done":
+            return {"error": "Model is not trained"}, 409
         return send_file(model.exported_model_path, as_attachment=True)
 
     @app.route("/model/<id>/predict", methods=["POST"])
     def predict_result(id):
         model, config, dataset = Dataset.model_from_id(id)
+
+        # Check if model is trained
+        if model.status != "done":
+            return {"error": "Model is not trained"}, 409
+
         app.logger.info(f"predicting for dataset {dataset.name}")
         app.logger.info(f"Found configuration {config}")
         data = request.json
