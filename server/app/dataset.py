@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 
 
 def load_all_datasets(datasets_directory):
+    """Load all unknown datasets into the database """
     datasets_already_loaded = [Path(d.path) for d in Dataset.objects]
 
     for path in map(Path, os.listdir(datasets_directory)):
@@ -23,6 +24,11 @@ def load_all_datasets(datasets_directory):
 
 
 def create_initial_dataset_config(path: Path):
+    """Create a basic configuration for a dataset
+
+    All columns are enabled and the first column of the dataset is selected as
+    the label
+    """
     # TODO: detect separator once, store it, and give it explicitely
     # It would allow pandas to use the faster C csv engine.
     data = pd.read_csv(path, sep=None)
@@ -35,6 +41,7 @@ def create_initial_dataset_config(path: Path):
 
 
 def get_dataset(path: Path, config: dict):
+    """Load and configure a dataset from disk"""
     data = pd.read_csv(path, sep=None)
     columns = [k for k, v in config["columns"].items() if v]
     label = config["label"]
@@ -47,6 +54,7 @@ def get_dataset(path: Path, config: dict):
 
 @dask.delayed
 def get_dataset_visualization(path: Path):
+    """Get or generate the SweetViz vizualisation"""
     viz_path = path.with_suffix(".sweetviz.html")
     log.info(f"Searching viz file {viz_path}")
     if viz_path.exists():

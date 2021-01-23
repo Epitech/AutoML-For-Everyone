@@ -43,11 +43,13 @@ class Dataset(Document):
 
     @staticmethod
     def create_from_path(path: Path):
+        """Create a dataset object from a csv dataset on disk"""
         df = pd.read_csv(path, sep=None, engine="python")
         return Dataset(path=str(path), name=path.name, columns=df.columns)
 
     @staticmethod
     def from_id(id: str) -> Dataset:
+        """Load a dataset from its id"""
         try:
             return next(Dataset.objects(name=id))
         except StopIteration:
@@ -55,6 +57,7 @@ class Dataset(Document):
 
     @staticmethod
     def config_from_id(id: str) -> (DatasetConfig, Dataset):
+        """Load a config from its id"""
         try:
             res = next(Dataset.objects
                        .filter(configs__id=id)
@@ -68,6 +71,7 @@ class Dataset(Document):
 
     @staticmethod
     def model_from_id(id: str) -> (DatasetModel, DatasetConfig, Dataset):
+        """Load a model from its id"""
         try:
             res = next(Dataset.objects
                        .filter(configs__models__id=id)
