@@ -1,11 +1,5 @@
 const URL = 'http://localhost:5000/dataset';
 
-export const get_datasets = async () => {
-  const res = await fetch(URL);
-
-  return res.json();
-};
-
 export const get_config = async (id: string) => {
   const res = await fetch(URL + `/${id}/config`);
 
