@@ -1,0 +1,31 @@
+.models {
+  display: flex;
+  flex-direction: row;
+}
+
+.current,
+.button {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: teal;
+  color: white;
+  margin: 0 1px;
+  padding: 10px;
+  text-align: center;
+}
+
+.current {
+  background-color: lightblue;
+  color: black;
+}
+
+.add {
+  color: white;
+  font-weight: bold;
+  font-size: 40px;
+  border-radius: 0px 10px 10px 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding: 0 20px 0 20px;
+}

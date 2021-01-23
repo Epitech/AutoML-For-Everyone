@@ -29,7 +29,7 @@ export class DatasetOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.sub = this.route.params.subscribe((params) => {
       this.id = params['id'];
-      this.refreshThis(params['id']);
+      this.refresh(params['id']);
     });
   }
 
@@ -37,7 +37,7 @@ export class DatasetOverviewComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
-  refreshThis(id: string) {
+  refresh(id: string) {
     get_dataset(id).then((dataset: Dataset) => {
       if (!dataset) return console.error('no dataset');
       this.dataset = dataset;
@@ -66,7 +66,7 @@ export class DatasetOverviewComponent implements OnInit {
     dialogRef.afterClosed().subscribe((create: boolean) => {
       if (create)
         post_config(this.id!, this.newConfig).then(() => {
-          this.refreshThis(this.id!);
+          this.refresh(this.id!);
         });
     });
   }

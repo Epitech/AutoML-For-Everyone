@@ -1,4 +1,14 @@
 <ng-container *ngIf="config">
     <app-table [transit]="config"></app-table>
-    <iframe [src]="sweetviz()" width="100%" height="1000px"></iframe>
+
+    <h2>Models</h2>
+
+    <div class="models">
+        <button [class]="m===model?'current':'button'" (click)="changeModel(m)"
+            *ngFor="let m of config.models">{{m}}</button>
+        <button class="button add" (click)="openDialog()">+</button>
+    </div>
+
+    <h2>Data Viz</h2>
+    <iframe [src]="sweetviz()" width="100%"></iframe>
 </ng-container>
