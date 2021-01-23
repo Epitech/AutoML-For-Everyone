@@ -44,6 +44,8 @@ def create_app():
 
     mongoengine.connect("datasets", host=MONGO_HOST)
 
+    # Repair the database
+    dataset.repair_all_datasets()
     # Initializa the database with all datasets that can be found
     dataset.load_all_datasets(DATASETS_DIRECTORY)
 

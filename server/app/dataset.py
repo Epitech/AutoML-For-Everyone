@@ -12,6 +12,13 @@ from app.model.dataset import Dataset
 log = logging.getLogger(__name__)
 
 
+def repair_all_datasets():
+    """Repair dangling paths in all the Datasets"""
+    dataset: Dataset
+    for dataset in Dataset.objects:
+        dataset.repair()
+
+
 def load_all_datasets(datasets_directory):
     """Load all unknown datasets into the database """
     datasets_already_loaded = [Path(d.path) for d in Dataset.objects]
