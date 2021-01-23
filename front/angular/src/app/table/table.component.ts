@@ -7,7 +7,7 @@ export type EmittedType = {
   label: Label;
 };
 export type DataType = {
-  dispatch: (value: EmittedType) => void;
+  dispatch?: (value: EmittedType) => void;
 } & EmittedType;
 
 @Component({
@@ -20,17 +20,17 @@ export class TableComponent {
   @Input() transit!: DataType;
 
   handleCheck(col: string, checked: boolean) {
+    if (!this.transit.dispatch) return;
+
     this.transit.columns[col] = checked;
     if (col === this.transit.label && !checked) this.transit.label = undefined;
-    this.outputData();
+    this.transit.dispatch(this.transit);
   }
 
   changeLabel(label: string) {
-    this.transit.label = this.transit.label === label ? undefined : label;
-    this.outputData();
-  }
+    if (!this.transit.dispatch) return;
 
-  outputData() {
+    this.transit.label = this.transit.label === label ? undefined : label;
     this.transit.dispatch(this.transit);
   }
 }

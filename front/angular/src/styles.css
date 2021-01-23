@@ -24,3 +24,7 @@ button {
   border: none;
   cursor: pointer;
 }
+
+button:focus {
+  outline: none;
+}

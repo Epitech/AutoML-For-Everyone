@@ -1,13 +1,20 @@
 const URL = 'http://localhost:5000';
 
-type OptionsType = {
-  method: 'GET' | 'POST' | 'PUT';
-  body?: any;
-  headers?: HeadersInit;
-};
+type OptionsType =
+  | {
+      method: 'GET' | 'POST';
+      body?: any;
+    }
+  | { method: 'POST'; body: any; headers: HeadersInit };
 
 const api = (url: string, options?: OptionsType, no_json?: boolean) =>
   fetch(URL + url, options).then((res) => (no_json ? res : res.json()));
+
+const with_body = (body: any): OptionsType => ({
+  method: 'POST',
+  body: JSON.stringify(body),
+  headers: new Headers({ 'Content-Type': 'application/json' }),
+});
 
 // DATASETS
 
@@ -23,27 +30,19 @@ export const post_dataset = (file: File) => {
 // CONFIG
 
 export const post_config = (id: string, config: any) =>
-  api(
-    `/dataset/${id}/config`,
-    {
-      method: 'POST',
-      body: JSON.stringify(config),
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-    },
-    true
-  );
+  api(`/dataset/${id}/config`, with_body(config), true);
 
 export const get_config = (id: string) => api(`/config/${id}`);
 
 export const get_lint = (id: string) =>
   api(`/config/${id}/lint`, { method: 'POST' });
 
-export const get_sweetviz = (id: string) => api(`/config/${id}/sweetviz`);
+export const get_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
 
 // MODEL
 
-export const post_model = (id: string) =>
-  api(`/config/${id}/model`, { method: 'POST' }, true);
+export const post_model = (id: string, config: any) =>
+  api(`/config/${id}/model`, with_body(config), true);
 
 export const get_model = (id: string) => api(`/model/${id}`);
 

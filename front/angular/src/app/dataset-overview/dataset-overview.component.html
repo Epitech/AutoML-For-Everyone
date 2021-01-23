@@ -1,9 +1,10 @@
-<span *ngIf="dataset">
+<ng-container *ngIf="dataset">
     <h1>My dataset - {{dataset.name}}</h1>
 
-    <div class="row">
-        <button class="button" (click)="changeConfig(c)" *ngFor="let c of dataset.configs">{{c}}</button>
+    <div class="configs">
+        <button [class]="c===config?'current':'button'" (click)="changeConfig(c)"
+            *ngFor="let c of dataset.configs">{{c}}</button>
         <button class="button add" (click)="openDialog()">+</button>
     </div>
-    <app-config *ngIf="config" [config]="config"></app-config>
-</span>
+    <app-config *ngIf="config" [id]="config"></app-config>
+</ng-container>

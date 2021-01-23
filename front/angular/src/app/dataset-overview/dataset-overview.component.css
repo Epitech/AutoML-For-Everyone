@@ -1,8 +1,9 @@
-.row {
+.configs {
   display: flex;
   flex-direction: row;
 }
 
+.current,
 .button {
   display: flex;
   justify-content: center;
@@ -12,6 +13,11 @@
   margin: 0 1px;
   padding: 10px;
   text-align: center;
+}
+
+.current {
+  background-color: lightblue;
+  color: black;
 }
 
 .add {
@@ -24,6 +30,3 @@
   padding: 0 20px 0 20px;
 }
 
-.add:focus {
-  outline: none;
-}

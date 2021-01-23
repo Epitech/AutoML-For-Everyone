@@ -1,8 +1,9 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { get_dataset, post_config } from '../../api2';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DataType, EmittedType } from '../table/table.component';
+import { MatDialog } from '@angular/material/dialog';
+import { EmittedType } from '../table/table.component';
+import { DialogContentNewConfig } from '../dialog-new-config/dialog-new-config';
 
 type Fields = { [key: string]: boolean };
 type Dataset = {
@@ -73,13 +74,4 @@ export class DatasetOverviewComponent implements OnInit {
   changeConfig(config: string) {
     this.config = config;
   }
-}
-
-@Component({
-  selector: 'dialog-content-new-config',
-  templateUrl: 'dialog-content-new-config.html',
-  styleUrls: ['dialog-content-new-config.css'],
-})
-export class DialogContentNewConfig {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: DataType) {}
 }

@@ -1,1 +1,4 @@
-<p>config {{config}} works!</p>
+<ng-container *ngIf="config">
+    <app-table [transit]="config"></app-table>
+    <iframe [src]="sweetviz()" width="100%" height="1000px"></iframe>
+</ng-container>
