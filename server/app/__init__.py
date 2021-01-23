@@ -63,7 +63,7 @@ def create_app():
                 abort(400)
             filename = secure_filename(file.filename)
             file.save(DATASETS_DIRECTORY / filename)
-            return {"status": "ok"}
+            return {"status": "ok"}, 201
         else:
             abort(400)
 
@@ -86,7 +86,7 @@ def create_app():
         app.logger.info(f"Inserting config {request.json}")
         app.logger.info(result.configs)
         result.save()
-        return config.to_json()
+        return config.to_json(), 201
 
     @app.route("/config/<id>")
     def get_dataset_config(id):
@@ -113,7 +113,7 @@ def create_app():
         model = DatasetModel(**model_kwargs)
         config.models.append(model)
         dataset.save()
-        return model.to_json()
+        return model.to_json(), 201
 
     @app.route("/model/<id>")
     def get_model(id):
@@ -134,7 +134,7 @@ def create_app():
 
         fut = client.submit(training.train_model, id)
         fire_and_forget(fut)
-        return {"status": model.status}
+        return {"status": model.status}, 202
 
     @app.route("/model/<id>/export")
     def export_result(id):
