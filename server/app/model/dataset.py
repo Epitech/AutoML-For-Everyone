@@ -42,7 +42,7 @@ class Dataset(Document):
     meta = {"collection": "datasets"}
 
     @staticmethod
-    def create_from_path(path: Path):
+    def create_from_path(path: Path) -> Dataset:
         """Create a dataset object from a csv dataset on disk"""
         df = pd.read_csv(path, sep=None, engine="python")
         return Dataset(path=str(path), name=path.name, columns=df.columns)
@@ -56,7 +56,7 @@ class Dataset(Document):
             raise DatasetNotFound(id)
 
     @staticmethod
-    def config_from_id(id: str) -> (DatasetConfig, Dataset):
+    def config_from_id(id: str) -> tuple[DatasetConfig, Dataset]:
         """Load a config from its id"""
         try:
             res = next(Dataset.objects
@@ -70,7 +70,7 @@ class Dataset(Document):
             raise ConfigNotFound(id)
 
     @staticmethod
-    def model_from_id(id: str) -> (DatasetModel, DatasetConfig, Dataset):
+    def model_from_id(id: str) -> tuple[DatasetModel, DatasetConfig, Dataset]:
         """Load a model from its id"""
         try:
             res = next(Dataset.objects
