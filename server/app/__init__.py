@@ -179,8 +179,16 @@ def create_app():
 
     @app.route("/model/<id>/status")
     def dataset_status(id):
+        model: DatasetModel
         model, _, _ = Dataset.model_from_id(id)
-        return jsonify({"status": model.status})
+
+        reply = {"status": model.status}
+
+        if model.log_path:
+            with open(model.log_path) as f:
+                reply["logs"] = f.read()
+
+        return reply
 
     @app.route("/dataset/pic")
     def export_explaination():
