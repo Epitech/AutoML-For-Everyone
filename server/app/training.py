@@ -59,9 +59,11 @@ def train_model(model_id):
 
     # Create the different assets path
     dataset_path = Path(dataset.path)
-    log_path = dataset_path.with_suffix(".training.log")
-    pickled_model_path = dataset_path.with_suffix(".pipeline.pickle")
-    exported_model_path = dataset_path.with_suffix(".pipeline.py")
+    model_dir = dataset_path.parent / f"{dataset.name}-model-{str(model.id)}"
+    model_dir.mkdir()
+    log_path = model_dir / "training.log"
+    pickled_model_path = model_dir / "pipeline.pickle"
+    exported_model_path = model_dir / "pipeline.py"
 
     model.log_path = str(log_path)
     set_status("started")
