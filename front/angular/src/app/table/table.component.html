@@ -1,0 +1,23 @@
+<table class="table">
+    <thead>
+        <tr>
+            <th *ngFor="let title of ['Column', 'Enabled', 'Label']">
+                <h2>{{title}}</h2>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let o of transit.columns | keyvalue">
+            <td>{{o.key}}</td>
+            <td>
+                <mat-checkbox [checked]="o.value" (change)="handleCheck(o.key, $event.checked)"></mat-checkbox>
+            </td>
+            <td>
+                <mat-checkbox *ngIf='o.value' [checked]="o.key === transit.label" (change)="changeLabel(o.key)">
+                </mat-checkbox>
+            </td>
+        </tr>
+        <tr>
+        </tr>
+    </tbody>
+</table>

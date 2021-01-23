@@ -1,0 +1,15 @@
+.cancel {
+  background-color: red;
+}
+
+.create {
+  background-color: teal;
+}
+
+.cancel,
+.create {
+  padding: 10px;
+  margin: 5px;
+  color: white;
+  border-radius: 5px;
+}

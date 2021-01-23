@@ -1,75 +1,29 @@
-.table {
-  margin: 10px auto;
-}
-
-.buttons {
+.row {
   display: flex;
-  justify-content: space-around;
-  width: 815px;
-  margin: auto;
+  flex-direction: row;
 }
 
 .button {
-  cursor: pointer;
-  border: none;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: teal;
   color: white;
-  border-radius: 20px;
-  background-color: var(--docaposte-blue);
-  padding: 10px 30px;
-}
-
-.config {
-  background-color: var(--docaposte-blue);
-  padding: 10px 50px;
-  border: none;
-  margin: 1px;
-  cursor: pointer;
-  color: white;
-}
-
-.export {
-  margin-bottom: 20px;
-}
-
-table {
-  border-collapse: collapse;
-}
-
-.table {
-  margin-bottom: 35px;
-}
-
-th {
-  width: 200px;
-}
-
-th {
-  color: var(--docaposte-darkblue);
-}
-
-td {
+  margin: 0 1px;
+  padding: 10px;
   text-align: center;
 }
 
-td,
-th {
-  border: black solid 1px;
-  margin: 0;
+.add {
+  color: white;
+  font-weight: bold;
+  font-size: 40px;
+  border-radius: 0px 10px 10px 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding: 0 20px 0 20px;
 }
 
-.lint {
-  color: red;
-  border: none;
-  background-color: transparent;
-}
-
-.running {
-  background-color: grey;
-  cursor: wait;
-}
-
-::ng-deep .mat-tooltip {
-  white-space: pre-line;
-  font-size: small;
-  text-align: center;
+.add:focus {
+  outline: none;
 }

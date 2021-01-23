@@ -18,3 +18,9 @@ h1,
 h2 {
   color: var(--docaposte-darkblue);
 }
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}

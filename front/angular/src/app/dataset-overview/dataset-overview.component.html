@@ -1,62 +1,9 @@
-<h1>My dataset</h1>
+<span *ngIf="dataset">
+    <h1>My dataset - {{dataset.name}}</h1>
 
-<button class="config" (click)="save_config()">Save config</button>
-
-<table class="table" *ngIf="dataset !== undefined">
-    <thead>
-        <tr>
-            <th *ngFor="let title of ['Column', 'Enable ?', 'Is label ?', 'predict value']">
-                <h2>{{title}}</h2>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let o of dataset.columns | keyvalue">
-            <td *ngIf="lints&&lints[o.key];else no_lints" [matTooltip]="lints[o.key].join('\n---\n')">
-                <button mat-button (click)="openLintDialog(o.key)" class="lint">{{o.key}}</button>
-            </td>
-            <ng-template #no_lints>
-                <td>{{o.key}}</td>
-            </ng-template>
-
-            <td>
-                <mat-checkbox [checked]="o.value" (change)="changeCheck(o.key, $event.checked)"></mat-checkbox>
-            </td>
-            <td>
-                <mat-checkbox *ngIf='o.value' [checked]="o.key === dataset.label" (change)="changeLabel(o.key)">
-                </mat-checkbox>
-            </td>
-            <td>
-                <input *ngIf='train_data && o.key !== dataset.label && o.value' id="{{'train_' + o.key.toString()}}"
-                    type="text" value="{{train_data[o.key]}}" (change)="changeTrain(o.key)">
-                <span *ngIf='o.key === dataset.label'>{{predict_result}}</span>
-            </td>
-        </tr>
-        <tr>
-        </tr>
-    </tbody>
-</table>
-
-<div class="buttons">
-    <div>
-        <div>Classifier
-            <mat-slide-toggle [checked]="regression" (change)="changeRegression($event)">Regressor</mat-slide-toggle>
-        </div>
-        <button [class]="status==='started'?'button running':'button'" (click)='train()'
-            [disabled]="status==='started'">tpot classic ({{status || 'not started' }}) with
-            ({{regression?'regressor':'classifier'}})</button>
+    <div class="row">
+        <button class="button" (click)="changeConfig(c)" *ngFor="let c of dataset.configs">{{c}}</button>
+        <button class="button add" (click)="openDialog()">+</button>
     </div>
-    <button [disabled]="status!=='done'" [class]="status!=='done'?'button running':'button'"
-        (click)='predict()'>predict</button>
-</div>
-
-<h2>Train result</h2>
-
-<div>
-    <button class="button export" (click)='export()'>export</button>
-</div>
-
-
-<h2>Data viz</h2>
-
-<iframe *ngIf="this.id !== ''" [src]="get_sweetviz()" width="100%" height="2000px"></iframe>
+    <app-config *ngIf="config" [config]="config"></app-config>
+</span>
