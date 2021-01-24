@@ -66,7 +66,10 @@ export class DatasetOverviewComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((create: boolean) => {
       if (create)
-        post_config(this.id!, this.newConfig).then(() => {
+        post_config(this.id!, {
+          ...this.newConfig,
+          model_type: 'classification',
+        }).then(() => {
           this.refresh(this.id!);
         });
     });
