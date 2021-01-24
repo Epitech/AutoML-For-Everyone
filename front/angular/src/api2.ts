@@ -43,7 +43,7 @@ export const get_config = (id: string) => api(`/config/${id}`);
 export const get_lint = (id: string) =>
   api(`/config/${id}/lint`, { method: 'POST' });
 
-export const get_sweetviz_url = (id: string) => `${URL}/dataset/${id}/sweetviz`;
+export const get_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
 
 // MODEL
 
@@ -61,7 +61,7 @@ export const post_train = (id: string) =>
 
 export const get_status = (id: string) => api(`/model/${id}/status`);
 
-export const get_export = (id: string) => api(`/model/${id}/export`);
+export const get_export = (id: string) => window.open(URL + `/model/${id}/export`);
 
 export const get_predict = (id: string) =>
   api(`/model/${id}/predict`, { method: 'POST' });

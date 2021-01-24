@@ -32,7 +32,7 @@ export class ModelComponent implements OnChanges {
       .then(({ status }) => {
         this.status = status;
         if (refresh && status)
-          setTimeout(({ id }) => this.checkStatus(id), 2000, this);
+          setTimeout(({ id }: ModelComponent) => this.checkStatus(id), 2000, this);
       })
       .catch((e) => {
         console.error('error get_status', e);

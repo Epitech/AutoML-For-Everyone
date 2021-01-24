@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { DomSanitizer } from '@angular/platform-browser';
 
-import { get_dataset, post_config, get_sweetviz_url } from '../../api2';
+import { get_dataset, post_config } from '../../api2';
 import { EmittedType } from '../table/table.component';
 import { DialogContentNewConfig } from '../dialog-new-config/dialog-new-config';
 
@@ -26,11 +25,7 @@ export class DatasetOverviewComponent implements OnInit {
   newConfig?: EmittedType;
   id?: string;
 
-  constructor(
-    private route: ActivatedRoute,
-    public dialog: MatDialog,
-    private sanitizer: DomSanitizer
-  ) {}
+  constructor(private route: ActivatedRoute, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.sub = this.route.params.subscribe((params) => {
@@ -80,7 +75,4 @@ export class DatasetOverviewComponent implements OnInit {
   changeConfig(config: string) {
     this.config = config;
   }
-
-  sweetviz = () =>
-    this.sanitizer.bypassSecurityTrustResourceUrl(get_sweetviz_url(this.id!));
 }
