@@ -9,14 +9,16 @@
     <tbody>
         <tr *ngFor="let o of transit.columns | keyvalue">
             <td>
-                <span matBadge="1" matBadgeOverlap="true" matBadgeColor="warn" class="col">{{o.key}}</span>
+                <span matBadge="1" matBadgeOverlap="false" matBadgeColor="warn" matBadgeSize="small">
+                    {{o.key}}
+                </span>
             </td>
             <td>
                 <mat-checkbox [disabled]="!transit.dispatch" [checked]="o.value"
                     (change)="handleCheck(o.key, $event.checked)"></mat-checkbox>
             </td>
             <td>
-                <mat-checkbox [disabled]="!transit.dispatch" *ngIf='o.value' [checked]="o.key === transit.label"
+                <mat-checkbox [disabled]="!transit.dispatch" [checked]="o.key === transit.label" *ngIf='o.value'
                     (change)="changeLabel(o.key)">
                 </mat-checkbox>
             </td>

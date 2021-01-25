@@ -13,13 +13,11 @@ th {
 
 td {
   text-align: center;
+  padding: 10px 0;
 }
 
 td,
 th {
   border: black solid 1px;
   margin: 0;
-}
-
-.col {
 }
