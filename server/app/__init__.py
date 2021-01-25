@@ -74,6 +74,17 @@ def create_app():
         dataset = Dataset.from_id(id)
         return dataset.to_json()
 
+    @app.route("/dataset/<id>/config/lint", methods=["POST"])
+    def lint_config_directly(id):
+        config = request.json
+        dataset = Dataset.from_id(id)
+        app.logger.info(
+            f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
+        df = pd.read_csv(dataset.path, sep=None)
+        df = df[[k for k, v in config["columns"].items() if v]]
+        app.logger.info(f"Dataset columns: {df.columns}")
+        return linter.lint_dataframe(df, config["label"])
+
     @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
         result = Dataset.from_id(id)
