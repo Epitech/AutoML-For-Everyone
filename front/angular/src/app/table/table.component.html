@@ -10,8 +10,9 @@
         <tr *ngFor="let o of transit.columns | keyvalue">
             <td>
                 <div *ngIf="transit.lints && transit.lints[o.key]; else notLint">
-                    <button class="lint" [matBadge]="transit.lints[o.key].length" matBadgeColor="warn"
-                        matBadgeSize="small" (click)="openLints(o.key)">
+                    <button *ngIf="lintContainsbad(transit.lints[o.key]); let color" [class]="color"
+                        [matBadge]="transit.lints[o.key].length" [matBadgeColor]="color" matBadgeSize="small"
+                        (click)="openLints(o.key)">
                         {{o.key}}
                     </button>
                 </div>
@@ -26,8 +27,6 @@
                     (change)="changeLabel(o.key)">
                 </mat-checkbox>
             </td>
-        </tr>
-        <tr>
         </tr>
     </tbody>
 </table>

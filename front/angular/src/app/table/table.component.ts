@@ -48,4 +48,7 @@ export class TableComponent {
     const data: LintType = { lint: this.transit.lints![column], column };
     this.dialog.open(DialogLintComponent, { data });
   }
+
+  lintContainsbad = (lints: Lint) =>
+    lints.reduce((c, l) => c + +l[2], 0) ? 'warn' : 'accent';
 }

@@ -27,7 +27,15 @@ button {
   font: 16px Roboto, "Helvetica Neue", sans-serif;
 }
 
-.lint {
+.accent,
+.warn {
   cursor: pointer;
+}
+
+.accent {
+  color: #448aff;
+}
+
+.warn {
   color: red;
 }
