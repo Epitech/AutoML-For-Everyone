@@ -9,10 +9,9 @@ import {
   get_lint,
 } from '../../api2';
 
-type Fields = { [key: string]: boolean };
-type Config = {
-  columns: Fields;
-  label: string;
+import { DataType, EmittedType } from '../table/table.component';
+
+type Config = EmittedType & {
   models: string[];
 };
 
@@ -23,7 +22,7 @@ type Config = {
 })
 export class ConfigComponent implements OnChanges {
   @Input() id!: string;
-  config?: Config;
+  config?: Config & DataType;
   model?: string;
 
   constructor(private sanitizer: DomSanitizer) {}
@@ -43,6 +42,7 @@ export class ConfigComponent implements OnChanges {
       this.config = config;
       get_lint(id).then(({ lints }) => {
         console.log('lint', lints);
+        this.config!.lints = lints;
       });
     });
   }

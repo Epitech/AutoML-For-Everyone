@@ -9,9 +9,13 @@
     <tbody>
         <tr *ngFor="let o of transit.columns | keyvalue">
             <td>
-                <span matBadge="1" matBadgeOverlap="false" matBadgeColor="warn" matBadgeSize="small">
-                    {{o.key}}
-                </span>
+                <div *ngIf="transit.lints && transit.lints[o.key]; else notLint">
+                    <button class="lint" [matBadge]="transit.lints[o.key].length" matBadgeColor="warn"
+                        matBadgeSize="small" (click)="openLints(o.key)">
+                        {{o.key}}
+                    </button>
+                </div>
+                <ng-template #notLint>{{o.key}}</ng-template>
             </td>
             <td>
                 <mat-checkbox [disabled]="!transit.dispatch" [checked]="o.value"

@@ -1,0 +1,13 @@
+<h1> Lints for column {{data.column}} </h1>
+
+<div *ngFor="let lint of data.lint" class="lint">
+    <mat-icon *ngIf="lint[2]; else good" color="warn">close</mat-icon>
+    <ng-template #good>
+        <mat-icon color="accent">done</mat-icon>
+    </ng-template>
+    {{lint[0]}}
+
+    <button *ngIf="lint[2]" (click)="openHelp(lint[1])" matTooltip="Learn more" class="help">
+        ?
+    </button>
+</div>

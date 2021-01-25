@@ -5,6 +5,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatIconModule } from '@angular/material/icon';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,6 +19,7 @@ import { ConfigComponent } from './config/config.component';
 import { TableComponent } from './table/table.component';
 import { DialogContentNewConfig } from './dialog-new-config/dialog-new-config';
 import { ModelComponent } from './model/model.component';
+import { DialogLintComponent } from './dialog-lint/dialog-lint.component';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { ModelComponent } from './model/model.component';
     TableComponent,
     DialogContentNewConfig,
     ModelComponent,
+    DialogLintComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +44,7 @@ import { ModelComponent } from './model/model.component';
     MatMenuModule,
     MatSlideToggleModule,
     MatBadgeModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

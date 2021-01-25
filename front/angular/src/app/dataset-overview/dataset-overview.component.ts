@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { get_dataset, post_config } from '../../api2';
-import { EmittedType } from '../table/table.component';
+import { DataType, EmittedType } from '../table/table.component';
 import { DialogContentNewConfig } from '../dialog-new-config/dialog-new-config';
 
 type Fields = { [key: string]: boolean };
@@ -55,14 +55,15 @@ export class DatasetOverviewComponent implements OnInit {
       label: undefined,
     };
 
-    const dialogRef = this.dialog.open(DialogContentNewConfig, {
-      data: {
-        ...emitted,
-        dispatch: (value: EmittedType) => {
-          this.newConfig = value;
-        },
+    const data: DataType = {
+      ...emitted,
+      dispatch: (value: EmittedType) => {
+        this.newConfig = value;
       },
-    });
+      lints: {},
+    };
+
+    const dialogRef = this.dialog.open(DialogContentNewConfig, { data });
 
     dialogRef.afterClosed().subscribe((create: boolean) => {
       if (create)

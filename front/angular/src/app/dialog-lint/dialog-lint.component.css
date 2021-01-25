@@ -1,0 +1,14 @@
+.lint {
+  margin-bottom: 10px;
+}
+
+.help {
+  background-color: lightblue;
+  border-radius: 10px;
+  height: 19px;
+  vertical-align: text-bottom;
+}
+
+mat-icon {
+  vertical-align: bottom;
+}

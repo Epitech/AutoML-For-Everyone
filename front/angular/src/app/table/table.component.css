@@ -19,5 +19,9 @@ td {
 td,
 th {
   border: black solid 1px;
-  margin: 0;
+}
+
+.lint {
+  color: red;
+  font: 16px Roboto, "Helvetica Neue", sans-serif;
 }
