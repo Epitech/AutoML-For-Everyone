@@ -12,7 +12,6 @@ linters_list = []
 score_list = []
 score_c_list = []
 
-
 def lint_column(col, df):
     return [[res, "", True] for linter in linters_list if (res := linter(df[col])) is not None]
 
@@ -25,11 +24,18 @@ def lint_dataframe(df: pd.DataFrame, target, *, use_dask=False):
             if (lints := lint_column(col, df))
         }
     }
-    X = df.drop([target], axis=1)
-    Y = df[target]
-    json = regression(X, Y, json)
-    #json = classification(X, Y, json)
-    return json
+    try:
+        X = df.drop([target], axis=1)
+        Y = df[target]
+        json = regression(X, Y, json)
+        #json = classification(X, Y, json)
+        return json
+    except ValueError:
+        print("Found a value who is not an integer")
+        return json
+    except:
+        print("Unexpected error")
+        return json
 
 def regression(X, Y, json):
     for score in score_list:
