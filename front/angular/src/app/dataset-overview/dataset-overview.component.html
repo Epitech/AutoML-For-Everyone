@@ -2,9 +2,14 @@
     <h1>My dataset - {{dataset.name}}</h1>
 
     <div class="configs">
-        <button [class]="c===config?'current':'button'" (click)="changeConfig(c)"
-            *ngFor="let c of dataset.configs">{{c}}</button>
-        <button class="button add" (click)="openDialog()">+</button>
+        <ng-container *ngFor="let c of dataset.configs; let index = index">
+            <button [class]="c===config?'current':'button'" (click)="changeConfig(c)">
+                <ng-container matTooltipShowDelay=1000 [matTooltip]="c">
+                    Config{{index + 1}}
+                </ng-container>
+            </button>
+            <button class="button add" (click)="openDialog()" matTooltip="Add a new model">+</button>
+        </ng-container>
     </div>
     <app-config *ngIf="config" [id]="config"></app-config>
 </ng-container>
