@@ -14,7 +14,7 @@ score_c_list = []
 
 
 def lint_column(col, df):
-    return [res for linter in linters_list if (res := linter(df[col])) is not None]
+    return [[res, "", True] for linter in linters_list if (res := linter(df[col])) is not None]
 
 
 def lint_dataframe(df: pd.DataFrame, target, *, use_dask=False):
@@ -101,7 +101,7 @@ def check_score_class_classification(X, Y):
     percent = total / 100
     for idx in range(0, fit.scores_.shape[0]):
         if fit.scores_[idx] < percent * 1.5:
-            list_string.append(f"{X.columns[idx]}")
+            list_string.append([f"{X.columns[idx]}", "https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest", True])
         else:
             list_string.append("")
     return list_string
@@ -118,7 +118,7 @@ def check_score_class_regression(X, Y):
     percent = total / 100
     for idx in range(0, fit.scores_.shape[0]):
         if fit.scores_[idx] < percent * 1.5:
-            list_string.append(f"{X.columns[idx]}")
+            list_string.append([f"The column {X.columns[idx]} represent 1.5 % or less of the result", "https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest", True])
         else:
             list_string.append("")
     return list_string
@@ -131,7 +131,7 @@ def check_importance(X, Y):
     model.fit(X, Y)
     for idx in range(0, model.feature_importances_.shape[0]):
         if model.feature_importances_[idx] < 0.05:
-            list_string.append(f"The column {X.columns[idx]} impacts the result by only 5% or less")
+            list_string.append([f"The column {X.columns[idx]} impacts the result by only 5% or less", "https://towardsdatascience.com/feature-selection-techniques-in-python-predicting-hotel-cancellations-48a77521ee4f", True])
         else:
             list_string.append("")
     return list_string
@@ -144,33 +144,33 @@ def check_importance_two(X, Y):
     model.fit(X, Y)
     for idx in range(0, model.coef_.shape[0]):
         if model.coef_[idx] <= 0:
-            list_string.append(f"The column {X.columns[idx]} has a negative coefficient or equal to 0")
+            list_string.append([f"The column {X.columns[idx]} has a negative coefficient or equal to 0", "https://towardsdatascience.com/linear-regression-explained-d0a1068accb9", True])
         else:
             list_string.append("")
     return list_string
 
-#regression
-#@score
+#regression + Test positif
+@score
 def check_importance_three(X, Y):
     list_string = []
     model = DecisionTreeRegressor()
     model.fit(X, Y)
     for idx in range(0, model.feature_importances_.shape[0]):
-        if model.feature_importances_[idx] < 0.05:
-            list_string.append(f"The column {X.columns[idx]} impacts the result by only 5% or less")
+        if model.feature_importances_[idx] >= 0.5:
+            list_string.append([f"The column {X.columns[idx]} impacts the result by 50% or more", "", False])
         else:
             list_string.append("")
-    return model.feature_importances_
+    return list_string
 
-#classification
+#classification + Test Positif
 #@score_classification
 def check_importance_four(X, Y):
     list_string = []
     model = DecisionTreeClassifier()
     model.fit(X, Y)
     for idx in range(0, model.feature_importances_.shape[0]):
-        if model.feature_importances_[idx] < 0.05:
-            list_string.append(f"The column {X.columns[idx]} impacts the result by only 5% or less")
+        if model.feature_importances_[idx] > 0.49:
+            list_string.append([f"The column {X.columns[idx]} impacts the result by 50% or more", "https://chiragsehra42.medium.com/decision-trees-explained-easily-28f23241248", False])
         else:
             list_string.append("")
     return list_string
@@ -183,17 +183,23 @@ def check_importance_five(X, Y):
     model.fit(X, Y)
     for idx in range(0, model.feature_importances_.shape[0]):
         if model.feature_importances_[idx] < 0.05:
-            list_string.append(f"The column {X.columns[idx]} impacts the result by only 5% or less")
+            list_string.append([f"The column {X.columns[idx]} impacts the result by only 5% or less", "https://www.kongakura.fr/article/Random-Forest-explication-et-implémentation-avec-sklearn%20python-machine%20learning-", True])
         else:
             list_string.append("")
     return list_string
 
-#regression
-#@score
+#regression + Test Positif
+@score
 def check_importance_six(X, Y):
+    list_string = []
     model = XGBRegressor()
     model.fit(X, Y)
-    return model.feature_importances_
+    for idx in range(0, model.feature_importances_.shape[0]):
+        if model.feature_importances_[idx] >= 0.5:
+            list_string.append([f"The column {X.columns[idx]} impacts the result by 50% or more", "https://www.datacorner.fr/xgboost/#:~:text=Pour%20faire%20simple%20XGBoost%20(comme,arbres%20de%20boosting%20de%20gradient.&text=L%27id%C3%A9e%20est%20donc%20simple,pour%20obtenir%20un%20seul%20r%C3%A9sultat", False])
+        else:
+            list_string.append("")
+    return list_string
 
 if __name__ == "__main__":
     import sys
