@@ -4,14 +4,11 @@
     <h2>Models</h2>
 
     <div class="models">
-        <ng-container *ngFor="let m of config.models; let index = index">
-            <button [class]="m===model?'current':'button'" (click)="changeModel(m)">
-                <ng-container matTooltipShowDelay=1000 [matTooltip]="m">
-                    Model {{index + 1}}
-                </ng-container>
-            </button>
-        </ng-container>
-        <button class="button add" (click)="openDialog()" matTooltip="Add a new config">+</button>
+        <button *ngFor="let m of config.models; let index = index" matTooltipShowDelay=1000 [matTooltip]="m"
+            [class]="m===model?'current':'button'" (click)="changeModel(m)">
+            Model {{index + 1}}
+        </button>
+        <button class="button add" (click)="openDialog()" matTooltip="Add a new model">+</button>
     </div>
 
     <app-model *ngIf="model" [id]="model"></app-model>

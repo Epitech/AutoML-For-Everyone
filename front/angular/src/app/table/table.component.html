@@ -8,12 +8,16 @@
     </thead>
     <tbody>
         <tr *ngFor="let o of transit.columns | keyvalue">
-            <td>{{o.key}}</td>
             <td>
-                <mat-checkbox [disabled]="!transit.dispatch" [checked]="o.value" (change)="handleCheck(o.key, $event.checked)"></mat-checkbox>
+                <span matBadge="1" matBadgeOverlap="true" matBadgeColor="warn" class="col">{{o.key}}</span>
             </td>
             <td>
-                <mat-checkbox [disabled]="!transit.dispatch" *ngIf='o.value' [checked]="o.key === transit.label" (change)="changeLabel(o.key)">
+                <mat-checkbox [disabled]="!transit.dispatch" [checked]="o.value"
+                    (change)="handleCheck(o.key, $event.checked)"></mat-checkbox>
+            </td>
+            <td>
+                <mat-checkbox [disabled]="!transit.dispatch" *ngIf='o.value' [checked]="o.key === transit.label"
+                    (change)="changeLabel(o.key)">
                 </mat-checkbox>
             </td>
         </tr>

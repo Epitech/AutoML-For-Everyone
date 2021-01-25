@@ -1,23 +1,25 @@
 .table {
-    margin: 10px auto;
-  }
-  
-  table {
-    border-collapse: collapse;
-  }
-  
-  th {
-    width: 200px;
-    color: var(--docaposte-darkblue);
-  }
-  
-  td {
-    text-align: center;
-  }
-  
-  td,
-  th {
-    border: black solid 1px;
-    margin: 0;
-  }
-  
+  margin: 10px auto;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  width: 200px;
+  color: var(--docaposte-darkblue);
+}
+
+td {
+  text-align: center;
+}
+
+td,
+th {
+  border: black solid 1px;
+  margin: 0;
+}
+
+.col {
+}

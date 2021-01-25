@@ -4,6 +4,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -39,6 +40,7 @@ import { ModelComponent } from './model/model.component';
     MatDialogModule,
     MatMenuModule,
     MatSlideToggleModule,
+    MatBadgeModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
