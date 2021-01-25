@@ -30,20 +30,16 @@ export class DatasetOverviewComponent implements OnInit {
   ngOnInit(): void {
     this.sub = this.route.params.subscribe((params) => {
       this.id = params['id'];
-      this.refresh(params['id']);
+      get_dataset(params['id']).then((dataset: Dataset) => {
+        if (!dataset) return console.error('no dataset');
+        this.dataset = dataset;
+        console.log(dataset);
+      });
     });
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
-  }
-
-  refresh(id: string) {
-    get_dataset(id).then((dataset: Dataset) => {
-      if (!dataset) return console.error('no dataset');
-      this.dataset = dataset;
-      console.log(dataset);
-    });
   }
 
   openDialog() {
@@ -54,9 +50,6 @@ export class DatasetOverviewComponent implements OnInit {
       ),
       label: undefined,
     };
-
-    // post_lint(this.id!, this.newConfig).then((lints) => {
-    //   console.log(lints);
 
     const data: DataType = {
       ...emitted,
@@ -74,11 +67,11 @@ export class DatasetOverviewComponent implements OnInit {
         post_config(this.id!, {
           ...this.newConfig,
           model_type: 'classification',
-        }).then(() => {
-          this.refresh(this.id!);
+        }).then((config) => {
+          this.config = config.id;
+          this.dataset!.configs.push(config.id);
         });
     });
-    // });
   }
 
   changeConfig(config: string) {

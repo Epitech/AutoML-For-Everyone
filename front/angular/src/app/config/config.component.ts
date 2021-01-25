@@ -27,15 +27,7 @@ export class ConfigComponent implements OnChanges {
 
   constructor(private sanitizer: DomSanitizer) {}
 
-  ngOnChanges({ id }: { id: SimpleChange }) {
-    this.refresh(id.currentValue);
-  }
-
-  changeModel(model: string) {
-    this.model = model;
-  }
-
-  refresh(id: string) {
+  ngOnChanges({ id: { currentValue: id } }: { id: SimpleChange }) {
     this.id = id;
     get_config(id).then((config: Config) => {
       console.log('config', config);
@@ -47,9 +39,18 @@ export class ConfigComponent implements OnChanges {
     });
   }
 
+  changeModel(model: string) {
+    this.model = model;
+  }
+
+  refresh(id: string) {}
+
   openDialog() {
     const model: ModelType = { generations: 2 };
-    post_model(this.id, model).then(() => this.refresh(this.id));
+    post_model(this.id, model).then((model) => {
+      this.model = model.id;
+      this.config!.models.push(model.id);
+    });
   }
 
   sweetviz = () =>

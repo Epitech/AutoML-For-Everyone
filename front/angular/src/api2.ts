@@ -30,7 +30,7 @@ export const post_dataset = (file: File) => {
 // CONFIG
 
 export const post_config = (id: string, config: any) =>
-  api(`/dataset/${id}/config`, with_body(config), true);
+  api(`/dataset/${id}/config`, with_body(config));
 
 export const post_lint = (id: string, config: any) =>
   api(`/dataset/${id}/config/lint`, with_body(config));
@@ -48,7 +48,7 @@ export type ModelType = {
 };
 
 export const post_model = (id: string, config: any) =>
-  api(`/config/${id}/model`, with_body(config), true);
+  api(`/config/${id}/model`, with_body(config));
 
 export const get_model = (id: string) => api(`/model/${id}`);
 
