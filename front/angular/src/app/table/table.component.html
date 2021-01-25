@@ -15,7 +15,7 @@
                         {{o.key}}
                     </button>
                 </div>
-                <ng-template #notLint>{{o.key}}</ng-template>
+                <ng-template #notLint><button>{{o.key}}</button></ng-template>
             </td>
             <td>
                 <mat-checkbox [disabled]="!transit.dispatch" [checked]="o.value"

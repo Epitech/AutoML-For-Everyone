@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_dataset, post_config } from '../../api2';
+import { get_dataset, post_config, post_lint } from '../../api2';
 import { DataType, EmittedType } from '../table/table.component';
 import { DialogContentNewConfig } from '../dialog-new-config/dialog-new-config';
 
@@ -55,12 +55,16 @@ export class DatasetOverviewComponent implements OnInit {
       label: undefined,
     };
 
+    // post_lint(this.id!, this.newConfig).then((lints) => {
+    //   console.log(lints);
+
     const data: DataType = {
       ...emitted,
       dispatch: (value: EmittedType) => {
         this.newConfig = value;
       },
       lints: {},
+      id: this.id,
     };
 
     const dialogRef = this.dialog.open(DialogContentNewConfig, { data });
@@ -74,6 +78,7 @@ export class DatasetOverviewComponent implements OnInit {
           this.refresh(this.id!);
         });
     });
+    // });
   }
 
   changeConfig(config: string) {

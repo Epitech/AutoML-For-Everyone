@@ -21,7 +21,13 @@ th {
   border: black solid 1px;
 }
 
-.lint {
-  color: red;
+button {
+  color: black;
+  cursor: initial;
   font: 16px Roboto, "Helvetica Neue", sans-serif;
+}
+
+.lint {
+  cursor: pointer;
+  color: red;
 }

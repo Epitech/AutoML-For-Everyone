@@ -6,16 +6,16 @@ import {
   LintType,
 } from '../dialog-lint/dialog-lint.component';
 
-type Fields = { [key: string]: boolean };
-type Label = string | undefined;
 export type EmittedType = {
-  columns: Fields;
-  label: Label;
+  columns: { [key: string]: boolean };
+  label?: string;
 };
 export type Lint = [string, string, boolean][];
+export type Dispatch = (value: EmittedType) => void;
 export type DataType = {
-  dispatch?: (value: EmittedType) => void;
+  dispatch?: Dispatch;
   lints?: { [key: string]: Lint };
+  id?: string;
 } & EmittedType;
 
 @Component({

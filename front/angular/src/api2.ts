@@ -32,6 +32,9 @@ export const post_dataset = (file: File) => {
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config), true);
 
+export const post_lint = (id: string, config: any) =>
+  api(`/dataset/${id}/config/lint`, with_body(config));
+
 export const get_config = (id: string) => api(`/config/${id}`);
 
 export const get_lint = (id: string) => api(`/config/${id}/lint`);

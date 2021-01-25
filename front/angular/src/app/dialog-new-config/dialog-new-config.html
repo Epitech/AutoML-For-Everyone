@@ -4,5 +4,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button class="cancel" mat-button mat-dialog-close>Cancel</button>
-  <button class="create" mat-button [mat-dialog-close]="true">Create</button>
+  <button class="create" mat-button [mat-dialog-close]="true" [disabled]="!data.label">Create</button>
 </mat-dialog-actions>

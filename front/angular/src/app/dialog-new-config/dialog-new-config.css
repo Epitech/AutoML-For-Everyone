@@ -6,6 +6,11 @@
   background-color: teal;
 }
 
+.create:disabled {
+  background-color: lightgrey;
+  cursor: initial;
+}
+
 .cancel,
 .create {
   padding: 10px;
