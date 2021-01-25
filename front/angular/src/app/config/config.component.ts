@@ -6,6 +6,7 @@ import {
   post_model,
   ModelType,
   get_sweetviz_url,
+  get_lint,
 } from '../../api2';
 
 type Fields = { [key: string]: boolean };
@@ -40,6 +41,9 @@ export class ConfigComponent implements OnChanges {
     get_config(id).then((config: Config) => {
       console.log('config', config);
       this.config = config;
+      get_lint(id).then(({ lints }) => {
+        console.log('lint', lints);
+      });
     });
   }
 
