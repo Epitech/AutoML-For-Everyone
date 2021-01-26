@@ -5,7 +5,7 @@
         "not started"}})</button>
     <button class="button" [disabled]="status !== 'done'" (click)="export()">export</button>
     <button class="button" [disabled]="status !== 'done'" (click)="openPredict()">predict</button>
-    <span *ngIf="predictResult">
+    <span *ngIf="predictResult !== undefined">
         last prediction result: {{predictResult}}
     </span>
 </ng-container>

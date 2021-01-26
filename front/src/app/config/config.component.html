@@ -13,6 +13,9 @@
 
     <app-model *ngIf="model" [id]="model" [predictColumns]="getPredictColumns()"></app-model>
 
-    <a [href]="'/dataviz/'+id">DataViz</a>
+    <h2>DataViz</h2>
+    <div class="gotoVizContainer" >
+        <a class="gotoViz" [href]="'/dataviz/'+id">DataViz</a>
+    </div>
 
 </ng-container>
