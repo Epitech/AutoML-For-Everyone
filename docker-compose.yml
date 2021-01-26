@@ -39,7 +39,5 @@ services:
 
   angular:
     build: front
-    volumes:
-      - ./front:/app
     ports:
       - 4200:4200

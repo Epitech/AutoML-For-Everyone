@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import {
@@ -49,6 +50,6 @@ export class TableComponent {
     this.dialog.open(DialogLintComponent, { data });
   }
 
-  lintContainsbad = (lints: Lint) =>
+  lintContainsbad = (lints: Lint): ThemePalette =>
     lints.reduce((c, l) => c + +l[2], 0) ? 'warn' : 'accent';
 }
