@@ -15,5 +15,5 @@ instance/
 dist/
 *.egg-info/
 
-datasets
+/datasets
 !datasets/*.csv

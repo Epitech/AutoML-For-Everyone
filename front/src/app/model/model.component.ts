@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import {
   get_model,
@@ -6,7 +7,13 @@ import {
   post_train,
   get_status,
   get_export,
+  get_predict,
 } from '../../api2';
+import {
+  DialogPredictComponent,
+  PredictData,
+  PredictType,
+} from '../dialog-predict/dialog-predict';
 
 @Component({
   selector: 'app-model',
@@ -15,16 +22,34 @@ import {
 })
 export class ModelComponent implements OnChanges {
   @Input() id!: string;
+  @Input() predictColumns!: string[];
   model?: ModelType;
   status: null | 'starting' | 'started' | 'done' = null;
   statusRunning = () => this.status === 'starting' || this.status === 'started';
+  predictData: PredictType = {};
+  predictResult?: number;
 
-  ngOnChanges({ id }: { id: SimpleChange }) {
-    get_model(id.currentValue).then((model: ModelType) => {
-      this.checkStatus(this.id, false);
-      console.log('model', model);
-      this.model = model;
-    });
+  constructor(public dialog: MatDialog) {}
+
+  ngOnChanges({
+    id,
+    predictColumns,
+  }: {
+    id: SimpleChange;
+    predictColumns: SimpleChange;
+  }) {
+    if (predictColumns && !Object.keys(this.predictData).length) {
+      predictColumns.currentValue.forEach((col: string) => {
+        this.predictData[col] = '';
+      });
+    }
+
+    if (id)
+      get_model(id.currentValue).then((model: ModelType) => {
+        this.checkStatus(this.id, false);
+        console.log('model', model);
+        this.model = model;
+      });
   }
 
   launchTrain = () =>
@@ -53,4 +78,22 @@ export class ModelComponent implements OnChanges {
   }
 
   export = () => get_export(this.id);
+
+  openPredict() {
+    const data: PredictData = {
+      dispatch: (column, value) => {
+        this.predictData[column] = value;
+      },
+      predictColumns: this.predictData,
+    };
+
+    const dialogRef = this.dialog.open(DialogPredictComponent, { data });
+
+    dialogRef.afterClosed().subscribe((predict: boolean) => {
+      if (predict)
+        get_predict(this.id, this.predictData).then((r: number) => {
+          this.predictResult = r;
+        });
+    });
+  }
 }

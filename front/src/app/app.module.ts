@@ -23,6 +23,8 @@ import { DialogContentNewConfig } from './dialog-new-config/dialog-new-config';
 import { ModelComponent } from './model/model.component';
 import { DialogLintComponent } from './dialog-lint/dialog-lint.component';
 import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model';
+import { DialogPredictComponent } from './dialog-predict/dialog-predict';
+import { DatavizComponent } from './dataviz/dataviz.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model';
     ModelComponent,
     DialogLintComponent,
     DialogNewModelComponent,
+    DialogPredictComponent,
+    DatavizComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +54,7 @@ import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model';
     MatBadgeModule,
     MatIconModule,
     MatInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

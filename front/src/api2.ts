@@ -60,5 +60,5 @@ export const get_status = (id: string) => api(`/model/${id}/status`);
 export const get_export = (id: string) =>
   window.open(URL + `/model/${id}/export`);
 
-export const get_predict = (id: string) =>
-  api(`/model/${id}/predict`, { method: 'POST' });
+export const get_predict = (id: string, data: any) =>
+  api(`/model/${id}/predict`, with_body(data));

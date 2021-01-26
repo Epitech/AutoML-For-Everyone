@@ -1,14 +1,7 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 
-import {
-  get_config,
-  post_model,
-  ModelType,
-  get_sweetviz_url,
-  get_lint,
-} from '../../api2';
+import { get_config, post_model, ModelType, get_lint } from '../../api2';
 
 import { DataType, EmittedType } from '../table/table.component';
 import {
@@ -31,7 +24,7 @@ export class ConfigComponent implements OnChanges {
   model?: string;
   newModel?: ModelType;
 
-  constructor(private sanitizer: DomSanitizer, public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {}
 
   ngOnChanges({ id: { currentValue: id } }: { id: SimpleChange }) {
     this.id = id;
@@ -70,6 +63,8 @@ export class ConfigComponent implements OnChanges {
     });
   }
 
-  sweetviz = () =>
-    this.sanitizer.bypassSecurityTrustResourceUrl(get_sweetviz_url(this.id!));
+  getPredictColumns = () =>
+    Object.keys(this.config!.columns).filter(
+      (c) => this.config!.columns[c] && c !== this.config!.label
+    );
 }

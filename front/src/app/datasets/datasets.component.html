@@ -1,0 +1,15 @@
+<h1>My datasets</h1>
+
+<div class="buttons">
+    <app-button *ngFor="let d of datasets" url='/dataset/{{d}}'>
+        {{d}}
+    </app-button>
+</div>
+
+
+<form onsubmit="return false">
+    <label for="file">Choose File</label>
+    <input type="file" id="file" (change)="handleChange($event)">
+
+    <button (click)="upload()">Upload</button>
+</form>

@@ -1,0 +1,33 @@
+<h2 mat-dialog-title>Make a prediction</h2>
+<mat-dialog-content>
+    <!-- <form>
+        <mat-form-field>
+            <input type="number" matInput placeholder="generations" [value]="data.model.generations"
+                (change)="changeGenerations($event.target)">
+        </mat-form-field>
+    </form> -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th *ngFor="let title of ['Column', 'value']">
+                    <h2>{{title}}</h2>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let column of data.predictColumns | keyvalue">
+                <td>
+                    {{column.key}}
+                </td>
+                <td>
+                    <input type="text" [value]="data.predictColumns[column.key]" (change)="handleChange(column.key, $event.target)">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button class="cancel" mat-button mat-dialog-close>Cancel</button>
+    <button class="create" mat-button [mat-dialog-close]="true" [disabled]="anyWrong()">Create</button>
+</mat-dialog-actions>

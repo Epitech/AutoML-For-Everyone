@@ -11,8 +11,8 @@
         <button class="button add" (click)="openDialog()" matTooltip="Add a new model">+</button>
     </div>
 
-    <app-model *ngIf="model" [id]="model"></app-model>
+    <app-model *ngIf="model" [id]="model" [predictColumns]="getPredictColumns()"></app-model>
 
-    <h2>Data Viz</h2>
-    <iframe [src]="sweetviz()" width="100%" height="1000px"></iframe>
+    <a [href]="'/dataviz/'+id">DataViz</a>
+
 </ng-container>

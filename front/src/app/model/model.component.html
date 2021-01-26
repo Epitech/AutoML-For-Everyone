@@ -4,5 +4,8 @@
     <button class="button" [disabled]="statusRunning()" (click)="launchTrain()">train ({{status ||
         "not started"}})</button>
     <button class="button" [disabled]="status !== 'done'" (click)="export()">export</button>
-    <button class="button" [disabled]="true">predict (TODO)</button>
+    <button class="button" [disabled]="status !== 'done'" (click)="openPredict()">predict</button>
+    <span *ngIf="predictResult">
+        last prediction result: {{predictResult}}
+    </span>
 </ng-container>

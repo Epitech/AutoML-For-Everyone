@@ -7,8 +7,9 @@ import {
   LintType,
 } from '../dialog-lint/dialog-lint.component';
 
+export type ColumnsType = { [key: string]: boolean };
 export type EmittedType = {
-  columns: { [key: string]: boolean };
+  columns: ColumnsType;
   label?: string;
 };
 export type Lint = [string, string, boolean][];
