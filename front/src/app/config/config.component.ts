@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material/dialog';
 
 import {
   get_config,
@@ -10,6 +11,10 @@ import {
 } from '../../api2';
 
 import { DataType, EmittedType } from '../table/table.component';
+import {
+  DialogNewModelComponent,
+  ModelDataType,
+} from '../dialog-new-model/dialog-new-model';
 
 type Config = EmittedType & {
   models: string[];
@@ -24,8 +29,9 @@ export class ConfigComponent implements OnChanges {
   @Input() id!: string;
   config?: Config & DataType;
   model?: string;
+  newModel?: ModelType;
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private sanitizer: DomSanitizer, public dialog: MatDialog) {}
 
   ngOnChanges({ id: { currentValue: id } }: { id: SimpleChange }) {
     this.id = id;
@@ -43,13 +49,24 @@ export class ConfigComponent implements OnChanges {
     this.model = model;
   }
 
-  refresh(id: string) {}
-
   openDialog() {
-    const model: ModelType = { generations: 2 };
-    post_model(this.id, model).then((model) => {
-      this.model = model.id;
-      this.config!.models.push(model.id);
+    if (!this.newModel) this.newModel = { generations: 1 };
+
+    const data: ModelDataType = {
+      dispatch: (m) => {
+        this.newModel = m;
+      },
+      model: this.newModel,
+    };
+
+    const dialogRef = this.dialog.open(DialogNewModelComponent, { data });
+
+    dialogRef.afterClosed().subscribe((create: boolean) => {
+      if (create)
+        post_model(this.id, this.newModel).then((model) => {
+          this.model = model.id;
+          this.config!.models.push(model.id);
+        });
     });
   }
 

@@ -1,0 +1,20 @@
+.cancel {
+  background-color: red;
+}
+
+.create {
+  background-color: teal;
+}
+
+.create:disabled {
+  background-color: lightgrey;
+  cursor: initial;
+}
+
+.cancel,
+.create {
+  padding: 10px;
+  margin: 5px;
+  color: white;
+  border-radius: 5px;
+}
