@@ -39,13 +39,20 @@ class Dataset(Document):
     configs: list[DatasetConfig] = ListField(
         EmbeddedDocumentField(DatasetConfig), default=list)
 
+    map_list: []
+
     meta = {"collection": "datasets"}
 
     @staticmethod
     def create_from_path(path: Path) -> Dataset:
         """Create a dataset object from a csv dataset on disk"""
         df = pd.read_csv(path, sep=None, engine="python")
-        return Dataset(path=str(path), name=path.name, columns=df.columns)
+        #MODIF DES COLONNES ICI
+        map_list, df = check_columns(df)
+        #print(map_list)
+        #print(df.columns)
+        return Dataset(path=str(path), name=path.name, columns=df.columns, list=map_list)
+        #return Dataset(path=str(path), name=path.name, columns=df.columns)
 
     @staticmethod
     def from_id(id: str) -> Dataset:
@@ -127,3 +134,34 @@ class Dataset(Document):
         # If any property was modified, save the dataset
         if updated:
             self.save()
+
+
+
+def check_columns(df: pd.DataFrame):
+    map_list = []
+    for idx in range(0, len(df.columns)):
+        if df.dtypes[idx] == object:
+            tmp_value, tmp_map = new_process(df[df.columns.values[idx]])
+            df[df.columns.values[idx]] = tmp_value
+            map_list.append(tmp_map)
+        else:
+            map_list.append({})
+    return map_list, df
+            
+
+def new_process(column: pd.Series):
+    d = {}
+    new_values = column.astype('category').cat.rename_categories(range(1, column.nunique() + 1))
+    for idx in range(0, len(new_values)):
+        d[new_values[idx]] = column[idx]
+    return new_values, d
+
+def reconvert(column: pd.Series, dict_map):
+    new_column = column.astype(dtype=str)
+    for idx in range(0, len(column)):
+        new_column[idx] = dict_map[column[idx]]
+    return (new_column)
+
+if __name__ == "__main__":
+    obj = Dataset.create_from_path("../../../datasets/titanic.csv")
+    print(obj.columns)
