@@ -163,7 +163,7 @@ def check_importance_three(X, Y):
     model.fit(X, Y)
     for idx in range(0, model.feature_importances_.shape[0]):
         if model.feature_importances_[idx] >= 0.5:
-            list_string.append([f"The column impacts the result by 50% or more", "", False])
+            list_string.append([f"This column is important and positively impacts the result by 30% or more", "", False])
         else:
             list_string.append("")
     return list_string
@@ -176,7 +176,7 @@ def check_importance_four(X, Y):
     model.fit(X, Y)
     for idx in range(0, model.feature_importances_.shape[0]):
         if model.feature_importances_[idx] > 0.49:
-            list_string.append([f"The column impacts the result by 50% or more", "https://chiragsehra42.medium.com/decision-trees-explained-easily-28f23241248", False])
+            list_string.append([f"This column is important and positively impacts the result by 30% or more", "https://chiragsehra42.medium.com/decision-trees-explained-easily-28f23241248", False])
         else:
             list_string.append("")
     return list_string
@@ -202,7 +202,7 @@ def check_importance_six(X, Y):
     model.fit(X, Y)
     for idx in range(0, model.feature_importances_.shape[0]):
         if model.feature_importances_[idx] >= 0.5:
-            list_string.append([f"This column impacts the result by minimum 50%", "https://www.datacorner.fr/xgboost/#:~:text=Pour%20faire%20simple%20XGBoost%20(comme,arbres%20de%20boosting%20de%20gradient.&text=L%27id%C3%A9e%20est%20donc%20simple,pour%20obtenir%20un%20seul%20r%C3%A9sultat", False])
+            list_string.append([f"This column impacts the result by 30% or more", "https://www.datacorner.fr/xgboost/#:~:text=Pour%20faire%20simple%20XGBoost%20(comme,arbres%20de%20boosting%20de%20gradient.&text=L%27id%C3%A9e%20est%20donc%20simple,pour%20obtenir%20un%20seul%20r%C3%A9sultat", False])
         else:
             list_string.append("")
     return list_string
