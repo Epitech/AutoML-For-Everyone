@@ -14,12 +14,14 @@ from app.model.dataset import Dataset
 
 
 @dask.delayed
-def tpot_training(X: np.array, y: np.array, log_file=None,
-                  model_type="classification"):
+def tpot_training(X: np.array, y: np.array, model_config: dict,
+                  *, log_file=None, model_type="classification"):
+    # Select the model based on model type
     model = TPOTClassifier if model_type == "classification" else TPOTRegressor
-    classifier = model(
-        verbosity=2, generations=2, population_size=10, use_dask=True)
-    logger.info(f"Created {model_type}")
+
+    # Create the model
+    classifier = model(**model_config, verbosity=2, use_dask=True)
+    logger.info(f"Created {model_type} with config {model_config}")
     if log_file:
         with open(log_file, "w") as f, redirect_stdout(f):
             classifier.fit(X, y)
@@ -81,7 +83,9 @@ def train_model(model_id):
     logger.info(config.to_json())
 
     # Train the model
-    classifier = tpot_training(X, y, log_path, config.model_type)
+    classifier = tpot_training(
+        X, y, model.model_config, log_file=log_path,
+        model_type=config.model_type)
 
     # Save best pipeline
     save_res = save_pipeline(classifier, pickled_model_path)

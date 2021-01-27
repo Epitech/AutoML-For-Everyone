@@ -122,11 +122,8 @@ def create_app():
     @app.route("/config/<id>/model", methods=["POST"])
     def create_model(id):
         config, dataset = Dataset.config_from_id(id)
-        accepted_keys = ["generations"]
-        model_kwargs = {k: v for k, v in request.json.items()
-                        for k in accepted_keys}
-        app.logger.info(f"Creating model with config: {model_kwargs}")
-        model = DatasetModel(**model_kwargs)
+        app.logger.info(f"Creating model with config: {request.json}")
+        model = DatasetModel(model_config=request.json)
         config.models.append(model)
         dataset.save()
         return model.to_json(), 201
