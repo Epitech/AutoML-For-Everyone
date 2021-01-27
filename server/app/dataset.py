@@ -8,6 +8,7 @@ import dask
 import os
 
 from app.model.dataset import Dataset
+import app.column_mapping as column_mapping
 
 log = logging.getLogger(__name__)
 
@@ -27,7 +28,8 @@ def load_all_datasets(datasets_directory):
         path = datasets_directory / path
         if path.suffix == ".csv" and path not in datasets_already_loaded:
             log.info(path)
-            Dataset.create_from_path(path).save()
+            d = Dataset.create_from_path(path).save()
+            log.info(f"Created entry for dataset {path}: {d.to_json()}")
 
 
 def create_initial_dataset_config(path: Path):
@@ -47,9 +49,10 @@ def create_initial_dataset_config(path: Path):
     }
 
 
-def get_dataset(path: Path, config: dict):
+def get_dataset(path: Path, config: dict, mapping={}):
     """Load and configure a dataset from disk"""
     data = pd.read_csv(path, sep=None)
+    data = column_mapping.convert_with_column_mapping(data, mapping)
     columns = [k for k, v in config["columns"].items() if v]
     label = config["label"]
     columns.remove(label)

@@ -19,6 +19,7 @@ import app.linter as linter
 from app.model.dataset import Dataset
 from app.model.config import DatasetConfig
 from app.model.model import DatasetModel
+import app.column_mapping as column_mapping
 
 
 def create_app():
@@ -175,7 +176,8 @@ def create_app():
         app.logger.info(f"Found configuration {config}")
         data = request.json
         app.logger.info(f"got data {data}")
-        data = [float(data[k])
+        mapping = column_mapping.decode_mapping(dataset.column_mapping)
+        data = [(mapping[k][data[k]] if k in mapping else float(data[k]))
                 for k in sorted(data.keys())
                 if k in config.columns
                 and config.columns[k]
@@ -184,9 +186,14 @@ def create_app():
         with open(model.pickled_model_path, "rb") as f:
             pipeline = pickle.load(f)
         app.logger.info("loaded pipeline")
-        result = pipeline.predict([data])
+        result = pipeline.predict([data])[0]
         app.logger.info(f"Predicted {result}")
-        return jsonify(result[0])
+        app.logger.info(mapping["Survived"])
+
+        if config.label in mapping:
+            result = column_mapping.reconvert_one_value(
+                config.label, result, mapping)
+        return {config.label: result}
 
     @app.route("/model/<id>/status")
     def dataset_status(id):

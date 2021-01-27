@@ -11,6 +11,7 @@ from contextlib import redirect_stdout
 
 from app.dataset import get_dataset
 from app.model.dataset import Dataset
+import app.column_mapping as column_mapping
 
 
 @dask.delayed
@@ -73,8 +74,10 @@ def train_model(model_id):
     set_status("started")
 
     # Load the dataset
-    X, y = get_dataset(dataset_path, config)
+    mapping = column_mapping.decode_mapping(dataset.column_mapping)
+    X, y = get_dataset(dataset_path, config, mapping)
     logger.info(f"Loaded dataset: {X} {y}")
+    logger.info(f"Mapping: {mapping}")
 
     # Convert to types TPOT understands
     X = X.to_numpy().astype(np.float64)

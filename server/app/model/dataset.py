@@ -3,15 +3,17 @@
 from __future__ import annotations
 
 from mongoengine import Document, StringField, \
-    ListField, EmbeddedDocumentField
+    ListField, EmbeddedDocumentField, DictField
 from pathlib import Path
 from werkzeug.exceptions import NotFound
 import pandas as pd
 from bson.objectid import ObjectId
 import logging
+import math
 
 from .config import DatasetConfig
 from .model import DatasetModel
+import app.column_mapping as mapping
 
 
 log = logging.getLogger(__name__)
@@ -39,7 +41,7 @@ class Dataset(Document):
     configs: list[DatasetConfig] = ListField(
         EmbeddedDocumentField(DatasetConfig), default=list)
 
-    map_list: []
+    column_mapping = DictField()
 
     meta = {"collection": "datasets"}
 
@@ -47,12 +49,10 @@ class Dataset(Document):
     def create_from_path(path: Path) -> Dataset:
         """Create a dataset object from a csv dataset on disk"""
         df = pd.read_csv(path, sep=None, engine="python")
-        #MODIF DES COLONNES ICI
-        map_list, df = check_columns(df)
-        #print(map_list)
-        #print(df.columns)
-        return Dataset(path=str(path), name=path.name, columns=df.columns, list=map_list)
-        #return Dataset(path=str(path), name=path.name, columns=df.columns)
+        column_mapping = mapping.create_column_mapping(df)
+        column_mapping = mapping.encode_mapping(column_mapping)
+        return Dataset(path=str(path), name=path.name, columns=df.columns,
+                       column_mapping=column_mapping)
 
     @staticmethod
     def from_id(id: str) -> Dataset:
@@ -97,6 +97,7 @@ class Dataset(Document):
         return {
             "name": self.name,
             "columns": self.columns,
+            # "map_list": self.map_list,
             "configs": [str(c.id) for c in self.configs]
         }
 
@@ -136,31 +137,6 @@ class Dataset(Document):
             self.save()
 
 
-
-def check_columns(df: pd.DataFrame):
-    map_list = []
-    for idx in range(0, len(df.columns)):
-        if df.dtypes[idx] == object:
-            tmp_value, tmp_map = new_process(df[df.columns.values[idx]])
-            df[df.columns.values[idx]] = tmp_value
-            map_list.append(tmp_map)
-        else:
-            map_list.append({})
-    return map_list, df
-            
-
-def new_process(column: pd.Series):
-    d = {}
-    new_values = column.astype('category').cat.rename_categories(range(1, column.nunique() + 1))
-    for idx in range(0, len(new_values)):
-        d[new_values[idx]] = column[idx]
-    return new_values, d
-
-def reconvert(column: pd.Series, dict_map):
-    new_column = column.astype(dtype=str)
-    for idx in range(0, len(column)):
-        new_column[idx] = dict_map[column[idx]]
-    return (new_column)
 
 if __name__ == "__main__":
     obj = Dataset.create_from_path("../../../datasets/titanic.csv")
