@@ -29,6 +29,13 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
     else:
         classifier.fit(X, y)
     logger.info("Finished training")
+
+    #explainer = shap.KernelExplainer(classifier.predict_proba, X_train, link="logit")
+    #shap_values = explainer.shap_values(X_test, nsamples=100)
+    #fig = shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
+    #plt.show()
+    #plt.savefig('save.png')
+
     return classifier
 
 
