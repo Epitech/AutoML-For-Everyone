@@ -43,7 +43,17 @@ export class ConfigComponent implements OnChanges {
   }
 
   openDialog() {
-    if (!this.newModel) this.newModel = { generations: 1 };
+    if (!this.newModel)
+      this.newModel = {
+        generations: 100,
+        population_size: 100,
+        offspring_size: 100,
+        mutation_rate: 0.9,
+        crossover_rate: 0.1,
+        scoring: 'accuracy',
+        subsample: 1.0,
+        early_stop: 10,
+      };
 
     const data: ModelDataType = {
       dispatch: (m) => {
@@ -56,7 +66,7 @@ export class ConfigComponent implements OnChanges {
 
     dialogRef.afterClosed().subscribe((create: boolean) => {
       if (create)
-        post_model(this.id, this.newModel).then((model) => {
+        post_model(this.id, this.newModel!).then((model) => {
           this.model = model.id;
           this.config!.models.push(model.id);
         });

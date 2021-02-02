@@ -43,11 +43,52 @@ export const get_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
 
 // MODEL
 
+export const scoring = [
+  'accuracy',
+  'adjusted_rand_score',
+  'average_precision',
+  'balanced_accuracy',
+  'f1',
+  'f1_macro',
+  'f1_micro',
+  'f1_samples',
+  'f1_weighted',
+  'neg_log_loss',
+  'precision',
+  'precision_macro',
+  'precision_micro',
+  'precision_samples',
+  'precision_weighted',
+  'recall',
+  'recall_macro',
+  'recall_micro',
+  'recall_samples',
+  'recall_weighted',
+  'jaccard',
+  'jaccard_macro',
+  'jaccard_micro',
+  'jaccard_samples',
+  'jaccard_weighted',
+  'roc_auc',
+  'roc_auc_ovr',
+  'roc_auc_ovo',
+  'roc_auc_ovr_weighted',
+  'roc_auc_ovo_weighted',
+];
+
 export type ModelType = {
+  [key: string]: string | number;
   generations: number;
+  population_size: number;
+  offspring_size: number;
+  mutation_rate: number;
+  crossover_rate: number;
+  subsample: number;
+  early_stop: number;
+  scoring: typeof scoring[number];
 };
 
-export const post_model = (id: string, config: any) =>
+export const post_model = (id: string, config: ModelType) =>
   api(`/config/${id}/model`, with_body(config));
 
 export const get_model = (id: string) => api(`/model/${id}`);
