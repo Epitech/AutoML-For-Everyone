@@ -4,6 +4,10 @@
     <button class="button" [disabled]="status !== 'not started'" (click)="launchTrain()">train ({{status}})</button>
     <button class="button" [disabled]="status !== 'done'" (click)="export()">export</button>
     <button class="button" [disabled]="status !== 'done'" (click)="openPredict()">predict</button>
+    <label for="file">Choose File: </label>
+    <input type="file" id="file" (change)="setFile($event)">
+    <button class="button" [disabled]="status !== 'done' || !predictFile " (click)="csv_predict()">predict with
+        file</button>
     <span *ngIf="predictResult !== undefined">
         last prediction result: {{predictResult}}
     </span>
