@@ -188,7 +188,6 @@ def create_app():
         app.logger.info("loaded pipeline")
         result = pipeline.predict([data])[0]
         app.logger.info(f"Predicted {result}")
-        app.logger.info(mapping["Survived"])
 
         if config.label in mapping:
             result = column_mapping.reconvert_one_value(
