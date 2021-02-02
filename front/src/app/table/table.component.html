@@ -30,3 +30,6 @@
         </tr>
     </tbody>
 </table>
+<ng-container *ngIf="transit.dispatch">
+    classification <mat-slide-toggle (change)="changeType($event.checked)">regression</mat-slide-toggle>
+</ng-container>

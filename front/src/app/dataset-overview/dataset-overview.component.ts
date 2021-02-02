@@ -49,6 +49,7 @@ export class DatasetOverviewComponent implements OnInit {
         {} as Fields
       ),
       label: undefined,
+      model_type: "regression",
     };
 
     const data: DataType = {
@@ -66,7 +67,6 @@ export class DatasetOverviewComponent implements OnInit {
       if (create)
         post_config(this.id!, {
           ...this.newConfig,
-          model_type: 'classification',
         }).then((config) => {
           this.config = config.id;
           this.dataset!.configs.push(config.id);

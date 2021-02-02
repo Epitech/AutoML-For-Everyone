@@ -11,6 +11,7 @@ export type ColumnsType = { [key: string]: boolean };
 export type EmittedType = {
   columns: ColumnsType;
   label?: string;
+  model_type: 'classification' | 'regression';
 };
 export type Lint = [string, string, boolean][];
 export type Dispatch = (value: EmittedType) => void;
@@ -36,6 +37,13 @@ export class TableComponent {
 
     this.transit.columns[col] = checked;
     if (col === this.transit.label && !checked) this.transit.label = undefined;
+    this.transit.dispatch(this.transit);
+  }
+
+  changeType(regression: boolean) {
+    if (!this.transit.dispatch) return;
+
+    this.transit.model_type = regression ? 'regression' : 'classification';
     this.transit.dispatch(this.transit);
   }
 
