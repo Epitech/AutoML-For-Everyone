@@ -8,6 +8,7 @@ import dask
 import os
 
 from app.model.dataset import Dataset
+from app.model.config import DatasetConfig
 import app.column_mapping as column_mapping
 
 log = logging.getLogger(__name__)
@@ -63,9 +64,13 @@ def get_dataset(path: Path, config: dict, mapping={}):
 
 
 @dask.delayed
-def get_dataset_visualization(path: Path):
+def get_dataset_visualization(path: Path, config: DatasetConfig = None):
     """Get or generate the SweetViz vizualisation"""
-    viz_path = path.with_suffix(".sweetviz.html")
+    if config is not None:
+        viz_name = f"{path.name}-{config.id}-sweetviz.html"
+    else:
+        viz_name = f"{path.name}-sweetviz.html"
+    viz_path = path.with_name(viz_name)
     log.info(f"Searching viz file {viz_path}")
     if viz_path.exists():
         log.info("Viz found")
@@ -75,7 +80,11 @@ def get_dataset_visualization(path: Path):
         data = pd.read_csv(path, sep=None)
         data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
         log.info("Generating viz")
-        viz = sv.analyze(data)
+        if config is not None:
+            viz = sv.analyze(data, target_feat=config.label,
+                             feat_cfg=sv.FeatureConfig(force_num=[config.label]))
+        else:
+            viz = sv.analyze(data)
         log.info(f"Saving viz to {viz_path}")
         viz.show_html(filepath=viz_path, open_browser=False)
         log.info("Returning viz")
