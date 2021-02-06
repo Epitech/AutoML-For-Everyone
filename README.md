@@ -1,23 +1,44 @@
-# DOCAPOSTE IA project
+# DOCAPOSTE AI Project
 
-# Dependencies
+# Requirements
 
 ## Windows
 
-Install [Docker Desktop](https://docs.docker.com/docker-for-windows/install/)
+Install Docker on windows :
+* [Docker Desktop](https://docs.docker.com/docker-for-windows/install/)
 
-# Backend
+If you encounter a problem with the installation or launch of docker follow this [link](https://github.com/Epitech/docaposte/blob/master/INSTALLATION.md)
 
-To start the development server, enter the root directory with a shell and execute
+## Linux
 
+Install Docker on Linux :
+* [CentOS](https://docs.docker.com/engine/install/centos/)
+* [Debian](https://docs.docker.com/engine/install/debian/)
+* [Fedora](https://docs.docker.com/engine/install/fedora/)
+* [Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+
+# Installation
+
+## Windows
+
+1. Open Docker Desktop and check that the strip in the bottom left corner is green
+2. Clone our repository
+3. Enter the root directory of the projet
+4. Execute the following command with powershell 
 ```
 docker-compose up --build
 ```
+5. In the Containers / Apps tab you should have a banner named docaposte
+6. You can now access the platform with this [link](localhost:4200)
 
-# Frontend
+## Linux
 
-To start the development server, enter the `front` directory and execute
+1. Clone our repository
+2. Enter the root directory of the projet
+3. Execute the following command 
+```
+docker-compose up --build
+```
+4. You can now access the platform with this [link](localhost:4200)
 
-    docker-compose up
-
-and visit the [localhost:4200](http://localhost:4200) address.
+# How to use the platform ?
