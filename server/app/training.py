@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from tpot import TPOTClassifier, TPOTRegressor
+from sklearn.model_selection import train_test_split
 import numpy as np
 from distributed.worker import logger
 import dask
@@ -13,6 +14,9 @@ from app.dataset import get_dataset
 from app.model.dataset import Dataset
 import app.column_mapping as column_mapping
 
+import shap
+import matplotlib as plt
+
 
 @dask.delayed
 def tpot_training(X: np.array, y: np.array, model_config: dict,
@@ -20,24 +24,24 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
     # Select the model based on model type
     model = TPOTClassifier if model_type == "classification" else TPOTRegressor
 
+    X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2)
     # Create the model
     classifier = model(**model_config, verbosity=2, use_dask=True)
     logger.info(f"Created {model_type} with config {model_config}")
     if log_file:
         with open(log_file, "w") as f, redirect_stdout(f):
-            classifier.fit(X, y)
+            classifier.fit(X_train, Y_train)
     else:
-        classifier.fit(X, y)
+        classifier.fit(X_train, Y_train)
     logger.info("Finished training")
 
-    #explainer = shap.KernelExplainer(classifier.predict_proba, X_train, link="logit")
-    #shap_values = explainer.shap_values(X_test, nsamples=100)
-    #fig = shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
-    #plt.show()
-    #plt.savefig('save.png')
+    explainer = shap.KernelExplainer(classifier.predict_proba, X_train, link="logit")
+    shap_values = explainer.shap_values(X_test, nsamples=100)
+    fig = shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
+    plt.show()
+    plt.savefig('save.png')
 
     return classifier
-
 
 @dask.delayed
 def save_pipeline(classifier, path):
