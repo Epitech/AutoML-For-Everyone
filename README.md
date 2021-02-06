@@ -7,6 +7,8 @@
 Install Docker on windows :
 * [Docker Desktop](https://docs.docker.com/docker-for-windows/install/)
 
+If you encounter a problem with the installation or launch of docker follow this [link](https://github.com/Epitech/docaposte/blob/master/INSTALLATION.md)
+
 ## Linux
 
 Install Docker on Linux :
@@ -38,3 +40,5 @@ docker-compose up --build
 docker-compose up --build
 ```
 4. You can now access the platform with this [link](localhost:4200)
+
+# How to use the platform ?
