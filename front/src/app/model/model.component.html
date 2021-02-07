@@ -8,7 +8,10 @@
     <input type="file" id="file" (change)="setFile($event)">
     <button class="button" [disabled]="status !== 'done' || !predictFile " (click)="csv_predict()">predict with
         file</button>
-    <span *ngIf="predictResult !== undefined">
-        last prediction result: {{predictResult}}
-    </span>
+    <div *ngIf="predictResult !== undefined">
+        last prediction results:
+        <p *ngFor="let p of predictResult | keyvalue">
+            {{p.key}} : {{p.value}}
+        </p>
+    </div>
 </ng-container>

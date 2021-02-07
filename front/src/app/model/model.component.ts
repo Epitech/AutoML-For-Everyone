@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
+type PredictResult = {[key:string]:any};
+
 import {
   get_model,
   ModelType,
@@ -26,7 +28,7 @@ export class ModelComponent implements OnChanges {
   model?: ModelType;
   status: "not started" | 'starting' | 'started' | 'done' = "not started";
   predictData: PredictType = {};
-  predictResult?: number;
+  predictResult?: PredictResult;
   predictFile?: File;
 
   constructor(public dialog: MatDialog) {}
@@ -91,7 +93,7 @@ export class ModelComponent implements OnChanges {
 
     dialogRef.afterClosed().subscribe((predict: boolean) => {
       if (predict)
-        get_predict(this.id, this.predictData).then((r: number) => {
+        get_predict(this.id, this.predictData).then((r: PredictResult) => {
           this.predictResult = r;
         });
     });
@@ -114,7 +116,7 @@ export class ModelComponent implements OnChanges {
       columns.forEach((c, i) => {
         if (this.predictColumns.includes(c)) this.predictData[c] = rows[i];
       });
-      get_predict(this.id, this.predictData).then((r: number) => {
+      get_predict(this.id, this.predictData).then((r: PredictResult) => {
         this.predictResult = r;
       });
     };
