@@ -114,9 +114,11 @@ class Dataset(Document):
                 # If the path are not valid anymore, reset them and set
                 # the status back to "not started"
                 if is_dangling(model.exported_model_path) \
-                   or is_dangling(model.pickled_model_path):
+                   or is_dangling(model.pickled_model_path) \
+                   or is_dangling(model.confusion_matrix_path):
                     model.exported_model_path = None
                     model.pickled_model_path = None
+                    model.confusion_matrix_path = None
                     model.log_path = None
                     model.status = "not started"
                     updated = True
@@ -135,7 +137,6 @@ class Dataset(Document):
         # If any property was modified, save the dataset
         if updated:
             self.save()
-
 
 
 if __name__ == "__main__":

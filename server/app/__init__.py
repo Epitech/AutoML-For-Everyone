@@ -169,6 +169,13 @@ def create_app():
             return {"error": "Model is not trained"}, 409
         return send_file(model.exported_model_path, as_attachment=True)
 
+    @app.route("/model/<id>/confusion_matrix")
+    def export_confusion_matrix(id):
+        model, _, _ = Dataset.model_from_id(id)
+        if model.status != "done":
+            return {"error": "Model is not trained"}, 409
+        return send_file(model.confusion_matrix_path, as_attachment=True)
+
     @app.route("/model/<id>/predict", methods=["POST"])
     def predict_result(id):
         model, config, dataset = Dataset.model_from_id(id)

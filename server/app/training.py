@@ -2,7 +2,7 @@
 
 from tpot import TPOTClassifier, TPOTRegressor
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, plot_confusion_matrix
 import numpy as np
 from distributed.worker import logger
 import dask
@@ -30,7 +30,8 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
     model = TPOTClassifier if model_type == "classification" else TPOTRegressor
 
     # Create the model
-    classifier = model(**model_config, verbosity=2, use_dask=True) #, max_time_mins=1
+    classifier = model(**model_config, verbosity=2,
+                       use_dask=True)  # , max_time_mins=1
     logger.info(f"Created {model_type} with config {model_config}")
     if log_file:
         log_file.unlink(missing_ok=True)
@@ -83,6 +84,14 @@ def analyse_model(model, X_train, y_train, X_test, y_test) -> ModelAnalysis:
 
 
 @dask.delayed
+def create_confusion_matrix(classifier, X_test, y_test, path):
+    logger.info(f"Saving confusion matrix to {path}")
+    estimator = classifier.fitted_pipeline_
+    plot_confusion_matrix(estimator, X_test, y_test)
+    plt.savefig(path, bbox_inches="tight")
+
+
+@dask.delayed
 def export_pipeline_code(classifier, path):
     logger.info(f"Saving pipeline code to {path}")
     classifier.export(path)
@@ -106,6 +115,7 @@ def train_model(model_id):
         log_path = model_dir / "training.log"
         pickled_model_path = model_dir / "pipeline.pickle"
         exported_model_path = model_dir / "pipeline.py"
+        confusion_matrix_path = model_dir / "confusion_matrix.png"
 
         model.log_path = str(log_path)
         set_status("started")
@@ -141,13 +151,19 @@ def train_model(model_id):
         analysis_res = analyse_model(
             classifier, X_train, y_train, X_test, y_test)
 
+        # Create the confusion matrix
+        matrix_res = create_confusion_matrix(
+            classifier, X_test, y_test, confusion_matrix_path)
+
         # Get the results of the exportation and model saving
-        _, _, analysis = dask.compute(save_res, export_res, analysis_res)
+        _, _, analysis, _ = dask.compute(
+            save_res, export_res, analysis_res, matrix_res)
 
         # Update the model with the exported paths
         # and set the status as done
         model.pickled_model_path = str(pickled_model_path)
         model.exported_model_path = str(exported_model_path)
+        model.confusion_matrix_path = str(confusion_matrix_path)
         model.analysis = analysis
         model.status = "done"
         dataset.save()
