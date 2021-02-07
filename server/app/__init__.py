@@ -134,6 +134,14 @@ def create_app():
         dataset.save()
         return model.to_json(), 201
 
+    @app.route("/config/<id>", methods=["DELETE"])
+    def delete_config(id):
+        app.logger.info(f"Removing config {id}")
+        config, dataset = Dataset.config_from_id(id)
+        dataset.configs = [c for c in dataset.configs if c.id != config.id]
+        dataset.save()
+        return ""
+
     @app.route("/model/<id>")
     def get_model(id):
         model, config, dataset = Dataset.model_from_id(id)
@@ -218,6 +226,14 @@ def create_app():
                 reply["logs"] = f.read()
 
         return reply
+
+    @app.route("/model/<id>", methods=["DELETE"])
+    def delete_model(id):
+        app.logger.info(f"Removing model {id}")
+        model, config, dataset = Dataset.model_from_id(id)
+        config.models = [m for m in config.models if m.id != model.id]
+        dataset.save()
+        return ""
 
     @app.route("/dataset/pic")
     def export_explaination():
