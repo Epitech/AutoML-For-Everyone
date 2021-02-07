@@ -197,22 +197,25 @@ def create_app():
         data = request.json
         app.logger.info(f"got data {data}")
         mapping = column_mapping.decode_mapping(dataset.column_mapping)
-        data = [(mapping[k][data[k]] if k in mapping else float(data[k]))
-                for k in sorted(data.keys())
-                if k in config.columns
-                and config.columns[k]
-                and config.label != k]
+        data = [[(mapping[k][line[k]] if k in mapping else float(line[k]))
+                 for k in sorted(line.keys())
+                 if k in config.columns
+                 and config.columns[k]
+                 and config.label != k] for line in data]
         app.logger.info(f"sorted data {data}")
         with open(model.pickled_model_path, "rb") as f:
             pipeline = pickle.load(f)
         app.logger.info("loaded pipeline")
-        result = pipeline.predict([data])[0]
+        result = pipeline.predict(data).tolist()
         app.logger.info(f"Predicted {result}")
 
         if config.label in mapping:
-            result = column_mapping.reconvert_one_value(
-                config.label, result, mapping)
-        return {config.label: result}
+            result = [
+                column_mapping.reconvert_one_value(
+                    config.label, value, mapping)
+                for value in result
+            ]
+        return jsonify([{config.label: value} for value in result])
 
     @app.route("/model/<id>/status")
     def dataset_status(id):
