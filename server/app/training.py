@@ -8,6 +8,7 @@ import dask
 import pickle
 from pathlib import Path
 from contextlib import redirect_stdout
+from pathlib import Path
 # import pandas as pd
 
 from app.dataset import get_dataset
@@ -20,7 +21,7 @@ import matplotlib as plt
 
 @dask.delayed
 def tpot_training(X: np.array, y: np.array, model_config: dict,
-                  *, log_file=None, model_type="classification"):
+                  *, log_file: Path=None, model_type="classification"):
     # Select the model based on model type
     model = TPOTClassifier if model_type == "classification" else TPOTRegressor
 
@@ -29,6 +30,7 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
     classifier = model(**model_config, verbosity=2, use_dask=True)
     logger.info(f"Created {model_type} with config {model_config}")
     if log_file:
+        log_file.unlink(missing_ok=True)
         with open(log_file, "w") as f, redirect_stdout(f):
             classifier.fit(X_train, Y_train)
     else:
