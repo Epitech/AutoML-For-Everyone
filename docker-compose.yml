@@ -40,4 +40,4 @@ services:
   angular:
     build: front
     ports:
-      - 4200:4200
+      - 4200:80
