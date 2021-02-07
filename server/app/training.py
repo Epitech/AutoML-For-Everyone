@@ -27,24 +27,16 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
     # Select the model based on model type
     model = TPOTClassifier if model_type == "classification" else TPOTRegressor
 
-    X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2)
     # Create the model
     classifier = model(**model_config, verbosity=2, use_dask=True) #, max_time_mins=1
     logger.info(f"Created {model_type} with config {model_config}")
     if log_file:
         log_file.unlink(missing_ok=True)
         with open(log_file, "w") as f, redirect_stdout(f):
-            classifier.fit(X_train, Y_train)
+            classifier.fit(X, y)
     else:
-        classifier.fit(X_train, Y_train)
+        classifier.fit(X, y)
     logger.info("Finished training")
-
-    # sys.stderr.write("DEBUT SHAP\n")
-    # explainer = shap.KernelExplainer(classifier.predict_proba, X_train, link="logit")
-    # shap_values = explainer.shap_values(X_test, nsamples=100)
-    # shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
-    # plt.savefig('save.png')
-    # sys.stderr.write("FIN SHAP\n")
 
     return classifier
 
@@ -70,6 +62,21 @@ def export_pipeline_code(classifier, path):
     logger.info("Finished exporting")
 
 
+@dask.delayed
+def save_shap(classifier, shap_model_path, copy_X, copy_y, mapping):
+    if copy_X.shape[0] > 200:
+        copy_X = copy_X.sample(n=200, replace=False)
+    explainer = shap.KernelExplainer(classifier.predict_proba, copy_X)
+    shap_values = explainer.shap_values(copy_X, nsamples=100)
+    if copy_y.name in mapping:
+        shap.summary_plot(shap_values, copy_X, class_names=[*mapping[copy_y.name]])
+    else:
+        shap.summary_plot(shap_values, copy_X)
+    plt.suptitle(f'Impact of each parameters on {copy_y.name} column')
+    plt.savefig(shap_model_path, bbox_inches='tight')
+    plt.clf()
+
+
 def train_model(model_id):
     model, config, dataset = Dataset.model_from_id(model_id)
 
@@ -86,6 +93,7 @@ def train_model(model_id):
         log_path = model_dir / "training.log"
         pickled_model_path = model_dir / "pipeline.pickle"
         exported_model_path = model_dir / "pipeline.py"
+        shap_model_path = model_dir / "save.png"
 
         model.log_path = str(log_path)
         set_status("started")
@@ -96,11 +104,18 @@ def train_model(model_id):
         logger.info(f"Loaded dataset: {X} {y}")
         logger.info(f"Mapping: {mapping}")
 
+        # Copy data before column name drop (using it for shap)
+        copy_X = X
+        copy_y = y
+
         # Convert to types TPOT understands
         X = X.to_numpy().astype(np.float64)
         y = y.to_numpy().astype(np.float64)
 
         logger.info(config.to_json())
+
+        # Split values
+        #X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2)
 
         # Train the model
         classifier = tpot_training(
@@ -113,9 +128,12 @@ def train_model(model_id):
         # Export best pipeline code
         export_res = export_pipeline_code(classifier, exported_model_path)
 
+        # Save shap image
+        image_res = save_shap(classifier, shap_model_path, copy_X, copy_y, mapping)
+
         # Try to get the results of the exportation and model saving
         try:
-            dask.compute(save_res, export_res)
+            dask.compute(save_res, export_res, image_res)
         except Exception as e:
             logger.warn(f"Got exception while running pipeline: {e}")
             set_status("error")
