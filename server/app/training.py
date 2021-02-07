@@ -11,13 +11,14 @@ from contextlib import redirect_stdout
 from pathlib import Path
 import traceback
 # import pandas as pd
+import sys
 
 from app.dataset import get_dataset
 from app.model.dataset import Dataset
 import app.column_mapping as column_mapping
 
 import shap
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 
 @dask.delayed
@@ -28,7 +29,7 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
 
     X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2)
     # Create the model
-    classifier = model(**model_config, verbosity=2, use_dask=True)
+    classifier = model(**model_config, verbosity=2, use_dask=True) #, max_time_mins=1
     logger.info(f"Created {model_type} with config {model_config}")
     if log_file:
         log_file.unlink(missing_ok=True)
@@ -38,10 +39,12 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
         classifier.fit(X_train, Y_train)
     logger.info("Finished training")
 
+    # sys.stderr.write("DEBUT SHAP\n")
     # explainer = shap.KernelExplainer(classifier.predict_proba, X_train, link="logit")
     # shap_values = explainer.shap_values(X_test, nsamples=100)
     # shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
-    # plt.savefig('datasets/save.png')
+    # plt.savefig('save.png')
+    # sys.stderr.write("FIN SHAP\n")
 
     return classifier
 
