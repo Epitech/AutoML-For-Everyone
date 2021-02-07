@@ -2,6 +2,7 @@
 
 from tpot import TPOTClassifier, TPOTRegressor
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score
 import numpy as np
 from distributed.worker import logger
 import dask
@@ -16,6 +17,7 @@ import sys
 from app.dataset import get_dataset
 from app.model.dataset import Dataset
 import app.column_mapping as column_mapping
+from app.model.model import ModelAnalysis
 
 import shap
 import matplotlib.pyplot as plt
@@ -23,20 +25,19 @@ import matplotlib.pyplot as plt
 
 @dask.delayed
 def tpot_training(X: np.array, y: np.array, model_config: dict,
-                  *, log_file: Path=None, model_type="classification"):
+                  *, log_file: Path = None, model_type="classification"):
     # Select the model based on model type
     model = TPOTClassifier if model_type == "classification" else TPOTRegressor
 
-    X_train, X_test, Y_train, Y_test = train_test_split(X, y, test_size=0.2)
     # Create the model
     classifier = model(**model_config, verbosity=2, use_dask=True) #, max_time_mins=1
     logger.info(f"Created {model_type} with config {model_config}")
     if log_file:
         log_file.unlink(missing_ok=True)
         with open(log_file, "w") as f, redirect_stdout(f):
-            classifier.fit(X_train, Y_train)
+            classifier.fit(X, y)
     else:
-        classifier.fit(X_train, Y_train)
+        classifier.fit(X, y)
     logger.info("Finished training")
 
     # sys.stderr.write("DEBUT SHAP\n")
@@ -47,6 +48,7 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
     # sys.stderr.write("FIN SHAP\n")
 
     return classifier
+
 
 @dask.delayed
 def save_pipeline(classifier, path):
@@ -61,6 +63,23 @@ def save_pipeline(classifier, path):
     with open(path, "wb") as f:
         pickle.dump(pipeline, f)
     logger.info("Pipeline saved")
+
+
+@dask.delayed
+def analyse_model(model, X_train, y_train, X_test, y_test) -> ModelAnalysis:
+    y_test_pred = model.predict(X_test)
+    logger.info(f"y: {y_test}, pred: {y_test_pred}")
+    f1 = f1_score(y_test, y_test_pred, average="macro")
+    logger.info(f"F1 score: {f1}")
+
+    train_accurary = model.score(X_train, y_train)
+    logger.info(f"train accuracy: {train_accurary}")
+    test_accurary = model.score(X_test, y_test)
+    logger.info(f"test accuracy: {test_accurary}")
+
+    return ModelAnalysis(training_accurary=train_accurary,
+                         testing_accuracy=test_accurary,
+                         f1_score=f1)
 
 
 @dask.delayed
@@ -81,7 +100,8 @@ def train_model(model_id):
     try:
         # Create the different assets path
         dataset_path = Path(dataset.path)
-        model_dir = dataset_path.parent / f"{dataset.name}-model-{str(model.id)}"
+        model_dir = dataset_path.parent / \
+            f"{dataset.name}-model-{str(model.id)}"
         model_dir.mkdir(exist_ok=True)
         log_path = model_dir / "training.log"
         pickled_model_path = model_dir / "pipeline.pickle"
@@ -100,11 +120,15 @@ def train_model(model_id):
         X = X.to_numpy().astype(np.float64)
         y = y.to_numpy().astype(np.float64)
 
+        # Separate training and testing data
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2)
+
         logger.info(config.to_json())
 
         # Train the model
         classifier = tpot_training(
-            X, y, model.model_config, log_file=log_path,
+            X_train, y_train, model.model_config, log_file=log_path,
             model_type=config.model_type)
 
         # Save best pipeline
@@ -113,17 +137,18 @@ def train_model(model_id):
         # Export best pipeline code
         export_res = export_pipeline_code(classifier, exported_model_path)
 
-        # Try to get the results of the exportation and model saving
-        try:
-            dask.compute(save_res, export_res)
-        except Exception as e:
-            logger.warn(f"Got exception while running pipeline: {e}")
-            set_status("error")
+        # Create metrics on the generated pipeline
+        analysis_res = analyse_model(
+            classifier, X_train, y_train, X_test, y_test)
+
+        # Get the results of the exportation and model saving
+        _, _, analysis = dask.compute(save_res, export_res, analysis_res)
 
         # Update the model with the exported paths
         # and set the status as done
         model.pickled_model_path = str(pickled_model_path)
         model.exported_model_path = str(exported_model_path)
+        model.analysis = analysis
         model.status = "done"
         dataset.save()
     except Exception as e:
