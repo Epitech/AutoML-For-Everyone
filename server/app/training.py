@@ -177,8 +177,8 @@ def train_model(model_id):
             classifier, X_test, y_test, confusion_matrix_path)
 
         # Get the results of the exportation and model saving
-        _, _, analysis, _ = dask.compute(
-            save_res, export_res, image_res, analysis_res, matrix_res)
+        _, _, analysis, _, _ = dask.compute(
+            save_res, export_res, analysis_res, image_res, matrix_res)
 
         # Update the model with the exported paths
         # and set the status as done
