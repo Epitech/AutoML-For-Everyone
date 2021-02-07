@@ -18,3 +18,9 @@
   color: white;
   border-radius: 5px;
 }
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}

@@ -26,11 +26,14 @@ def load_all_datasets(datasets_directory):
     datasets_already_loaded = [Path(d.path) for d in Dataset.objects]
 
     for path in map(Path, os.listdir(datasets_directory)):
+        path = (datasets_directory / path).resolve()
         path = datasets_directory / path
         if path.suffix == ".csv" and path not in datasets_already_loaded:
-            log.info(path)
+            log.info(f"Loading {path}")
             d = Dataset.create_from_path(path).save()
             log.info(f"Created entry for dataset {path}: {d.to_json()}")
+        else:
+            log.info(f"Not loading {path}")
 
 
 def create_initial_dataset_config(path: Path):

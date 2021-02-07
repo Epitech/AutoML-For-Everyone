@@ -1,13 +1,43 @@
 <h2 mat-dialog-title>Create new model</h2>
 <mat-dialog-content>
     <form>
-        <mat-form-field>
-            <input type="number" matInput placeholder="generations" [value]="data.model.generations"
-                (change)="changeGenerations($event.target)">
-        </mat-form-field>
+        <span class="column">
+            <mat-form-field>
+                <input min="1" type="number" matInput placeholder="generations" [value]="data.model.generations"
+                    (change)="changeKey('generations', $event.target)">
+            </mat-form-field>
+            <mat-form-field>
+                <input min="0" type="number" matInput placeholder="population_size" [value]="data.model.population_size"
+                    (change)="changeKey('population_size', $event.target)">
+            </mat-form-field>
+            <mat-form-field>
+                <input min="0" type="number" matInput placeholder="offspring_size" [value]="data.model.offspring_size"
+                    (change)="changeKey('offspring_size', $event.target)">
+            </mat-form-field>
+            <mat-form-field>
+                <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="mutation_rate"
+                    [value]="data.model.mutation_rate" (change)="changeKey('mutation_rate', $event.target)">
+            </mat-form-field>
+            <mat-form-field>
+                <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="crossover_rate"
+                    [value]="data.model.crossover_rate" (change)="changeKey('crossover_rate', $event.target)">
+            </mat-form-field>
+            <mat-form-field>
+                <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="subsample"
+                    [value]="data.model.subsample" (change)="changeKey('subsample', $event.target)">
+            </mat-form-field>
+            <mat-form-field>
+                <input min="0" [max]="data.model.generations" type="number" matInput placeholder="early_stop"
+                    [value]="data.model.early_stop" (change)="changeKey('early_stop', $event.target)">
+            </mat-form-field>
+        </span>
     </form>
+    <label for="scoring-select">Scoring system:</label><br>
+    <select id="scoring-select" (change)="changeKey('scoring', $event.target)">
+        <option *ngFor="let opt of scoringOptions">{{opt}}</option>
+    </select>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button class="cancel" mat-button mat-dialog-close>Cancel</button>
-    <button class="create" mat-button [mat-dialog-close]="true" [disabled]="wrongGenerations()">Create</button>
+    <button class="create" mat-button [mat-dialog-close]="true" [disabled]="wrong()">Create</button>
 </mat-dialog-actions>

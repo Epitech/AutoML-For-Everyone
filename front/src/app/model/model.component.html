@@ -1,11 +1,17 @@
 <ng-container *ngIf="model">
     <p>model with {{model.generations}} generations</p>
 
-    <button class="button" [disabled]="statusRunning()" (click)="launchTrain()">train ({{status ||
-        "not started"}})</button>
+    <button class="button" [disabled]="status !== 'not started'" (click)="launchTrain()">train ({{status}})</button>
     <button class="button" [disabled]="status !== 'done'" (click)="export()">export</button>
     <button class="button" [disabled]="status !== 'done'" (click)="openPredict()">predict</button>
-    <span *ngIf="predictResult !== undefined">
-        last prediction result: {{predictResult}}
-    </span>
+    <label for="file">Choose File: </label>
+    <input type="file" id="file" (change)="setFile($event)">
+    <button class="button" [disabled]="status !== 'done' || !predictFile " (click)="csv_predict()">predict with
+        file</button>
+    <div *ngIf="predictResult !== undefined">
+        last prediction results:
+        <p *ngFor="let p of predictResult | keyvalue">
+            {{p.key}} : {{p.value}}
+        </p>
+    </div>
 </ng-container>

@@ -1,6 +1,8 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
+type PredictResult = {[key:string]:any};
+
 import {
   get_model,
   ModelType,
@@ -24,10 +26,10 @@ export class ModelComponent implements OnChanges {
   @Input() id!: string;
   @Input() predictColumns!: string[];
   model?: ModelType;
-  status: null | 'starting' | 'started' | 'done' = null;
-  statusRunning = () => this.status === 'starting' || this.status === 'started';
+  status: "not started" | 'starting' | 'started' | 'done' = "not started";
   predictData: PredictType = {};
-  predictResult?: number;
+  predictResult?: PredictResult;
+  predictFile?: File;
 
   constructor(public dialog: MatDialog) {}
 
@@ -64,7 +66,7 @@ export class ModelComponent implements OnChanges {
       .then(({ status }) => {
         console.log('train', status);
         this.status = status;
-        if (refresh && this.statusRunning())
+        if (refresh && (this.status === 'starting' || this.status === 'started'))
           setTimeout(
             ({ id }: ModelComponent) => this.checkStatus(id),
             2000,
@@ -73,7 +75,7 @@ export class ModelComponent implements OnChanges {
       })
       .catch((e) => {
         console.error('error get_status', e);
-        this.status = null;
+        this.status = "not started";
       });
   }
 
@@ -91,9 +93,40 @@ export class ModelComponent implements OnChanges {
 
     dialogRef.afterClosed().subscribe((predict: boolean) => {
       if (predict)
-        get_predict(this.id, this.predictData).then((r: number) => {
+        get_predict(this.id, this.predictData).then((r: PredictResult) => {
           this.predictResult = r;
         });
     });
+  }
+
+  csv_predict() {
+    if (!this.predictFile) return;
+
+    const fd = new FileReader();
+    fd.onload = () => {
+      if (!fd.result) return;
+
+      const lines = fd.result.toString().split('\n');
+
+      if (lines.length < 2) return alert(lines.length);
+
+      const columns = lines[0].split(',');
+      const rows = lines[1].split(',');
+      console.log(columns, rows);
+      columns.forEach((c, i) => {
+        if (this.predictColumns.includes(c)) this.predictData[c] = rows[i];
+      });
+      get_predict(this.id, this.predictData).then((r: PredictResult) => {
+        this.predictResult = r;
+      });
+    };
+    fd.readAsText(this.predictFile);
+  }
+
+  setFile(event: any) {
+    const files: FileList = event.target.files;
+    if (files.length !== 1) return;
+
+    this.predictFile = files[0];
   }
 }
