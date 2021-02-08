@@ -80,6 +80,14 @@ def analyse_model(model, X_train, y_train, X_test, y_test) -> ModelAnalysis:
 def create_confusion_matrix(classifier, X_test, y_test, path):
     logger.info(f"Saving confusion matrix to {path}")
     estimator = classifier.fitted_pipeline_
+
+    # Merge X_test and y_test to delete rows with NaN values
+    name = y_test.name
+    X_test = X_test.join(y_test)
+    X_test = X_test.dropna(axis=0)
+    y_test = X_test[name]
+    X_test = X_test.drop(columns=[name])
+
     plot_confusion_matrix(estimator, X_test, y_test)
     plt.savefig(path, bbox_inches="tight")
     plt.clf()
@@ -145,6 +153,10 @@ def train_model(model_id):
         X = X.to_numpy().astype(np.float64)
         y = y.to_numpy().astype(np.float64)
 
+        # Separate training and testing data with column name
+        _, X_test_col, _, y_test_col = train_test_split(
+            copy_X, copy_y, test_size=0.2)
+
         # Separate training and testing data
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2)
@@ -174,11 +186,12 @@ def train_model(model_id):
 
         # Create the confusion matrix
         matrix_res = create_confusion_matrix(
-            classifier, X_test, y_test, confusion_matrix_path)
+            classifier, X_test_col, y_test_col, confusion_matrix_path)
 
         # Get the results of the exportation and model saving
-        _, _, analysis, _, _ = dask.compute(
-            save_res, export_res, analysis_res, image_res, matrix_res)
+        _, _, analysis, _ = dask.compute(
+            save_res, export_res, analysis_res, matrix_res)
+        _ = dask.compute(image_res)
 
         # Update the model with the exported paths
         # and set the status as done
