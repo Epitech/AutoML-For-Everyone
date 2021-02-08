@@ -134,6 +134,14 @@ def create_app():
         dataset.save()
         return model.to_json(), 201
 
+    @app.route("/config/<id>", methods=["DELETE"])
+    def delete_config(id):
+        app.logger.info(f"Removing config {id}")
+        config, dataset = Dataset.config_from_id(id)
+        dataset.configs = [c for c in dataset.configs if c.id != config.id]
+        dataset.save()
+        return ""
+
     @app.route("/model/<id>")
     def get_model(id):
         model, config, dataset = Dataset.model_from_id(id)
@@ -169,6 +177,13 @@ def create_app():
             return {"error": "Model is not trained"}, 409
         return send_file(model.exported_model_path, as_attachment=True)
 
+    @app.route("/model/<id>/confusion_matrix")
+    def export_confusion_matrix(id):
+        model, _, _ = Dataset.model_from_id(id)
+        if model.status != "done":
+            return {"error": "Model is not trained"}, 409
+        return send_file(model.confusion_matrix_path, as_attachment=True)
+
     @app.route("/model/<id>/predict", methods=["POST"])
     def predict_result(id):
         model, config, dataset = Dataset.model_from_id(id)
@@ -182,22 +197,25 @@ def create_app():
         data = request.json
         app.logger.info(f"got data {data}")
         mapping = column_mapping.decode_mapping(dataset.column_mapping)
-        data = [(mapping[k][data[k]] if k in mapping else float(data[k]))
-                for k in sorted(data.keys())
-                if k in config.columns
-                and config.columns[k]
-                and config.label != k]
+        data = [[(mapping[k][line[k]] if k in mapping else float(line[k]))
+                 for k in sorted(line.keys())
+                 if k in config.columns
+                 and config.columns[k]
+                 and config.label != k] for line in data]
         app.logger.info(f"sorted data {data}")
         with open(model.pickled_model_path, "rb") as f:
             pipeline = pickle.load(f)
         app.logger.info("loaded pipeline")
-        result = pipeline.predict([data])[0]
+        result = pipeline.predict(data).tolist()
         app.logger.info(f"Predicted {result}")
 
         if config.label in mapping:
-            result = column_mapping.reconvert_one_value(
-                config.label, result, mapping)
-        return {config.label: result}
+            result = [
+                column_mapping.reconvert_one_value(
+                    config.label, value, mapping)
+                for value in result
+            ]
+        return jsonify([{config.label: value} for value in result])
 
     @app.route("/model/<id>/status")
     def dataset_status(id):
@@ -211,6 +229,14 @@ def create_app():
                 reply["logs"] = f.read()
 
         return reply
+
+    @app.route("/model/<id>", methods=["DELETE"])
+    def delete_model(id):
+        app.logger.info(f"Removing model {id}")
+        model, config, dataset = Dataset.model_from_id(id)
+        config.models = [m for m in config.models if m.id != model.id]
+        dataset.save()
+        return ""
 
     @app.route("/dataset/pic")
     def export_explaination():
