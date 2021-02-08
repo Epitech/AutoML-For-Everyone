@@ -27,6 +27,7 @@ export class ModelComponent implements OnChanges {
   @Input() predictColumns!: string[];
   model?: ModelType;
   status: "not started" | 'starting' | 'started' | 'done' = "not started";
+  logs: string = "";
   predictData: PredictType = {};
   predictResult?: PredictResult;
   predictFile?: File;
@@ -63,9 +64,10 @@ export class ModelComponent implements OnChanges {
 
   checkStatus(id: string, refresh: boolean = true) {
     get_status(id)
-      .then(({ status }) => {
+      .then(({ status, logs }) => {
         console.log('train', status);
         this.status = status;
+        this.logs = logs;
         if (refresh && (this.status === 'starting' || this.status === 'started'))
           setTimeout(
             ({ id }: ModelComponent) => this.checkStatus(id),
