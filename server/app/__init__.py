@@ -140,7 +140,7 @@ def create_app():
         config, dataset = Dataset.config_from_id(id)
         dataset.configs = [c for c in dataset.configs if c.id != config.id]
         dataset.save()
-        return ""
+        return jsonify({})
 
     @app.route("/model/<id>")
     def get_model(id):
@@ -243,9 +243,3 @@ def create_app():
         return send_from_directory(str("/datasets"), str("save.png"), as_attachment=True)
 
     return app
-
-#####TODO : PROBLEME AU NIVEAU DE LA DATA####
-#explainer = shap.KernelExplainer(classifier.predict_proba, X.to_numpy().astype(np.float64), link="logit")
-#shap_values = explainer.shap_values(X.to_numpy().astype(np.float64), nsamples=100)
-#shap.summary_plot(shap_values, X.to_numpy().astype(np.float64), plot_type="bar", show=False)
-# plt.savefig('datasets/save.png')

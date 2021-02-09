@@ -8,5 +8,9 @@
         </button>
         <button class="button add" (click)="openDialog()" matTooltip="Add a new config">+</button>
     </div>
+    <button *ngFor="let c of dataset.configs; let index = index" matTooltipShowDelay=1000 [matTooltip]="c"
+            [class]="c===config?'button':'button'" (click)="deleteConfig(c)">
+            Delete Config {{index + 1}}
+        </button>
     <app-config *ngIf="config" [id]="config"></app-config>
 </ng-container>

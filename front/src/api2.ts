@@ -2,7 +2,7 @@ const URL = 'http://localhost:5000';
 
 type OptionsType =
   | {
-      method: 'GET' | 'POST';
+      method: 'GET' | 'POST' | 'DELETE';
       body?: any;
     }
   | { method: 'POST'; body: any; headers: HeadersInit };
@@ -14,6 +14,10 @@ const with_body = (body: any): OptionsType => ({
   method: 'POST',
   body: JSON.stringify(body),
   headers: new Headers({ 'Content-Type': 'application/json' }),
+});
+
+const without_body = (): OptionsType => ({
+  method: 'DELETE'
 });
 
 // DATASETS
@@ -31,6 +35,8 @@ export const post_dataset = (file: File) => {
 
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config));
+
+export const delete_config = (id: string) => api(`/config/${id}`, without_body());
 
 export const post_lint = (id: string, config: any) =>
   api(`/dataset/${id}/config/lint`, with_body(config));

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_dataset, post_config } from '../../api2';
+import { delete_config, get_dataset, post_config } from '../../api2';
 import { DataType, EmittedType } from '../table/table.component';
 import { DialogContentNewConfig } from '../dialog-new-config/dialog-new-config';
 
@@ -76,5 +76,17 @@ export class DatasetOverviewComponent implements OnInit {
 
   changeConfig(config: string) {
     this.config = config;
+  }
+
+  deleteConfig(config: string) {
+    if (this.config === config)
+        this.config = undefined;
+    delete_config(config).then((response) => {
+      var idx = this.dataset?.configs.findIndex(data => data === config)
+      if (idx !== undefined && idx !== -1)
+        this.dataset?.configs.splice(idx, 1)
+    }).catch((err) => {
+      console.log(err);
+    });
   }
 }
