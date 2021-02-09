@@ -16,10 +16,6 @@ const with_body = (body: any): OptionsType => ({
   headers: new Headers({ 'Content-Type': 'application/json' }),
 });
 
-const without_body = (): OptionsType => ({
-  method: 'DELETE'
-});
-
 // DATASETS
 
 export const get_datasets = () => api('/dataset');
@@ -36,7 +32,9 @@ export const post_dataset = (file: File) => {
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config));
 
-export const delete_config = (id: string) => api(`/config/${id}`, without_body());
+export const delete_config = (id: string) => api(`/config/${id}`, { method: 'DELETE' }, false);
+
+export const delete_model = (id: string) => api(`/model/${id}`, { method: 'DELETE' }, false);
 
 export const post_lint = (id: string, config: any) =>
   api(`/dataset/${id}/config/lint`, with_body(config));

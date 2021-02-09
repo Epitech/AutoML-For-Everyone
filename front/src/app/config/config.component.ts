@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_config, post_model, ModelType, get_lint } from '../../api2';
+import { get_config, post_model, ModelType, get_lint, delete_model } from '../../api2';
 
 import { DataType, EmittedType } from '../table/table.component';
 import {
@@ -77,4 +77,16 @@ export class ConfigComponent implements OnChanges {
     Object.keys(this.config!.columns).filter(
       (c) => this.config!.columns[c] && c !== this.config!.label
     );
+
+    deleteModel(model: string) {
+      if (this.model === model)
+          this.model = undefined;
+      delete_model(model).then(() => {
+        var idx = this.config!.models.findIndex(data => data === model)
+        if (idx !== undefined && idx !== -1)
+          this.config!.models.splice(idx, 1)
+      }).catch((err) => {
+        console.log(err);
+      });
+    }
 }

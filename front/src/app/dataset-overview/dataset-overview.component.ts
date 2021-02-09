@@ -81,7 +81,7 @@ export class DatasetOverviewComponent implements OnInit {
   deleteConfig(config: string) {
     if (this.config === config)
         this.config = undefined;
-    delete_config(config).then((response) => {
+    delete_config(config).then(() => {
       var idx = this.dataset?.configs.findIndex(data => data === config)
       if (idx !== undefined && idx !== -1)
         this.dataset?.configs.splice(idx, 1)

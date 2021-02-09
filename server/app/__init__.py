@@ -236,7 +236,7 @@ def create_app():
         model, config, dataset = Dataset.model_from_id(id)
         config.models = [m for m in config.models if m.id != model.id]
         dataset.save()
-        return ""
+        return jsonify({})
 
     @app.route("/dataset/pic")
     def export_explaination():

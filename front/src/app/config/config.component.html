@@ -10,6 +10,10 @@
         </button>
         <button class="button add" (click)="openDialog()" matTooltip="Add a new model">+</button>
     </div>
+    <button *ngFor="let m of config.models; let index = index" matTooltipShowDelay=1000 [matTooltip]="m"
+            [class]="m===model?'button':'button'" (click)="deleteModel(m)">
+            Delete Model {{index + 1}}
+        </button>
 
     <app-model *ngIf="model" [id]="model" [predictColumns]="getPredictColumns()"></app-model>
 
