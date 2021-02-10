@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-type PredictResult = {[key:string]:any};
+type PredictResult = { [key: string]: any };
 
 import {
   get_model,
@@ -25,11 +25,11 @@ import {
 export class ModelComponent implements OnChanges {
   @Input() id!: string;
   @Input() predictColumns!: string[];
-  model?: ModelType;
-  status: "not started" | 'starting' | 'started' | 'done' = "not started";
-  logs: string = "";
-  predictData: PredictType = {};
-  predictResult?: PredictResult;
+  model?: { model_config: ModelType };
+  status: 'not started' | 'starting' | 'started' | 'done' = 'not started';
+  logs: string = '';
+  predictData: PredictType[] = [];
+  predictResult?: PredictResult[];
   predictFile?: File;
 
   constructor(public dialog: MatDialog) {}
@@ -41,14 +41,18 @@ export class ModelComponent implements OnChanges {
     id: SimpleChange;
     predictColumns: SimpleChange;
   }) {
-    if (predictColumns && !Object.keys(this.predictData).length) {
+    if (!this.predictData.length) {
+      const predictData: PredictType = {};
       predictColumns.currentValue.forEach((col: string) => {
-        this.predictData[col] = '';
+        predictData[col] = '';
       });
+      this.predictData.push(predictData);
     }
 
+    if (predictColumns) this.predictColumns = predictColumns.currentValue;
+
     if (id)
-      get_model(id.currentValue).then((model: ModelType) => {
+      get_model(id.currentValue).then((model) => {
         this.checkStatus(this.id, false);
         console.log('model', model);
         this.model = model;
@@ -68,7 +72,10 @@ export class ModelComponent implements OnChanges {
         console.log('train', status);
         this.status = status;
         this.logs = logs;
-        if (refresh && (this.status === 'starting' || this.status === 'started'))
+        if (
+          refresh &&
+          (this.status === 'starting' || this.status === 'started')
+        )
           setTimeout(
             ({ id }: ModelComponent) => this.checkStatus(id),
             2000,
@@ -77,7 +84,7 @@ export class ModelComponent implements OnChanges {
       })
       .catch((e) => {
         console.error('error get_status', e);
-        this.status = "not started";
+        this.status = 'not started';
       });
   }
 
@@ -86,16 +93,16 @@ export class ModelComponent implements OnChanges {
   openPredict() {
     const data: PredictData = {
       dispatch: (column, value) => {
-        this.predictData[column] = value;
+        this.predictData[0][column] = value;
       },
-      predictColumns: this.predictData,
+      predictColumns: this.predictData[0],
     };
 
     const dialogRef = this.dialog.open(DialogPredictComponent, { data });
 
     dialogRef.afterClosed().subscribe((predict: boolean) => {
       if (predict)
-        get_predict(this.id, this.predictData).then((r: PredictResult) => {
+        get_predict(this.id, this.predictData).then((r: PredictResult[]) => {
           this.predictResult = r;
         });
     });
@@ -112,13 +119,22 @@ export class ModelComponent implements OnChanges {
 
       if (lines.length < 2) return alert(lines.length);
 
-      const columns = lines[0].split(',');
-      const rows = lines[1].split(',');
-      console.log(columns, rows);
-      columns.forEach((c, i) => {
-        if (this.predictColumns.includes(c)) this.predictData[c] = rows[i];
+      const names = lines.shift()!.split(',');
+      this.predictData.length = 0;
+      lines.forEach((line) => {
+        const cols = line.split(',');
+        if (!line.length) return;
+
+        const data: PredictType = {};
+
+        names.forEach((c, i) => {
+          if (this.predictColumns.includes(c)) data[c] = cols[i];
+        });
+
+        this.predictData.push(data);
       });
-      get_predict(this.id, this.predictData).then((r: PredictResult) => {
+      console.log('doit');
+      get_predict(this.id, this.predictData).then((r: PredictResult[]) => {
         this.predictResult = r;
       });
     };
