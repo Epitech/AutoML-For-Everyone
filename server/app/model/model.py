@@ -16,13 +16,22 @@ _MODEL_CONFIG_KEYS = [
     "subsample",
     "config_dict",
     "template",
-    "early_stop"
+    "early_stop",
+    "config_dict"
+]
+
+_CONFIG_DICT_LIST = [
+    "TPOT light",
+    "TPOT MDR",
+    "TPOT sparse"
 ]
 
 
 def _validate_model_config(v: dict):
     if not all(k in _MODEL_CONFIG_KEYS for k in v.keys()):
         raise ValidationError("Invalid keys in model config")
+    if "config_dict" in v and v["config_dict"] not in _CONFIG_DICT_LIST:
+        raise ValidationError("Invalid config dict value")
 
 
 class ModelAnalysis(EmbeddedDocument):
