@@ -184,6 +184,14 @@ def create_app():
             return {"error": "Model is not trained"}, 409
         return send_file(model.confusion_matrix_path, as_attachment=True)
 
+    @app.route("/model/<id>/shap_value")
+    def export_shap_value(id):
+        model, _, _ = Dataset.model_from_id(id)
+        if model.status != "done":
+            return {"error": "Model is not trained"}, 409
+        app.logger.info(f"ICI : {model.shap_model_path}\n\n\n\n")
+        return send_file(model.shap_model_path, as_attachment=True)
+
     @app.route("/model/<id>/predict", methods=["POST"])
     def predict_result(id):
         model, config, dataset = Dataset.model_from_id(id)
@@ -238,8 +246,8 @@ def create_app():
         dataset.save()
         return jsonify({})
 
-    @app.route("/dataset/pic")
-    def export_explaination():
-        return send_from_directory(str("/datasets"), str("save.png"), as_attachment=True)
+    @app.route("/getimg/<directory>/<filename>", methods=["GET"])
+    def get_image(directory, filename):
+        return send_from_directory(str(directory), str(filename), as_attachment=True)
 
     return app

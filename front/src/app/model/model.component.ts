@@ -17,7 +17,8 @@ import {
   get_status,
   get_export,
   get_predict,
-  get_dataset
+  get_matrix,
+  get_shap
 } from '../../api2';
 import {
   DialogPredictComponent,
@@ -160,14 +161,30 @@ export class ModelComponent implements OnChanges {
   }
 
   displayValues() {
-    this.route.params.subscribe((params) => {
-      this.dataset_name = params['id'];
-  });
-    get_dataset(this.dataset_name).then((dataset: Dataset) => {
-      this.img_shap = `${dataset.name}-model-${this.id}/save.png`;
-      this.img_matrix = `${dataset.name}-model-${this.id}/confusion_matrix.png`;
-      console.log(this.img_matrix)
-      console.log(this.img_shap)
-    });
+    this.img_matrix = `http://localhost:5000/model/${this.id}/confusion_matrix`
+    this.img_shap = `http://localhost:5000/model/${this.id}/shap_value`
+    // get_matrix(this.id).then((image) => {
+    //   console.log("YO 1")
+    //   console.log(image)
+    //   this.img_matrix = image;
+    // });
+    // console.log("YO 2")
+    // get_shap(this.id).then((image) => {
+    //   console.log("YO 3")
+    //   this.img_shap = image;
+    // });
+
+    // get_dataset(this.dataset_name).then((dataset: Dataset) => {
+    //   get_image("./datasets/", `${dataset.name}-model-${this.id}/save.png`).then((data) => {
+    //     this.img_shap = data;
+    //   });
+    //   get_image("./datasets/", `${dataset.name}-model-${this.id}/confusion_matrix.png`).then((data) => {
+    //     this.img_matrix = data;
+    //   });
+    //   this.img_shap = `../../../../datasets/${dataset.name}-model-${this.id}/save.png`;
+    //   this.img_matrix = `../../../../datasets/${dataset.name}-model-${this.id}/confusion_matrix.png`;
+    //   console.log(this.img_matrix)
+    //   console.log(this.img_shap)
+    // });
   }
 }

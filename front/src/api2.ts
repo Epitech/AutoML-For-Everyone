@@ -107,3 +107,9 @@ export const get_export = (id: string) =>
 
 export const get_predict = (id: string, data: any) =>
   api(`/model/${id}/predict`, with_body(data));
+
+export const get_matrix = (id: string) =>
+  api(`/model/${id}/confusion_matrix`, { method: 'GET' }, true);
+
+export const get_shap = (id: string) =>
+  api(`/model/${id}/shap_value`, { method: 'GET' }, true);

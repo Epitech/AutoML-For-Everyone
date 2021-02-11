@@ -61,6 +61,7 @@ class DatasetModel(EmbeddedDocument):
     exported_model_path: str = StringField()
     log_path: str = StringField()
     confusion_matrix_path: str = StringField()
+    shap_model_path: str = StringField()
 
     def to_json(self):
         return {

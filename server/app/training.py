@@ -195,9 +195,11 @@ def train_model(model_id):
 
         # Update the model with the exported paths
         # and set the status as done
+        logger.info(f"PATH MATRIX : {confusion_matrix_path}\n\nPATH SHAP : {shap_model_path}\n\n\n\n")
         model.pickled_model_path = str(pickled_model_path)
         model.exported_model_path = str(exported_model_path)
         model.confusion_matrix_path = str(confusion_matrix_path)
+        model.shap_model_path = str(shap_model_path)
         model.analysis = analysis
         model.status = "done"
         dataset.save()
