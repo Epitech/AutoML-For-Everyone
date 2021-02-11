@@ -14,6 +14,9 @@
     <input type="file" id="file" (change)="setFile($event)">
     <button class="button" [disabled]="status !== 'done' || !predictFile" (click)="csv_predict()">predict with
         file</button>
+    <button class="button" [disabled]="status !== 'done'" (click)="displayValues()">Load values to display image</button>
+    <img class="images" [src]="img_shap">
+    <img class="images" [src]="img_matrix">
     <div *ngIf="predictResult !== undefined">
         last prediction results:
         <div *ngFor="let pred of predictResult">

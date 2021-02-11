@@ -1,7 +1,14 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 type PredictResult = { [key: string]: any };
+
+type Dataset = {
+  columns: string[];
+  configs: string[];
+  name: string;
+};
 
 import {
   get_model,
@@ -10,6 +17,7 @@ import {
   get_status,
   get_export,
   get_predict,
+  get_dataset
 } from '../../api2';
 import {
   DialogPredictComponent,
@@ -31,8 +39,11 @@ export class ModelComponent implements OnChanges {
   predictData: PredictType[] = [];
   predictResult?: PredictResult[];
   predictFile?: File;
+  img_shap: string = "";
+  img_matrix: string = "";
+  dataset_name: string = "";
 
-  constructor(public dialog: MatDialog) {}
+  constructor(private route: ActivatedRoute, public dialog: MatDialog) {}
 
   ngOnChanges({
     id,
@@ -146,5 +157,18 @@ export class ModelComponent implements OnChanges {
     if (files.length !== 1) return;
 
     this.predictFile = files[0];
+  }
+
+  displayValues() {
+    console.log(this.id)
+    this.route.params.subscribe((params) => {
+      console.log(params['id'])
+      this.dataset_name = params['id'];
+  });
+    get_dataset(this.dataset_name).then((dataset: Dataset) => {
+      console.log("SLOHANNNNNNN")
+      this.img_shap = `${dataset.name}-model-${this.id}/save.png`;
+      this.img_matrix = `${dataset.name}-model-${this.id}/confusion_matrix.png`;
+    });
   }
 }
