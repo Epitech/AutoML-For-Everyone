@@ -160,15 +160,14 @@ export class ModelComponent implements OnChanges {
   }
 
   displayValues() {
-    console.log(this.id)
     this.route.params.subscribe((params) => {
-      console.log(params['id'])
       this.dataset_name = params['id'];
   });
     get_dataset(this.dataset_name).then((dataset: Dataset) => {
-      console.log("SLOHANNNNNNN")
       this.img_shap = `${dataset.name}-model-${this.id}/save.png`;
       this.img_matrix = `${dataset.name}-model-${this.id}/confusion_matrix.png`;
+      console.log(this.img_matrix)
+      console.log(this.img_shap)
     });
   }
 }
