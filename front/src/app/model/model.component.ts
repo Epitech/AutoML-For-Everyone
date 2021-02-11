@@ -48,7 +48,7 @@ export class ModelComponent implements OnChanges {
 
   ngOnChanges({
     id,
-    predictColumns,
+    predictColumns
   }: {
     id: SimpleChange;
     predictColumns: SimpleChange;
@@ -63,12 +63,13 @@ export class ModelComponent implements OnChanges {
 
     if (predictColumns) this.predictColumns = predictColumns.currentValue;
 
-    if (id)
+    if (id) {
       get_model(id.currentValue).then((model) => {
         this.checkStatus(this.id, false);
         console.log('model', model);
         this.model = model;
       });
+    }
   }
 
   launchTrain = () =>
@@ -163,28 +164,5 @@ export class ModelComponent implements OnChanges {
   displayValues() {
     this.img_matrix = `http://localhost:5000/model/${this.id}/confusion_matrix`
     this.img_shap = `http://localhost:5000/model/${this.id}/shap_value`
-    // get_matrix(this.id).then((image) => {
-    //   console.log("YO 1")
-    //   console.log(image)
-    //   this.img_matrix = image;
-    // });
-    // console.log("YO 2")
-    // get_shap(this.id).then((image) => {
-    //   console.log("YO 3")
-    //   this.img_shap = image;
-    // });
-
-    // get_dataset(this.dataset_name).then((dataset: Dataset) => {
-    //   get_image("./datasets/", `${dataset.name}-model-${this.id}/save.png`).then((data) => {
-    //     this.img_shap = data;
-    //   });
-    //   get_image("./datasets/", `${dataset.name}-model-${this.id}/confusion_matrix.png`).then((data) => {
-    //     this.img_matrix = data;
-    //   });
-    //   this.img_shap = `../../../../datasets/${dataset.name}-model-${this.id}/save.png`;
-    //   this.img_matrix = `../../../../datasets/${dataset.name}-model-${this.id}/confusion_matrix.png`;
-    //   console.log(this.img_matrix)
-    //   console.log(this.img_shap)
-    // });
   }
 }
