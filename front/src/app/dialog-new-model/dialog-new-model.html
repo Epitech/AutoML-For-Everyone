@@ -33,7 +33,7 @@
         </span>
     </form>
     <label for="scoring-select">Scoring system:</label><br>
-    <select id="scoring-select" (change)="changeKey('scoring', $event.target)">
+    <select id="scoring-select" (change)="changeKey('scoring', $event.target, false)">
         <option *ngFor="let opt of scoringOptions">{{opt}}</option>
     </select>
 </mat-dialog-content>

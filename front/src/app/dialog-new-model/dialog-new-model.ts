@@ -29,10 +29,10 @@ export class DialogNewModelComponent {
     this.isNotRatio(this.data.model!.subsample) ||
     this.isNegative(this.data.model!.early_stop);
 
-  changeKey(key: string, input: EventTarget | null) {
+  changeKey(key: string, input: EventTarget | null, isNumber = true) {
     if (!input) return;
     const { value } = input as HTMLInputElement;
-    this.data.model[key] = +value;
+    this.data.model[key] = isNumber ? +value : value;
     this.data.dispatch(this.data.model);
     console.log(this.data.model);
   }
