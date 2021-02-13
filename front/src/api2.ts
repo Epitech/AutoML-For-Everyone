@@ -80,6 +80,13 @@ export const scoring = [
   'roc_auc_ovo_weighted',
 ];
 
+export const scoring_regression = [
+  'neg_median_absolute_error',
+  'neg_mean_absolute_error',
+  'neg_mean_squared_error',
+  'r2',
+];
+
 export const configDict = [
     'TPOT light',
     'TPOT MDR',
