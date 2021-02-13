@@ -47,7 +47,7 @@ export const get_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
 
 // MODEL
 
-export const scoring = [
+export const scoring_classification = [
   'accuracy',
   'adjusted_rand_score',
   'average_precision',
@@ -102,7 +102,7 @@ export type ModelType = {
   crossover_rate: number;
   subsample: number;
   early_stop: number;
-  scoring: typeof scoring[number];
+  scoring: typeof scoring_classification[number] | typeof scoring_regression[number];
   config_dict?: typeof configDict[number];
 };
 

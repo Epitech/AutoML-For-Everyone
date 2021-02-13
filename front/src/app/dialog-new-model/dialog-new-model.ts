@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { configDict, ModelType, scoring } from 'src/api2';
+import { configDict, ModelType, scoring_classification, scoring_regression } from 'src/api2';
 
 export type ModelDataType = {
   dispatch: (m: ModelType) => void;
@@ -13,13 +13,15 @@ export type ModelDataType = {
   styleUrls: ['dialog-new-model.css'],
 })
 export class DialogNewModelComponent {
-  scoringOptions = scoring;
   configDictOptions = configDict;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: ModelDataType) {}
 
   isNegative = (v: number) => v <= 0;
   isNotRatio = (v: number) => v < 0 || v > 1;
+
+  model_type = this.data.model.model_type;
+  scoringOptions = this.model_type === 'classification' ? scoring_classification : scoring_regression;
 
   wrong = (): boolean =>
     this.isNegative(this.data.model!.generations) ||

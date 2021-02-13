@@ -50,9 +50,10 @@ export class ConfigComponent implements OnChanges {
         offspring_size: 100,
         mutation_rate: 0.9,
         crossover_rate: 0.1,
-        scoring: 'accuracy',
+        scoring: this.config?.model_type === 'classification' ? 'accuracy' : 'neg_median_absolute_error',
         subsample: 1.0,
         early_stop: 10,
+        model_type: this.config?.model_type,
       };
 
     const data: ModelDataType = {
