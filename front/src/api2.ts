@@ -80,8 +80,14 @@ export const scoring = [
   'roc_auc_ovo_weighted',
 ];
 
+export const configDict = [
+    'TPOT light',
+    'TPOT MDR',
+    'TPOT sparse'
+];
+
 export type ModelType = {
-  [key: string]: string | number;
+  [key: string]: string | number | undefined;
   generations: number;
   population_size: number;
   offspring_size: number;
@@ -90,6 +96,7 @@ export type ModelType = {
   subsample: number;
   early_stop: number;
   scoring: typeof scoring[number];
+  config_dict?: typeof configDict[number];
 };
 
 export const post_model = (id: string, config: ModelType) =>

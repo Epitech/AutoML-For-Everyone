@@ -35,6 +35,11 @@
     <label for="scoring-select">Scoring system:</label><br>
     <select id="scoring-select" (change)="changeKey('scoring', $event.target, false)">
         <option *ngFor="let opt of scoringOptions">{{opt}}</option>
+    </select><br>
+    <label for="config-dict-select">Model preset:</label><br>
+    <select id="config-dict-select" (change)="changeKey('config_dict', $event.target, false)">
+        <option>Default</option>
+        <option *ngFor="let opt of configDictOptions">{{opt}}</option>
     </select>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

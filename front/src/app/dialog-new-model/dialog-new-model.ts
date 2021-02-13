@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ModelType, scoring } from 'src/api2';
+import { configDict, ModelType, scoring } from 'src/api2';
 
 export type ModelDataType = {
   dispatch: (m: ModelType) => void;
@@ -14,6 +14,7 @@ export type ModelDataType = {
 })
 export class DialogNewModelComponent {
   scoringOptions = scoring;
+  configDictOptions = configDict;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: ModelDataType) {}
 
@@ -32,8 +33,20 @@ export class DialogNewModelComponent {
   changeKey(key: string, input: EventTarget | null, isNumber = true) {
     if (!input) return;
     const { value } = input as HTMLInputElement;
-    this.data.model[key] = isNumber ? +value : value;
+    if (key === 'config_dict') {
+      this.setConfigDict(value);
+    } else {
+      this.data.model[key] = isNumber ? +value : value;
+    }
     this.data.dispatch(this.data.model);
     console.log(this.data.model);
+  }
+
+  setConfigDict(value: string) {
+    if (value === 'Default') {
+      this.data.model.config_dict = undefined;
+    } else {
+      this.data.model.config_dict = value;
+    }
   }
 }
