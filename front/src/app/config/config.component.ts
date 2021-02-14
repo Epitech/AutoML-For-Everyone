@@ -53,7 +53,6 @@ export class ConfigComponent implements OnChanges {
         scoring: this.config?.model_type === 'classification' ? 'accuracy' : 'neg_median_absolute_error',
         subsample: 1.0,
         early_stop: 10,
-        model_type: this.config?.model_type,
       };
 
     const data: ModelDataType = {
@@ -61,6 +60,7 @@ export class ConfigComponent implements OnChanges {
         this.newModel = m;
       },
       model: this.newModel,
+      type : this.config?.model_type,
     };
 
     const dialogRef = this.dialog.open(DialogNewModelComponent, { data });

@@ -5,6 +5,7 @@ import { configDict, ModelType, scoring_classification, scoring_regression } fro
 export type ModelDataType = {
   dispatch: (m: ModelType) => void;
   model: ModelType;
+  type: any;
 };
 
 @Component({
@@ -12,6 +13,7 @@ export type ModelDataType = {
   templateUrl: 'dialog-new-model.html',
   styleUrls: ['dialog-new-model.css'],
 })
+
 export class DialogNewModelComponent {
   configDictOptions = configDict;
 
@@ -20,8 +22,7 @@ export class DialogNewModelComponent {
   isNegative = (v: number) => v <= 0;
   isNotRatio = (v: number) => v < 0 || v > 1;
 
-  model_type = this.data.model.model_type;
-  scoringOptions = this.model_type === 'classification' ? scoring_classification : scoring_regression;
+  scoringOptions = this.data.type === 'classification' ? scoring_classification : scoring_regression;
 
   wrong = (): boolean =>
     this.isNegative(this.data.model!.generations) ||
