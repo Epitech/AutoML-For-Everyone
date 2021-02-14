@@ -9,6 +9,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatListModule } from '@angular/material/list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +30,7 @@ import { DialogLintComponent } from './dialog-lint/dialog-lint.component';
 import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model';
 import { DialogPredictComponent } from './dialog-predict/dialog-predict';
 import { DatavizComponent } from './dataviz/dataviz.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +47,7 @@ import { DatavizComponent } from './dataviz/dataviz.component';
     DialogNewModelComponent,
     DialogPredictComponent,
     DatavizComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -55,6 +62,11 @@ import { DatavizComponent } from './dataviz/dataviz.component';
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatStepperModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDividerModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

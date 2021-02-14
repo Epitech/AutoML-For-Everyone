@@ -1,0 +1,179 @@
+<mat-horizontal-stepper #stepper>
+    <mat-step>
+        <ng-template matStepLabel>Start</ng-template>
+
+        <div class="row container">
+            <div class="column">
+                <button class="cardButton big" (click)="selected = 'new'">
+                    <mat-card [class]="selected === 'new' ? 'cardMain' : 'card'">
+                        <mat-card-header>
+                            <mat-card-title>Start a new project</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                sed
+                                do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </button>
+            </div>
+            <div class="column">
+                <button class="cardButton" (click)="selected = 'cla'">
+                    <mat-card [class]="selected === 'cla' ? 'cardMain' : 'card'">
+                        <mat-card-header>
+                            <mat-card-title>Classification</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                sed
+                                do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </button>
+                <button class="cardButton" (click)="selected = 'reg'">
+                    <mat-card [class]="selected === 'reg' ? 'cardMain' : 'card'">
+                        <mat-card-header>
+                            <mat-card-title>Regression</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                sed
+                                do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </button>
+            </div>
+            <div class="column">
+                <button class="cardButton" (click)="selected = 'clu'">
+                    <mat-card [class]="selected === 'clu' ? 'cardMain' : 'card'">
+                        <mat-card-header>
+                            <mat-card-title>Clustering</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                sed
+                                do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </button>
+                <button class="cardButton" (click)="selected = 'tim'">
+                    <mat-card [class]="selected === 'tim' ? 'cardMain' : 'card'">
+                        <mat-card-header>
+                            <mat-card-title>Time series</mat-card-title>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                                incididunt ut
+                                labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                sed
+                                do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                            </p>
+                        </mat-card-content>
+                    </mat-card>
+                </button>
+            </div>
+        </div>
+        <button mat-flat-button matStepperNext color="primary">Suivant</button>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Import Data</ng-template>
+
+
+        <mat-card class="container">
+            <mat-card-content>
+                <mat-card class="card mat-elevation-z0">
+                    <mat-card-header>
+                        <mat-card-title>Regression</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-card class="uploadCard mat-elevation-z0">
+                            <mat-card-content>
+                            </mat-card-content>
+                        </mat-card>
+                    </mat-card-content>
+                </mat-card>
+                <mat-card class="card mat-elevation-z0">
+                    <mat-card-header>
+                        <mat-card-title>Select DataSet to use from library</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-list>
+                            <mat-list-item>
+                                <div class="row listItem">
+                                    <span>
+                                        <span>1&nbsp;&nbsp;</span>
+                                        <span>dataset.csv</span>
+                                    </span>
+                                    <span>
+                                        <span>100kb</span>
+                                        <mat-icon>delete</mat-icon>
+                                        <mat-icon>keyboard_arrow_right</mat-icon>
+                                    </span>
+                                </div>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <div class="row listItem">
+                                    <span>
+                                        <span>2&nbsp;&nbsp;</span>
+                                        <span>dataset.csv</span>
+                                    </span>
+                                    <span>
+                                        <span>100kb</span>
+                                        <mat-icon>delete</mat-icon>
+                                        <mat-icon>keyboard_arrow_right</mat-icon>
+                                    </span>
+                                </div>
+                            </mat-list-item>
+                            <mat-divider></mat-divider>
+                            <mat-list-item>
+                                <div class="row listItem">
+                                    <span>
+                                        <span>3&nbsp;&nbsp;</span>
+                                        <span>dataset.csv</span>
+                                    </span>
+                                    <span>
+                                        <span>100kb</span>
+                                        <mat-icon>delete</mat-icon>
+                                        <mat-icon>keyboard_arrow_right</mat-icon>
+                                    </span>
+                                </div>
+                            </mat-list-item>
+                        </mat-list>
+                    </mat-card-content>
+                </mat-card>
+            </mat-card-content>
+        </mat-card>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Visualise Data</ng-template>
+        <iframe src="http://localhost:5000/config/60293e0a045efa4655691491/sweetviz" width="100%"
+            height="1000px"></iframe>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Configure Model</ng-template>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Train Model</ng-template>
+    </mat-step>
+    <mat-step>
+        <ng-template matStepLabel>Evaluate</ng-template>
+    </mat-step>
+</mat-horizontal-stepper>
