@@ -1,4 +1,4 @@
-version: "3"
+version: "3.6"
 services:
   flask:
     build:
@@ -12,7 +12,6 @@ services:
       DATASETS_DIRECTORY: /datasets
       MONGO_HOST: mongo
       DASK_SCHEDULER_HOST: dask-scheduler:8786
-    profiles: ["production"]
 
 
   mongo:
@@ -25,7 +24,6 @@ services:
       target: server-base
     ports:
       - "8787:8787"
-    command: ["dask-scheduler"]
 
   dask-worker:
     build:
@@ -38,44 +36,8 @@ services:
       MONGO_HOST: mongo
     working_dir: /
     command: ["dask-worker", "dask-scheduler:8786", "--preload", "worker_setup"]
-    profiles: ["production"]
 
   angular:
     build: front
     ports:
       - 4200:80
-
-  # Development only services
-
-  flask-dev:
-    build:
-      context: server
-      target: server-base
-    volumes:
-      - ./server/app:/app
-      - ./datasets:/datasets
-    environment:
-      FLASK_ENV: development
-      FLASK_APP: "app:create_app()"
-      DATASETS_DIRECTORY: /datasets
-      MONGO_HOST: mongo
-      DASK_SCHEDULER_HOST: dask-scheduler:8786
-    ports:
-      - "5000:5000"
-    command: ["flask", "run", "--host=0.0.0.0"]
-    profiles: ["dev"]
-
-  dask-worker-dev:
-    build:
-      context: server
-      target: server-base
-    volumes:
-      - ./server/app:/app
-      - ./datasets:/datasets
-      - ./server/worker_setup.py:/worker_setup.py
-    environment:
-      PYTHONPATH: /
-      MONGO_HOST: mongo
-    working_dir: /
-    command: ["dask-worker", "dask-scheduler:8786", "--preload", "worker_setup"]
-    profiles: ["dev"]
