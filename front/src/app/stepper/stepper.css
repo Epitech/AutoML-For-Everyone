@@ -15,14 +15,14 @@
 }
 
 .card, .cardMain {
-  color: #0000cc;
+  color: var(--docaposte-darkblue);
   height: 100%;
   font-size: larger;
 }
 
 .cardMain {
   color: white;
-  background-color: #0000cc;
+  background-color: var(--docaposte-darkblue);
 }
 
 .cardButton {
@@ -54,7 +54,7 @@
 }
 
 .mat-flat-button.mat-primaryx {
-  background-color: #0000cc;
+  background-color: var(--docaposte-darkblue);
   float: right;
   margin-right: 10%;
   margin-top: 10px;

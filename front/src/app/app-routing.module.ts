@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { DatasetOverviewComponent } from './dataset-overview/dataset-overview.component';
-import { DatasetsComponent } from './datasets/datasets.component';
-import { DatavizComponent } from './dataviz/dataviz.component';
+import { DatasetOverviewComponent } from './old-dataset-overview/dataset-overview.component';
+import { DatasetsComponent } from './old-datasets/datasets.component';
+import { DatavizComponent } from './old-dataviz/dataviz.component';
 
 const routes: Routes = [
   { path: '', component: DatasetsComponent },

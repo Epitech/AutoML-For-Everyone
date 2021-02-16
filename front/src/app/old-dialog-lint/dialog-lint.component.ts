@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Lint } from '../table/table.component';
+import { Lint } from '../old-table/table.component';
 
 export type LintType = {
   lint: Lint;

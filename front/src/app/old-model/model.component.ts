@@ -24,7 +24,7 @@ import {
   DialogPredictComponent,
   PredictData,
   PredictType,
-} from '../dialog-predict/dialog-predict';
+} from '../old-dialog-predict/dialog-predict';
 
 @Component({
   selector: 'app-model',

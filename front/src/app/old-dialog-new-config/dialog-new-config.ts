@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { post_lint } from 'src/api2';
-import { DataType, Dispatch } from '../table/table.component';
+import { DataType, Dispatch } from '../old-table/table.component';
 
 @Component({
   selector: 'app-dialog-new-config',

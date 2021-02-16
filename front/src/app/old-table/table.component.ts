@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {
   DialogLintComponent,
   LintType,
-} from '../dialog-lint/dialog-lint.component';
+} from '../old-dialog-lint/dialog-lint.component';
 
 export type ColumnsType = { [key: string]: boolean };
 export type EmittedType = {

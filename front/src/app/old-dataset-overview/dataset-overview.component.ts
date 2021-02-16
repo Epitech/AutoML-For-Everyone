@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import { delete_config, get_dataset, post_config } from '../../api2';
-import { DataType, EmittedType } from '../table/table.component';
-import { DialogContentNewConfig } from '../dialog-new-config/dialog-new-config';
+import { DataType, EmittedType } from '../old-table/table.component';
+import { DialogContentNewConfig } from '../old-dialog-new-config/dialog-new-config';
 
 type Fields = { [key: string]: boolean };
 type Dataset = {

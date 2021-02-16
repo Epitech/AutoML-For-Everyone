@@ -17,20 +17,20 @@ import { MatListModule } from '@angular/material/list';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { TopbarComponent } from './topbar/topbar.component';
-import { DatasetOverviewComponent } from './dataset-overview/dataset-overview.component';
-import { ButtonComponent } from './button/button.component';
+import { TopbarComponent } from './header/header';
+import { DatasetOverviewComponent } from './old-dataset-overview/dataset-overview.component';
+import { ButtonComponent } from './old-button/button.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DatasetsComponent } from './datasets/datasets.component';
-import { ConfigComponent } from './config/config.component';
-import { TableComponent } from './table/table.component';
-import { DialogContentNewConfig } from './dialog-new-config/dialog-new-config';
-import { ModelComponent } from './model/model.component';
-import { DialogLintComponent } from './dialog-lint/dialog-lint.component';
-import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model';
-import { DialogPredictComponent } from './dialog-predict/dialog-predict';
-import { DatavizComponent } from './dataviz/dataviz.component';
-import { HomeComponent } from './home/home.component';
+import { DatasetsComponent } from './old-datasets/datasets.component';
+import { ConfigComponent } from './old-config/config.component';
+import { TableComponent } from './old-table/table.component';
+import { DialogContentNewConfig } from './old-dialog-new-config/dialog-new-config';
+import { ModelComponent } from './old-model/model.component';
+import { DialogLintComponent } from './old-dialog-lint/dialog-lint.component';
+import { DialogNewModelComponent } from './old-dialog-new-model/dialog-new-model';
+import { DialogPredictComponent } from './old-dialog-predict/dialog-predict';
+import { DatavizComponent } from './old-dataviz/dataviz.component';
+import { HomeComponent } from './stepper/stepper';
 
 @NgModule({
   declarations: [
