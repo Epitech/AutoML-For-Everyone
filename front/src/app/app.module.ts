@@ -15,7 +15,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { TopbarComponent } from './header/header';
 import { DatasetOverviewComponent } from './old-dataset-overview/dataset-overview.component';
@@ -51,7 +50,6 @@ import { HomeComponent } from './stepper/stepper';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     NoopAnimationsModule,
     MatCheckboxModule,
     MatTooltipModule,
