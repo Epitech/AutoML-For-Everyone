@@ -29,6 +29,7 @@
             ],
             "styles": [
               "src/custom-theme.scss",
+              "src/material.styles.css",
               "src/styles.css"
             ],
             "scripts": []

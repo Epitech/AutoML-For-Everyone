@@ -1,0 +1,30 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.container {
+  width: 85%;
+  margin: auto;
+  height: 600px;
+  margin-top: 80px;
+
+}
+
+.card {
+  color: var(--docaposte-darkblue);
+  font-size: larger;
+}
+
+.uploadCard {
+  background-color: lightgrey;
+  border: dashed thin blue;
+  width: 95%;
+  height: 200px;
+  margin: auto;
+}
+
+.listItem {
+  width: 100%;
+}

@@ -1,0 +1,60 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 32%;
+  justify-content: space-between;
+}
+
+.container {
+  width: 85%;
+  margin: auto;
+  height: 600px;
+  margin-top: 80px;
+}
+
+.cardButton {
+  color: white;
+  text-align: left;
+  padding: 0;
+  height: 46%;
+}
+
+.big {
+  height: 100%;
+}
+
+.big .mat-card-title {
+  font-size: 35px;
+}
+
+.card,
+.cardMain {
+  color: var(--docaposte-darkblue);
+  height: 100%;
+  font-size: larger;
+}
+
+.cardMain {
+  color: white;
+  background-color: var(--docaposte-blue);
+}
+
+.mat-card-content {
+  font-size: 16px;
+}
+
+.mat-card-title {
+  font-size: 20px;
+}
+
+.mat-flat-button.mat-primary {
+  background-color: var(--docaposte-blue);
+  float: right;
+  margin-top: 10px;
+}

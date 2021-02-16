@@ -1,0 +1,29 @@
+/* angular material */
+html,
+body {
+  margin: 0;
+  background-color: var(--docaposte-off-white);
+}
+body,
+button {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+}
+
+.mat-horizontal-stepper-header-container {
+  background-color: white;
+  box-shadow: 0px 1px 4px 0px #b3b3b3;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}

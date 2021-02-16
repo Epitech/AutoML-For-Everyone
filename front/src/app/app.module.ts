@@ -31,6 +31,7 @@ import { DialogPredictComponent } from './old/old-dialog-predict/dialog-predict'
 import { DatavizComponent } from './old/old-dataviz/dataviz.component';
 import { HomeComponent } from './stepper/stepper';
 import { NewProjectComponent } from './new-project/new-project';
+import { SelectDataComponent } from './select-data/select-data';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { NewProjectComponent } from './new-project/new-project';
     DatavizComponent,
     HomeComponent,
     NewProjectComponent,
+    SelectDataComponent,
   ],
   imports: [
     BrowserModule,

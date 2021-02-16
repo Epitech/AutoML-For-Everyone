@@ -1,39 +1,12 @@
 :root {
   --docaposte-lightblue: #4376da;
-  --docaposte-blue: #0000ff;
-  --docaposte-darkblue: #0000cc;
-  --docaposte-off-white: #e5e5e5;
-}
-
-/* angular material */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  background-color: #e5e5e5;
-}
-body,
-button {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  --docaposte-blue: #0000cc;
+  --docaposte-darkblue: #00008c;
+  --docaposte-off-white: #f8f8fb;
 }
 
 h1,
 h2,
 h3 {
   color: var(--docaposte-blue);
-}
-
-button {
-  background-color: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-button:focus {
-  outline: none;
-}
-
-a {
-  text-decoration: none;
-  color: initial;
 }

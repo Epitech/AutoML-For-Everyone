@@ -1,1 +1,89 @@
-<p>new-project works!</p>
+<div class="row container">
+    <div class="column">
+        <button class="cardButton big" (click)="selected = 'new'">
+            <mat-card [class]="selected === 'new' ? 'cardMain' : 'card'">
+                <mat-card-header>
+                    <mat-card-title>Start a new project</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut
+                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed
+                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </button>
+    </div>
+    <div class="column">
+        <button class="cardButton" (click)="selected = 'cla'">
+            <mat-card [class]="selected === 'cla' ? 'cardMain' : 'card'">
+                <mat-card-header>
+                    <mat-card-title>Classification</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut
+                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed
+                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </button>
+        <button class="cardButton" (click)="selected = 'reg'">
+            <mat-card [class]="selected === 'reg' ? 'cardMain' : 'card'">
+                <mat-card-header>
+                    <mat-card-title>Regression</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut
+                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed
+                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </button>
+    </div>
+    <div class="column">
+        <button class="cardButton" (click)="selected = 'clu'">
+            <mat-card [class]="selected === 'clu' ? 'cardMain' : 'card'">
+                <mat-card-header>
+                    <mat-card-title>Clustering</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut
+                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed
+                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </button>
+        <button class="cardButton" (click)="selected = 'tim'">
+            <mat-card [class]="selected === 'tim' ? 'cardMain' : 'card'">
+                <mat-card-header>
+                    <mat-card-title>Time series</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                        incididunt ut
+                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                        sed
+                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                    </p>
+                </mat-card-content>
+            </mat-card>
+        </button>
+    </div>
+</div>
+<button mat-flat-button matStepperNext color="primary">Suivant</button>
