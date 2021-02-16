@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 
-import { AppComponent } from './app.component';
+import { AppComponent } from './app';
 import { TopbarComponent } from './header/header';
 import { DatasetOverviewComponent } from './old/old-dataset-overview/dataset-overview.component';
 import { ButtonComponent } from './old/old-button/button.component';
