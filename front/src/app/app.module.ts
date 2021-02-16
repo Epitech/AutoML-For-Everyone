@@ -30,6 +30,7 @@ import { DialogNewModelComponent } from './old/old-dialog-new-model/dialog-new-m
 import { DialogPredictComponent } from './old/old-dialog-predict/dialog-predict';
 import { DatavizComponent } from './old/old-dataviz/dataviz.component';
 import { HomeComponent } from './stepper/stepper';
+import { NewProjectComponent } from './new-project/new-project';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { HomeComponent } from './stepper/stepper';
     DialogPredictComponent,
     DatavizComponent,
     HomeComponent,
+    NewProjectComponent,
   ],
   imports: [
     BrowserModule,
