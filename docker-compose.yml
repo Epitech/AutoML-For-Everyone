@@ -24,6 +24,7 @@ services:
       target: server-base
     ports:
       - "8787:8787"
+    command: ["dask-scheduler"]
 
   dask-worker:
     build:
