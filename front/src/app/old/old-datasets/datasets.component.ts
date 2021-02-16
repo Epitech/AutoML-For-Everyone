@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { get_datasets, post_dataset } from '../../api2';
+import { get_datasets, post_dataset } from '../../../api2';
 
 @Component({
   selector: 'app-datasets',

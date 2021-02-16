@@ -17,18 +17,18 @@ import { MatListModule } from '@angular/material/list';
 
 import { AppComponent } from './app.component';
 import { TopbarComponent } from './header/header';
-import { DatasetOverviewComponent } from './old-dataset-overview/dataset-overview.component';
-import { ButtonComponent } from './old-button/button.component';
+import { DatasetOverviewComponent } from './old/old-dataset-overview/dataset-overview.component';
+import { ButtonComponent } from './old/old-button/button.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DatasetsComponent } from './old-datasets/datasets.component';
-import { ConfigComponent } from './old-config/config.component';
-import { TableComponent } from './old-table/table.component';
-import { DialogContentNewConfig } from './old-dialog-new-config/dialog-new-config';
-import { ModelComponent } from './old-model/model.component';
-import { DialogLintComponent } from './old-dialog-lint/dialog-lint.component';
-import { DialogNewModelComponent } from './old-dialog-new-model/dialog-new-model';
-import { DialogPredictComponent } from './old-dialog-predict/dialog-predict';
-import { DatavizComponent } from './old-dataviz/dataviz.component';
+import { DatasetsComponent } from './old/old-datasets/datasets.component';
+import { ConfigComponent } from './old/old-config/config.component';
+import { TableComponent } from './old/old-table/table.component';
+import { DialogContentNewConfig } from './old/old-dialog-new-config/dialog-new-config';
+import { ModelComponent } from './old/old-model/model.component';
+import { DialogLintComponent } from './old/old-dialog-lint/dialog-lint.component';
+import { DialogNewModelComponent } from './old/old-dialog-new-model/dialog-new-model';
+import { DialogPredictComponent } from './old/old-dialog-predict/dialog-predict';
+import { DatavizComponent } from './old/old-dataviz/dataviz.component';
 import { HomeComponent } from './stepper/stepper';
 
 @NgModule({

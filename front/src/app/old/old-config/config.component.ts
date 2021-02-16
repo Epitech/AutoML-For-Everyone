@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_config, post_model, ModelType, get_lint, delete_model } from '../../api2';
+import { get_config, post_model, ModelType, get_lint, delete_model } from '../../../api2';
 
 import { DataType, EmittedType } from '../old-table/table.component';
 import {
