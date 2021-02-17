@@ -1,8 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+
+import { get_datasets } from '../../api2';
 
 @Component({
   selector: 'app-select-data',
   templateUrl: 'select-data.html',
   styleUrls: ['select-data.css'],
 })
-export class SelectDataComponent {}
+export class SelectDataComponent implements OnInit {
+  ngOnInit() {
+    get_datasets().then((datasets) => {
+      console.log(datasets);
+    });
+  }
+}

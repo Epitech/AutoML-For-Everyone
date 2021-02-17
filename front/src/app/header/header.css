@@ -18,3 +18,7 @@
 .void {
   width: 150px;
 }
+
+.title {
+  letter-spacing: 2px;
+}
