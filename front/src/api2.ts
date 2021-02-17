@@ -43,7 +43,8 @@ export const get_config = (id: string) => api(`/config/${id}`);
 
 export const get_lint = (id: string) => api(`/config/${id}/lint`);
 
-export const get_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
+export const get_dataset_sweetviz_url = (id: string) => `${URL}/dataset/${id}/sweetviz`;
+export const get_config_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
 
 // MODEL
 

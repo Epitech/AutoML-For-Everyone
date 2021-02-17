@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { get_sweetviz_url } from '../../../api2';
+import { get_config_sweetviz_url as get_sweetviz_url } from '../../../api2';
 
 @Component({
   selector: 'app-dataviz',
