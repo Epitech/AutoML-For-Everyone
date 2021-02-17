@@ -2,62 +2,47 @@
     <mat-card-content>
         <mat-card class="card mat-elevation-z0">
             <mat-card-header>
-                <mat-card-title>Import Dataset</mat-card-title>
+                <mat-card-title>Import dataset</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <mat-card class="uploadCard mat-elevation-z0">
                     <mat-card-content>
+                        <span class="rowUpload">
+                            <span class="column">
+                                <span class="uploadIconContainer">
+                                    <mat-icon inline="true" fontSet="material-icons-round">upload</mat-icon>
+                                </span>
+                                <i class="uploadText">Upload your files here</i>
+                                <button class="uploadButton">Import Data</button>
+                            </span>
+                        </span>
                     </mat-card-content>
                 </mat-card>
             </mat-card-content>
         </mat-card>
         <mat-card class="card mat-elevation-z0">
             <mat-card-header>
-                <mat-card-title>Select Dataset library</mat-card-title>
+                <mat-card-title>Select dataset from library</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <mat-list>
-                    <mat-list-item>
-                        <div class="row listItem">
-                            <span>
-                                <h3 class="index">1&nbsp;&nbsp;</h3>
-                                <span>dataset.csv</span>
-                            </span>
-                            <span class="actions">
-                                <span>100kb</span>
-                                <mat-icon>delete</mat-icon>
-                                <mat-icon>keyboard_arrow_right</mat-icon>
-                            </span>
-                        </div>
-                    </mat-list-item>
-                    <mat-divider></mat-divider>
-                    <mat-list-item>
-                        <div class="row listItem">
-                            <span>
-                                <h3 class="index">2&nbsp;&nbsp;</h3>
-                                <span>dataset.csv</span>
-                            </span>
-                            <span class="actions">
-                                <span>100kb</span>
-                                <mat-icon>delete</mat-icon>
-                                <mat-icon>keyboard_arrow_right</mat-icon>
-                            </span>
-                        </div>
-                    </mat-list-item>
-                    <mat-divider></mat-divider>
-                    <mat-list-item>
-                        <div class="row listItem">
-                            <span>
-                                <h3 class="index">3&nbsp;&nbsp;</h3>
-                                <span>dataset.csv</span>
-                            </span>
-                            <span class="actions">
-                                <span>100kb</span>
-                                <mat-icon>delete</mat-icon>
-                                <mat-icon>keyboard_arrow_right</mat-icon>
-                            </span>
-                        </div>
-                    </mat-list-item>
+                    <ng-container
+                        *ngFor="let dataset of ['dataset1.csv', 'dataset2.csv', 'dataset3.csv']; let index = index">
+                        <mat-list-item>
+                            <div class="rowList listItem">
+                                <span>
+                                    <h3 class="index">{{index}}</h3>
+                                    <span class="name">{{dataset}}</span>
+                                </span>
+                                <span class="actions">
+                                    <span class="size">100kb</span>
+                                    <mat-icon>delete_outline</mat-icon>
+                                    <mat-icon>keyboard_arrow_right</mat-icon>
+                                </span>
+                            </div>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                    </ng-container>
                 </mat-list>
             </mat-card-content>
         </mat-card>

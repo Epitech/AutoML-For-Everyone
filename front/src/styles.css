@@ -1,9 +1,10 @@
 :root {
+  --docaposte-off-white: #f8f8fb;
+  --docaposte-grey: #c6c8d0;
+  --docaposte-darkgrey: #666d92;
   --docaposte-lightblue: #3970e6;
   --docaposte-blue: #0000cc;
   --docaposte-darkblue: #00008c;
-  --docaposte-off-white: #f8f8fb;
-  --docaposte-grey: #dcdcdf;
 }
 
 h1,
