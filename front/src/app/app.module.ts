@@ -33,6 +33,7 @@ import { HomeComponent } from './stepper/stepper';
 import { NewProjectComponent } from './new-project/new-project';
 import { SelectDataComponent } from './select-data/select-data';
 import { VisualiseDataComponent } from './visualise-data/visualise-data';
+import { ProgressionDataService } from './progression-data.service';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,7 @@ import { VisualiseDataComponent } from './visualise-data/visualise-data';
     MatDividerModule,
     MatListModule,
   ],
-  providers: [],
+  providers: [ProgressionDataService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
