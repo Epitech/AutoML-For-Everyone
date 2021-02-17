@@ -32,6 +32,7 @@ import { DatavizComponent } from './old/old-dataviz/dataviz.component';
 import { HomeComponent } from './stepper/stepper';
 import { NewProjectComponent } from './new-project/new-project';
 import { SelectDataComponent } from './select-data/select-data';
+import { VisualiseDataComponent } from './visualise-data/visualise-data';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { SelectDataComponent } from './select-data/select-data';
     HomeComponent,
     NewProjectComponent,
     SelectDataComponent,
+    VisualiseDataComponent,
   ],
   imports: [
     BrowserModule,
