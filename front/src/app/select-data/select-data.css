@@ -9,7 +9,6 @@
   margin: auto;
   height: 600px;
   margin-top: 80px;
-
 }
 
 .card {
@@ -18,8 +17,8 @@
 }
 
 .uploadCard {
-  background-color: lightgrey;
-  border: dashed thin blue;
+  background-color: var(--docaposte-off-white);
+  border: dashed thin var(--docaposte-lightblue);
   width: 95%;
   height: 200px;
   margin: auto;
@@ -27,4 +26,16 @@
 
 .listItem {
   width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 15%;
+}
+
+.index {
+  display: inline;
+  color: var(--docaposte-darkblue);
 }
