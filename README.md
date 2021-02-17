@@ -26,7 +26,7 @@ Install Docker on Linux :
 3. Enter the root directory of the projet
 4. Execute the following command with powershell 
 ```
-docker-compose --prodile production up --build
+docker-compose up --build
 ```
 5. In the Containers / Apps tab you should have a banner named docaposte
 6. You can now access the platform with this [link](localhost:4200)
@@ -37,7 +37,7 @@ docker-compose --prodile production up --build
 2. Enter the root directory of the projet
 3. Execute the following command 
 ```
-docker-compose --prodile production up --build
+docker-compose up --build
 ```
 4. You can now access the platform with this [link](localhost:4200)
 
