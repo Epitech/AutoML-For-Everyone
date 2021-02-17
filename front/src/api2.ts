@@ -18,7 +18,7 @@ const with_body = (body: any): OptionsType => ({
 
 // DATASETS
 
-export const get_datasets = () => api('/dataset');
+export const get_datasets = (): Promise<string[]> => api('/dataset');
 
 export const get_dataset = (id: string) => api(`/dataset/${id}`);
 export const post_dataset = (file: File) => {

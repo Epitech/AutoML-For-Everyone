@@ -11,8 +11,10 @@ button {
 
 button {
   background-color: transparent;
+  color: inherit;
   border: none;
   cursor: pointer;
+  padding: 0;
 }
 
 button:focus {

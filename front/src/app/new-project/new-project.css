@@ -34,7 +34,8 @@
 }
 
 .card,
-.cardMain {
+.cardMain,
+.cardSoon {
   color: var(--docaposte-darkblue);
   height: 100%;
   font-size: larger;
@@ -43,6 +44,10 @@
 .cardMain {
   color: white;
   background-color: var(--docaposte-blue);
+}
+
+.cardSoon {
+  color: grey;
 }
 
 .mat-card-content {

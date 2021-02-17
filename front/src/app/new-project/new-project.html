@@ -1,7 +1,7 @@
 <div class="row container">
     <div class="column">
-        <button class="cardButton big" (click)="selected = 'new'">
-            <mat-card [class]="selected === 'new' ? 'cardMain' : 'card'">
+        <span class="cardButton big">
+            <mat-card class="cardMain">
                 <mat-card-header>
                     <mat-card-title>Start a new project</mat-card-title>
                 </mat-card-header>
@@ -15,75 +15,65 @@
                     </p>
                 </mat-card-content>
             </mat-card>
-        </button>
+        </span>
     </div>
     <div class="column">
-        <button class="cardButton" (click)="selected = 'cla'">
-            <mat-card [class]="selected === 'cla' ? 'cardMain' : 'card'">
+        <span class="cardButton">
+            <mat-card class="card">
                 <mat-card-header>
                     <mat-card-title>Classification</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut
-                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed
-                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                        Classification is the process of predicting the class of descrete data points.
+                        For example, the model will predict if an image is closer to a dog or a cat.
                     </p>
                 </mat-card-content>
             </mat-card>
-        </button>
-        <button class="cardButton" (click)="selected = 'reg'">
-            <mat-card [class]="selected === 'reg' ? 'cardMain' : 'card'">
+        </span>
+        <span class="cardButton">
+            <mat-card class="card">
                 <mat-card-header>
                     <mat-card-title>Regression</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut
-                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed
-                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                        Regression analysis consists of a set of machine learning methods that allow us to
+                        predict a continuous outcome variable (y) based on the value of one or multiple
+                        predictor variables (x). For example, predict the temperature based on pressure, wind speed,
+                        altitude etc.
                     </p>
                 </mat-card-content>
             </mat-card>
-        </button>
+        </span>
     </div>
     <div class="column">
-        <button class="cardButton" (click)="selected = 'clu'">
-            <mat-card [class]="selected === 'clu' ? 'cardMain' : 'card'">
+        <span disabled class="cardButton">
+            <mat-card class="cardSoon">
                 <mat-card-header>
                     <mat-card-title>Clustering</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut
-                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed
-                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                        Automatically discovers natural grouping in data. Clustering algorithms only
+                        interprets the input data and find natural groups or clusters in feature space.
                     </p>
                 </mat-card-content>
             </mat-card>
-        </button>
-        <button class="cardButton" (click)="selected = 'tim'">
-            <mat-card [class]="selected === 'tim' ? 'cardMain' : 'card'">
+        </span>
+        <span disabled class="cardButton">
+            <mat-card class="cardSoon">
                 <mat-card-header>
                     <mat-card-title>Time series</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut
-                        labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                        sed
-                        do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                        Time series forecasting involves taking models then fit them on historical
+                        data then using them to predict future observations.
                     </p>
                 </mat-card-content>
             </mat-card>
-        </button>
+        </span>
     </div>
 </div>
 <button mat-flat-button matStepperNext color="primary">Suivant</button>

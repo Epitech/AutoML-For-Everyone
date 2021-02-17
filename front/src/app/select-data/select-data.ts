@@ -8,9 +8,11 @@ import { get_datasets } from '../../api2';
   styleUrls: ['select-data.css'],
 })
 export class SelectDataComponent implements OnInit {
+  datasets?: string[];
+
   ngOnInit() {
-    get_datasets().then((datasets) => {
-      console.log(datasets);
+    get_datasets().then((d) => {
+      this.datasets = d;
     });
   }
 }

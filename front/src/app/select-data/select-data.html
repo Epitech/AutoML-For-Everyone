@@ -23,9 +23,8 @@
                 <mat-card-title>Select dataset from library</mat-card-title>
             </mat-card-header>
             <mat-card-content>
-                <mat-list>
-                    <ng-container
-                        *ngFor="let dataset of ['dataset1.csv', 'dataset2.csv', 'dataset3.csv']; let index = index">
+                <mat-list *ngIf="datasets">
+                    <ng-container *ngFor="let dataset of datasets; let index = index">
                         <mat-list-item>
                             <div class="rowList listItem">
                                 <span>
@@ -35,7 +34,9 @@
                                 <span class="actions">
                                     <span class="size">100kb</span>
                                     <mat-icon>delete_outline</mat-icon>
-                                    <mat-icon>keyboard_arrow_right</mat-icon>
+                                    <button matStepperNext>
+                                        <mat-icon>keyboard_arrow_right</mat-icon>
+                                    </button>
                                 </span>
                             </div>
                         </mat-list-item>
