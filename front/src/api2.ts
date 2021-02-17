@@ -32,9 +32,9 @@ export const post_dataset = (file: File) => {
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config));
 
-export const delete_config = (id: string) => api(`/config/${id}`, { method: 'DELETE' }, false);
+export const delete_config = (id: string) => api(`/config/${id}`, { method: 'DELETE' });
 
-export const delete_model = (id: string) => api(`/model/${id}`, { method: 'DELETE' }, false);
+export const delete_model = (id: string) => api(`/model/${id}`, { method: 'DELETE' });
 
 export const post_lint = (id: string, config: any) =>
   api(`/dataset/${id}/config/lint`, with_body(config));
