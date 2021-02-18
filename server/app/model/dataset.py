@@ -141,6 +141,13 @@ class Dataset(Document):
         if updated:
             self.save()
 
+    def delete_data(self):
+        Path(self.path).unlink(missing_ok=True)
+        if self.visualization_path:
+            Path(self.visualization_path).unlink(missing_ok=True)
+        for config in self.configs:
+            config.delete_data()
+
 
 if __name__ == "__main__":
     obj = Dataset.create_from_path("../../../datasets/titanic.csv")

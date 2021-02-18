@@ -70,6 +70,13 @@ def create_app():
         else:
             abort(400)
 
+    @app.route("/dataset/<id>", methods=["DELETE"])
+    def delete_dataset(id):
+        dataset = Dataset.from_id(id)
+        dataset.delete_data()
+        dataset.delete()
+        return {}
+
     @app.route("/dataset/<id>")
     def get_dataset(id):
         dataset = Dataset.from_id(id)
