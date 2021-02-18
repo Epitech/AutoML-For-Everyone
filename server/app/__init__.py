@@ -182,6 +182,8 @@ def create_app():
         model, _, _ = Dataset.model_from_id(id)
         if model.status != "done":
             return {"error": "Model is not trained"}, 409
+        if not model.confusion_matrix_path:
+            return {"error": "No confusion matrix available"}, 404
         return send_file(model.confusion_matrix_path, as_attachment=True)
 
     @app.route("/model/<id>/shap_value")

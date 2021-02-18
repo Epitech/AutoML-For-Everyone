@@ -115,7 +115,6 @@ class Dataset(Document):
                 # the status back to "not started"
                 if is_dangling(model.exported_model_path) \
                    or is_dangling(model.pickled_model_path) \
-                   or is_dangling(model.confusion_matrix_path) \
                    or is_dangling(model.shap_model_path):
                     model.exported_model_path = None
                     model.pickled_model_path = None
