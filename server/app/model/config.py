@@ -23,6 +23,8 @@ class DatasetConfig(EmbeddedDocument):
     model_type: str = StringField(
         required=True, choices=MODEL_TYPES, default=MODEL_TYPES[0])
 
+    visualization_path: str = StringField()
+
     def to_json(self):
         return {
             "id": str(self.id),

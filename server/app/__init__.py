@@ -89,7 +89,8 @@ def create_app():
     @app.route("/dataset/<id>/sweetviz")
     def get_dataset_visualization(id):
         d = Dataset.from_id(id)
-        return dataset.get_dataset_visualization(Path(d.path)).compute()
+        path = dataset.get_dataset_visualization(Path(d.path), d)
+        return send_file(path)
 
     @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
@@ -123,7 +124,8 @@ def create_app():
     @app.route("/config/<id>/sweetviz")
     def get_config_visualization(id):
         config, d = Dataset.config_from_id(id)
-        return dataset.get_dataset_visualization(Path(d.path), config).compute()
+        path = dataset.get_dataset_visualization(Path(d.path), d, config)
+        return send_file(path)
 
     @app.route("/config/<id>/model", methods=["POST"])
     def create_model(id):

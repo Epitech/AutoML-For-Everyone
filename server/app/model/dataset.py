@@ -43,6 +43,8 @@ class Dataset(Document):
 
     column_mapping = DictField()
 
+    visualization_path: str = StringField()
+
     meta = {"collection": "datasets"}
 
     @staticmethod
