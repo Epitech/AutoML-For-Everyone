@@ -140,6 +140,7 @@ def create_app():
     def delete_config(id):
         app.logger.info(f"Removing config {id}")
         config, dataset = Dataset.config_from_id(id)
+        config.delete_data()
         dataset.configs = [c for c in dataset.configs if c.id != config.id]
         dataset.save()
         return jsonify({})
@@ -246,6 +247,7 @@ def create_app():
     def delete_model(id):
         app.logger.info(f"Removing model {id}")
         model, config, dataset = Dataset.model_from_id(id)
+        model.delete_data()
         config.models = [m for m in config.models if m.id != model.id]
         dataset.save()
         return jsonify({})
