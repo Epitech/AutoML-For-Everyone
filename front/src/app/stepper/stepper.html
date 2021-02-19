@@ -2,13 +2,13 @@
     <mat-step label="Start">
         <app-new-project></app-new-project>
     </mat-step>
-    <mat-step label="Import Data">
+    <mat-step label="Import Data" [completed]="selectDataDone">
         <app-select-data></app-select-data>
     </mat-step>
     <mat-step label="Visualise Data">
         <app-visualise-data></app-visualise-data>
     </mat-step>
-    <mat-step label="Create Config"></mat-step>
+    <mat-step label="Create Config" [completed]="createConfigDone"></mat-step>
     <mat-step label="Configure Model"></mat-step>
     <mat-step label="Train Model"></mat-step>
     <mat-step label="Evaluate"></mat-step>
