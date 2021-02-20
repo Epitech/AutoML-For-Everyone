@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import {
   get_datasets,
@@ -9,6 +10,7 @@ import {
 
 import { ProgressionDataService } from '../progression-data.service';
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
+import { DialogContentNewData } from '../dialog-new-data/dialog-new-data';
 
 @Component({
   selector: 'app-select-data',
@@ -19,7 +21,10 @@ export class SelectDataComponent {
   datasets?: DatasetType[];
   dataset?: string;
 
-  constructor(public progressionData: ProgressionDataService) {
+  constructor(
+    public progressionData: ProgressionDataService,
+    public dialog: MatDialog
+  ) {
     this.updateDatasets();
     this.progressionData.getDataset().subscribe({
       next: (d) => {
@@ -49,6 +54,11 @@ export class SelectDataComponent {
   };
 
   create: createType = () => {
-    console.warn('todo: file popup');
+    this.dialog
+      .open(DialogContentNewData)
+      .afterClosed()
+      .subscribe((ret) => {
+        console.warn('todo: upload file', ret);
+      });
   };
 }

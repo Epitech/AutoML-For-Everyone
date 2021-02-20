@@ -1,0 +1,14 @@
+.cancel {
+  color: white;
+  background-color: red;
+}
+
+.create {
+  color: white;
+  background-color: teal;
+}
+
+.create:disabled {
+  background-color: lightgrey;
+  cursor: initial;
+}

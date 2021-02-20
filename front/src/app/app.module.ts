@@ -14,21 +14,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app';
 import { TopbarComponent } from './header/header';
-import { DatasetOverviewComponent } from './old/old-dataset-overview/dataset-overview.component';
-import { ButtonComponent } from './old/old-button/button.component';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DatasetsComponent } from './old/old-datasets/datasets.component';
-import { ConfigComponent } from './old/old-config/config.component';
-import { TableComponent } from './old/old-table/table.component';
 import { DialogContentNewConfig } from './dialog-new-config/dialog-new-config';
-import { ModelComponent } from './old/old-model/model.component';
-import { DialogLintComponent } from './old/old-dialog-lint/dialog-lint.component';
-import { DialogNewModelComponent } from './old/old-dialog-new-model/dialog-new-model';
-import { DialogPredictComponent } from './old/old-dialog-predict/dialog-predict';
-import { DatavizComponent } from './old/old-dataviz/dataviz.component';
 import { HomeComponent } from './stepper/stepper';
 import { NewProjectComponent } from './new-project/new-project';
 import { SelectDataComponent } from './select-data/select-data';
@@ -38,22 +28,14 @@ import { DocaposteListComponent } from './docaposte-list/docaposte-list';
 import { SelectConfigComponent } from './select-config/select-config';
 import { PropPipe } from './prop.pipe';
 import { FilesizePipe } from './filesize.pipe';
+import { DialogContentNewData } from './dialog-new-data/dialog-new-data';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopbarComponent,
-    DatasetOverviewComponent,
-    ButtonComponent,
-    DatasetsComponent,
-    ConfigComponent,
-    TableComponent,
     DialogContentNewConfig,
-    ModelComponent,
-    DialogLintComponent,
-    DialogNewModelComponent,
-    DialogPredictComponent,
-    DatavizComponent,
+    DialogContentNewData,
     HomeComponent,
     NewProjectComponent,
     SelectDataComponent,
