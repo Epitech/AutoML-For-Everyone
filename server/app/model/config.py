@@ -6,6 +6,7 @@ from mongoengine import EmbeddedDocument, MapField, BooleanField, \
     StringField, ObjectIdField, ListField, EmbeddedDocumentField
 from bson.objectid import ObjectId
 import logging
+from pathlib import Path
 
 from .model import DatasetModel
 
@@ -23,6 +24,8 @@ class DatasetConfig(EmbeddedDocument):
     model_type: str = StringField(
         required=True, choices=MODEL_TYPES, default=MODEL_TYPES[0])
 
+    visualization_path: str = StringField()
+
     def to_json(self):
         return {
             "id": str(self.id),
@@ -31,3 +34,9 @@ class DatasetConfig(EmbeddedDocument):
             "models": [str(m.id) for m in self.models],
             "model_type": self.model_type
         }
+
+    def delete_data(self):
+        if self.visualization_path:
+            Path(self.visualization_path).unlink(missing_ok=True)
+        for model in self.models:
+            model.delete_data()
