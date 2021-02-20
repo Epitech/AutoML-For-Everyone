@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { configDict, scoring_classification, scoring_regression } from '../../api2';
 import { MatDialog } from '@angular/material/dialog';
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
 
-interface Food {
-  value: string;
-  viewValue: string;
-}
+import { delete_model, get_config } from '../../api2';
 
+import { ProgressionDataService } from '../progression-data.service';
 import {
   DialogNewModelComponent,
 } from '../dialog-new-model/dialog-new-model.component';
@@ -18,26 +15,42 @@ import {
   styleUrls: ['./config-model.component.css']
 })
 export class ConfigModelComponent implements OnInit {
-  configDictOptions = configDict;
-  scoringOptions = true == true ? scoring_classification : scoring_regression;
-  
-  foods: Food[] = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
-  ];
+  model_list = [];
+  config?: string;
 
-  constructor(public dialog: MatDialog) { }
 
-  ngOnInit(): void {
+  constructor(public progressionData: ProgressionDataService,
+    public dialog: MatDialog) {
+      this.progressionData.getConfig().subscribe({
+        next: (c) => {
+          this.config = c;
+          this.updateList();
+        },
+      });
+    }
+
+  updateList() {
+    get_config(this.config).then((response) => {
+      console.log(response['models']);
+      this.model_list = response['models']
+    });
   }
 
-  select: callbackType = (config) => {
-    
+  ngOnInit(): void {
+
+  }
+
+  select: callbackType = (model) => {
+    this.progressionData.setModel(model);
   };
 
   remove: callbackType = (config) => {
-    
+    delete_model(config).then(() => {
+      get_config(this.config).then((response) => {
+        console.log(response['models']);
+        this.model_list = response['models']
+      });
+    });
   };
 
   create: createType = () => {

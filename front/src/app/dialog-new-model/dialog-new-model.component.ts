@@ -12,9 +12,14 @@ export class DialogNewModelComponent implements OnInit {
   configDictOptions = configDict;
   scoringOptions = true == true ? scoring_classification : scoring_regression;
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit(): void {
   }
 
+  configure() {
+
+  }
 }

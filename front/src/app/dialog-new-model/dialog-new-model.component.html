@@ -1,5 +1,4 @@
-<div class="rectangle">
-    <div class="row">
+<div class="row">
         <div class="column contain-opt">
             <form class="example-form">
                 <mat-form-field class="example-full-width">
@@ -32,13 +31,28 @@
                 </mat-form-field>
             </form>
         </div>
-        <div class="column">
-            <h3>1</h3>
-            <h3>2</h3>
-            <h3>3</h3>
-            <h3>4</h3>
+        <div class="column contain-opt">
+            <form class="example-form">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Early Stop</mat-label>
+                    <input matInput placeholder="Ex: 100" value="100">
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Config Dict</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let config of configDictOptions" [value]="configure">{{config}}</mat-option>
+                    </mat-select>
+                </mat-form-field><mat-form-field appearance="fill">
+                    <mat-label>Scoring</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let config of scoringOptions" [value]="configure">{{config}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
         </div>
-        <!-- <button mat-flat-button matStepperNext color="primary">Create</button> -->
+        <mat-dialog-actions align="end">
+            <button class="create" mat-button [mat-dialog-close]="configure" color="primary">Create</button>
+        </mat-dialog-actions>
     </div>
 <!-- <div class="row">
     <div class="column contain-opt">
@@ -80,18 +94,17 @@
                 <input matInput placeholder="Ex: 100" value="100">
             </mat-form-field>
             <mat-form-field appearance="fill">
-                <mat-label>Config Dict</mat-label>
+                <mat-label>configure Dict</mat-label>
                 <mat-select>
-                    <mat-option *ngFor="let config of configDictOptions" [value]="config">{{config}}</mat-option>
+                    <mat-option *ngFor="let configure of configureDictOptions" [value]="configure">{{configure}}</mat-option>
                 </mat-select>
             </mat-form-field><mat-form-field appearance="fill">
                 <mat-label>Scoring</mat-label>
                 <mat-select>
-                    <mat-option *ngFor="let config of scoringOptions" [value]="config">{{config}}</mat-option>
+                    <mat-option *ngFor="let configure of scoringOptions" [value]="configure">{{configure}}</mat-option>
                 </mat-select>
             </mat-form-field>
         </form>
     </div>
     <button mat-flat-button matStepperNext color="primary">Create</button>
 </div> -->
-</div>

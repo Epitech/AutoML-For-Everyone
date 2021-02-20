@@ -33,6 +33,7 @@ import { PropPipe } from './prop.pipe';
 import { FilesizePipe } from './filesize.pipe';
 import { DialogContentNewData } from './dialog-new-data/dialog-new-data';
 import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model.component';
+import { DialogContentLint } from './dialog-lint/dialog-lint';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model.com
     TopbarComponent,
     DialogContentNewConfig,
     DialogContentNewData,
+    DialogContentLint,
     HomeComponent,
     NewProjectComponent,
     SelectDataComponent,

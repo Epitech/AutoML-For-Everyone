@@ -56,10 +56,16 @@ export const delete_config = (id: string) =>
 export const delete_model = (id: string) =>
   api(`/model/${id}`, { method: 'DELETE' });
 
-export const post_lint = (id: string, config: any) =>
+export type LintType = [string, string, boolean][];
+export type ColumnLintType = { [key: string]: LintType };
+export type PostLintType = {
+  lints: ColumnLintType;
+};
+
+export const post_lint = (id: string, config: any): Promise<PostLintType> =>
   api(`/dataset/${id}/config/lint`, with_body(config));
 
-export const get_config = (id: string) => api(`/config/${id}`);
+export const get_config = (id?: string) => api(`/config/${id}`);
 
 export const get_lint = (id: string) => api(`/config/${id}/lint`);
 

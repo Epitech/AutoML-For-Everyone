@@ -35,11 +35,16 @@
                                     <span *ngIf="size && size[index]" class="size">
                                         {{size[index]! | filesize}}
                                     </span>
-                                    <button (click)="remove(item)" >
+                                    <button (click)="remove(item)">
                                         <mat-icon>delete_outline</mat-icon>
                                     </button>
                                     <button (click)="select(item)">
-                                        <mat-icon>done</mat-icon>
+                                        <mat-icon *ngIf="selected===item; else notSelected">
+                                            check_box
+                                        </mat-icon>
+                                        <ng-template #notSelected>
+                                            <mat-icon>check_box_outline_blank</mat-icon>
+                                        </ng-template>
                                     </button>
                                 </span>
                             </div>

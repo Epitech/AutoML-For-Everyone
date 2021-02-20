@@ -9,6 +9,7 @@ export class ProgressionDataService {
   private dataset$ = new BehaviorSubject(this._dataset);
 
   setDataset(d?: string) {
+    this.setConfig(undefined);
     this._dataset = d;
     this.dataset$.next(this._dataset);
   }
@@ -27,5 +28,17 @@ export class ProgressionDataService {
 
   getConfig() {
     return this.config$.asObservable();
+  }
+
+  private _model?: string = undefined;
+  private model$ = new BehaviorSubject(this._model);
+
+  setModel(c?: string) {
+    this._model = c;
+    this.model$.next(this._model);
+  }
+
+  getModel() {
+    return this.model$.asObservable();
   }
 }
