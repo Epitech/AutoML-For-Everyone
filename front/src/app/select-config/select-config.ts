@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_dataset, DatasetType, post_config } from '../../api2';
+import {
+  get_dataset,
+  DatasetType,
+  post_config,
+  delete_config,
+} from '../../api2';
 
 import {
   DialogContentNewConfig,
@@ -52,7 +57,10 @@ export class SelectConfigComponent {
 
   remove: callbackType = (config) => {
     console.warn('todo: remove config');
-    if (config === this.config) this.progressionData.setConfig(undefined); // selected config was removed
+    delete_config(config).then(() => this.updateData(this.dataset?.name));
+    if (config === this.config) {
+      this.progressionData.setConfig(undefined);
+    } // selected config was removed
   };
 
   create: createType = () => {
