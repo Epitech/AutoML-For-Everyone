@@ -6,6 +6,7 @@ import {
   DatasetType,
   get_dataset,
   delete_dataset,
+  post_dataset,
 } from '../../api2';
 
 import { ProgressionDataService } from '../progression-data.service';
@@ -46,19 +47,16 @@ export class SelectDataComponent {
   };
 
   remove: callbackType = (dataset) => {
-    delete_dataset(dataset).then(() => this.updateDatasets());
-    console.warn('todo: remove dataset');
-    if (dataset === this.dataset) {
-      this.progressionData.setDataset(undefined);
-    } // selected dataset was removed
+    if (dataset === this.dataset) this.progressionData.setDataset(undefined);
+    delete_dataset(dataset).then(this.updateDatasets);
   };
 
   create: createType = () => {
     this.dialog
       .open(DialogContentNewData)
       .afterClosed()
-      .subscribe((ret) => {
-        console.warn('todo: upload file', ret);
+      .subscribe((file) => {
+        if (file) post_dataset(file).then(this.updateDatasets);
       });
   };
 }
