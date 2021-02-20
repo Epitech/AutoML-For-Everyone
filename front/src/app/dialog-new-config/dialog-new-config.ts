@@ -1,13 +1,14 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { NewConfigType as ApiNewConfigType } from '../../api2';
+
 export type DataType = {
   columns: string[];
 };
 type ColumnsType = { [key: string]: boolean };
 
-type NewConfigType = {
-  columns: ColumnsType;
+type NewConfigType = Omit<ApiNewConfigType, 'label'> & {
   label?: string;
 };
 
@@ -21,6 +22,7 @@ export class DialogContentNewConfig {
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: DataType) {
     this.config = {
+      model_type: 'classification',
       columns: data.columns.reduce(
         (obj: ColumnsType, col) => ({ ...obj, [col]: false }),
         {}

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_dataset, DatasetType } from '../../api2';
+import { get_dataset, DatasetType, post_config } from '../../api2';
 
 import {
   DialogContentNewConfig,
@@ -55,8 +55,11 @@ export class SelectConfigComponent {
     this.dialog
       .open(DialogContentNewConfig, { data })
       .afterClosed()
-      .subscribe((ret) => {
-        console.warn('todo: create config', ret);
+      .subscribe((config) => {
+        if (config)
+          post_config(this.dataset!.name, config).then(() => {
+            console.warn('todo: refresh UI');
+          });
       });
   };
 }

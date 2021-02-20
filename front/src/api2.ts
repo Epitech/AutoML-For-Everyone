@@ -38,6 +38,12 @@ export const post_dataset = (file: File) => {
 
 // CONFIG
 
+export type NewConfigType = {
+  columns: { [key: string]: boolean };
+  label: string;
+  model_type: 'classification' | 'regression';
+};
+
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config));
 

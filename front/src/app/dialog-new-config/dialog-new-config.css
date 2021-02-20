@@ -21,6 +21,16 @@ th {
   border: black solid 1px;
 }
 
+.switch:not([disabled]) {
+  color: lightgrey;
+}
+
+.switch:disabled {
+  text-decoration: underline;
+  color: var(--docaposte-lightblue);
+
+}
+
 .cancel {
   color: white;
   background-color: red;
