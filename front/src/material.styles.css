@@ -15,6 +15,7 @@ button {
   border: none;
   cursor: pointer;
   padding: 0;
+  font: 16px Roboto, "Helvetica Neue", sans-serif;
 }
 
 button:focus {

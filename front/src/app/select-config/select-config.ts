@@ -55,16 +55,14 @@ export class SelectConfigComponent {
   };
 
   remove: callbackType = (config) => {
-    console.warn('todo: remove config');
     delete_config(config).then(() => this.updateData(this.dataset?.name));
-    if (config === this.config) {
-      this.progressionData.setConfig(undefined);
-    } // selected config was removed
+    if (config === this.config) this.progressionData.setConfig(undefined);
   };
 
   create: createType = () => {
     const data: DataType = {
       columns: this.dataset!.columns,
+      dataset: this.dataset!.name,
     };
     this.dialog
       .open(DialogContentNewConfig, { data })
