@@ -1,0 +1,51 @@
+<mat-card class="container">
+    <mat-card-content>
+        <mat-card class="card mat-elevation-z0">
+            <mat-card-header>
+                <mat-card-title>{{createTitle}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-card class="createCard mat-elevation-z0">
+                    <mat-card-content class="rowCreate">
+                        <span class="column">
+                            <span class="createIconContainer">
+                                <mat-icon inline="true" fontSet="material-icons-round">{{createIcon}}</mat-icon>
+                            </span>
+                            <i class="createText">{{createText}}</i>
+                            <button (click)="create()" class="createButton">{{createButton}}</button>
+                        </span>
+                    </mat-card-content>
+                </mat-card>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="card mat-elevation-z0">
+            <mat-card-header>
+                <mat-card-title>{{selectTitle}}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list *ngIf="list">
+                    <ng-container *ngFor="let item of list; let index = index">
+                        <mat-list-item>
+                            <div class="rowList listItem">
+                                <span>
+                                    <h3 class="index">{{index}}</h3>
+                                    <span class="name">{{item}}</span>
+                                </span>
+                                <span class="actions">
+                                    <span class="size">{{size}}</span>
+                                    <button (click)="remove(item)" >
+                                        <mat-icon>delete_outline</mat-icon>
+                                    </button>
+                                    <button matStepperNext (click)="select(item)">
+                                        <mat-icon>keyboard_arrow_right</mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                    </ng-container>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </mat-card-content>
+</mat-card>

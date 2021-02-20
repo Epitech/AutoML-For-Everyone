@@ -8,7 +8,7 @@ export class ProgressionDataService {
   private _dataset?: string = undefined;
   private dataset$ = new BehaviorSubject(this._dataset);
 
-  setDataset(d: string) {
+  setDataset(d?: string) {
     this._dataset = d;
     this.dataset$.next(this._dataset);
   }

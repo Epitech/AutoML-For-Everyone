@@ -34,6 +34,7 @@ import { NewProjectComponent } from './new-project/new-project';
 import { SelectDataComponent } from './select-data/select-data';
 import { VisualiseDataComponent } from './visualise-data/visualise-data';
 import { ProgressionDataService } from './progression-data.service';
+import { DocaposteListComponent } from './docaposte-list/docaposte-list';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { ProgressionDataService } from './progression-data.service';
     NewProjectComponent,
     SelectDataComponent,
     VisualiseDataComponent,
+    DocaposteListComponent,
   ],
   imports: [
     BrowserModule,
