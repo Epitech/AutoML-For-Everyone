@@ -43,7 +43,6 @@ export class SelectConfigComponent {
   updateData(datasetId?: string): void {
     if (datasetId) {
       get_dataset(datasetId).then((dataset) => {
-        console.log(dataset);
         this.dataset = dataset;
       });
     } else {

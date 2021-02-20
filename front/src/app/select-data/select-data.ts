@@ -48,7 +48,7 @@ export class SelectDataComponent {
 
   remove: callbackType = (dataset) => {
     if (dataset === this.dataset) this.progressionData.setDataset(undefined);
-    delete_dataset(dataset).then(this.updateDatasets);
+    delete_dataset(dataset).then(() => this.updateDatasets());
   };
 
   create: createType = () => {
@@ -56,7 +56,7 @@ export class SelectDataComponent {
       .open(DialogContentNewData)
       .afterClosed()
       .subscribe((file) => {
-        if (file) post_dataset(file).then(this.updateDatasets);
+        if (file) post_dataset(file).then(() => this.updateDatasets());
       });
   };
 }

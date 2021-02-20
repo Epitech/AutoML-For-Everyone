@@ -24,11 +24,10 @@ export class HomeComponent {
         this.selectDataDone = id !== undefined;
       },
     });
-    // todo when config is done
-    // this.progressionData.getConfig().subscribe({
-    //   next: (id)=>{
-    //     this.createConfigDone = id !== undefined
-    //   }
-    // })
+    this.progressionData.getConfig().subscribe({
+      next: (id) => {
+        this.createConfigDone = id !== undefined;
+      },
+    });
   }
 }
