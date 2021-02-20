@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
+import { MatSelectModule } from '@angular/material/select';
 
 import { AppComponent } from './app';
 import { TopbarComponent } from './header/header';
@@ -34,6 +35,8 @@ import { NewProjectComponent } from './new-project/new-project';
 import { SelectDataComponent } from './select-data/select-data';
 import { VisualiseDataComponent } from './visualise-data/visualise-data';
 import { ProgressionDataService } from './progression-data.service';
+import { EvaluateDataComponent } from './evaluate-data/evaluate-data.component';
+import { ConfigModelComponent } from './config-model/config-model.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +57,8 @@ import { ProgressionDataService } from './progression-data.service';
     NewProjectComponent,
     SelectDataComponent,
     VisualiseDataComponent,
+    EvaluateDataComponent,
+    ConfigModelComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,6 +77,7 @@ import { ProgressionDataService } from './progression-data.service';
     MatCardModule,
     MatDividerModule,
     MatListModule,
+    MatSelectModule,
   ],
   providers: [ProgressionDataService],
   bootstrap: [AppComponent],
