@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 
-import { get_datasets, DatasetType, get_dataset } from '../../api2';
+import {
+  get_datasets,
+  DatasetType,
+  get_dataset,
+  delete_dataset,
+} from '../../api2';
 
 import { ProgressionDataService } from '../progression-data.service';
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
@@ -15,15 +20,19 @@ export class SelectDataComponent {
   dataset?: string;
 
   constructor(public progressionData: ProgressionDataService) {
-    get_datasets().then((ds) => {
-      Promise.all(ds.map((d) => get_dataset(d))).then((datasets) => {
-        this.datasets = datasets;
-      });
-    });
+    this.updateDatasets();
     this.progressionData.getDataset().subscribe({
       next: (d) => {
         this.dataset = d;
       },
+    });
+  }
+
+  updateDatasets(): void {
+    get_datasets().then((ds) => {
+      Promise.all(ds.map((d) => get_dataset(d))).then((datasets) => {
+        this.datasets = datasets;
+      });
     });
   }
 
@@ -32,8 +41,11 @@ export class SelectDataComponent {
   };
 
   remove: callbackType = (dataset) => {
+    delete_dataset(dataset).then(() => this.updateDatasets());
     console.warn('todo: remove dataset');
-    if (dataset === this.dataset) this.progressionData.setDataset(undefined); // selected dataset was removed
+    if (dataset === this.dataset) {
+      this.progressionData.setDataset(undefined);
+    } // selected dataset was removed
   };
 
   create: createType = () => {
