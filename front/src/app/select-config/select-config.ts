@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_dataset, DatasetType } from '../../api2';
+import { get_dataset, DatasetType, post_config } from '../../api2';
 
 import {
   DialogContentNewConfig,
@@ -25,11 +25,7 @@ export class SelectConfigComponent {
   ) {
     this.progressionData.getDataset().subscribe({
       next: (id) => {
-        if (id)
-          get_dataset(id).then((dataset) => {
-            console.log(dataset);
-            this.dataset = dataset;
-          });
+        this.updateData(id);
       },
     });
     this.progressionData.getConfig().subscribe({
@@ -37,6 +33,17 @@ export class SelectConfigComponent {
         this.config = c;
       },
     });
+  }
+
+  updateData(datasetId?: string): void {
+    if (datasetId) {
+      get_dataset(datasetId).then((dataset) => {
+        console.log(dataset);
+        this.dataset = dataset;
+      });
+    } else {
+      this.dataset = undefined;
+    }
   }
 
   select: callbackType = (config) => {
@@ -57,6 +64,11 @@ export class SelectConfigComponent {
       .afterClosed()
       .subscribe((ret) => {
         console.warn('todo: create config', ret);
+        if (this.dataset) {
+          post_config(this.dataset.name, ret).then(() =>
+            this.updateData(this.dataset?.name)
+          );
+        }
       });
   };
 }
