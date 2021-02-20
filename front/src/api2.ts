@@ -24,6 +24,7 @@ export type DatasetType = {
   columns: string[];
   configs: [];
   name: string;
+  size?: number;
 };
 
 export const get_dataset = (id: string): Promise<DatasetType> =>
