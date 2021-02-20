@@ -39,6 +39,7 @@
                                         <mat-icon>delete_outline</mat-icon>
                                     </button>
                                     <button (click)="select(item)">
+                                        <ng-container *ngIf="selected === item">THIS</ng-container>
                                         <mat-icon>done</mat-icon>
                                     </button>
                                 </span>
