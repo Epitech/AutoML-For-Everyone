@@ -9,6 +9,7 @@ export class ProgressionDataService {
   private dataset$ = new BehaviorSubject(this._dataset);
 
   setDataset(d?: string) {
+    this.setConfig(undefined);
     this._dataset = d;
     this.dataset$.next(this._dataset);
   }
