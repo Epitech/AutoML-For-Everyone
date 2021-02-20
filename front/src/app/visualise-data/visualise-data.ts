@@ -16,8 +16,7 @@ export class VisualiseDataComponent {
     public progressionData: ProgressionDataService,
     private sanitizer: DomSanitizer
   ) {
-    const id = this.progressionData.getDataset();
-    id.subscribe({
+    this.progressionData.getDataset().subscribe({
       next: (id) => {
         this.url =
           id &&

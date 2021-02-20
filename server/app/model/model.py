@@ -3,6 +3,8 @@
 from mongoengine import EmbeddedDocument, ObjectIdField, \
     StringField, DictField, ValidationError, FloatField, EmbeddedDocumentField
 from bson.objectid import ObjectId
+import shutil
+from pathlib import Path
 
 STATUS = ["not started", "starting",  "started", "exporting", "done", "error"]
 
@@ -70,3 +72,8 @@ class DatasetModel(EmbeddedDocument):
             "model_config": self.model_config,
             "analysis": self.analysis.to_json()
         }
+
+    def delete_data(self):
+        if self.pickled_model_path:
+            shutil.rmtree(Path(self.pickled_model_path).parent,
+                          ignore_errors=True)

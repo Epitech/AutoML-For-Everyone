@@ -16,6 +16,7 @@ import sys
 
 from app.dataset import get_dataset
 from app.model.dataset import Dataset
+from app.model.config import DatasetConfig
 import app.column_mapping as column_mapping
 from app.model.model import ModelAnalysis
 
@@ -117,6 +118,7 @@ def save_shap(classifier, shap_model_path, copy_X, copy_y, mapping):
 
 
 def train_model(model_id):
+    config: DatasetConfig
     model, config, dataset = Dataset.model_from_id(model_id)
 
     def set_status(status):
@@ -185,8 +187,11 @@ def train_model(model_id):
             classifier, X_train, y_train, X_test, y_test)
 
         # Create the confusion matrix
-        matrix_res = create_confusion_matrix(
-            classifier, X_test_col, y_test_col, confusion_matrix_path)
+        if config.model_type == "classification":
+            matrix_res = create_confusion_matrix(
+                classifier, X_test_col, y_test_col, confusion_matrix_path)
+        else:
+            matrix_res = dask.delayed(None)
 
         # Get the results of the exportation and model saving
         _, _, analysis, _ = dask.compute(
@@ -198,7 +203,8 @@ def train_model(model_id):
         logger.info(f"PATH MATRIX : {confusion_matrix_path}\n\nPATH SHAP : {shap_model_path}\n\n\n\n")
         model.pickled_model_path = str(pickled_model_path)
         model.exported_model_path = str(exported_model_path)
-        model.confusion_matrix_path = str(confusion_matrix_path)
+        if config.model_type == "classification":
+            model.confusion_matrix_path = str(confusion_matrix_path)
         model.shap_model_path = str(shap_model_path)
         model.analysis = analysis
         model.status = "done"

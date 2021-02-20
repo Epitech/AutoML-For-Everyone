@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
+import { ProgressionDataService } from '../progression-data.service';
+
 @Component({
   selector: 'app-stepper',
   templateUrl: './stepper.html',
@@ -12,4 +14,20 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     },
   ],
 })
-export class HomeComponent {}
+export class HomeComponent {
+  selectDataDone: boolean = false;
+  createConfigDone: boolean = false;
+
+  constructor(public progressionData: ProgressionDataService) {
+    this.progressionData.getDataset().subscribe({
+      next: (id) => {
+        this.selectDataDone = id !== undefined;
+      },
+    });
+    this.progressionData.getConfig().subscribe({
+      next: (id) => {
+        this.createConfigDone = id !== undefined;
+      },
+    });
+  }
+}

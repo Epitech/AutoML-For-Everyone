@@ -1,3 +1,19 @@
 .mat-stepper-horizontal {
   background-color: var(--docaposte-off-white);
 }
+
+.prev {
+  color: white;
+  background-color: var(--docaposte-blue);
+  position: absolute;
+  left: 25px;
+  bottom: 20px;
+}
+
+.next {
+  color: white;
+  background-color: var(--docaposte-blue);
+  position: absolute;
+  right: 25px;
+  bottom: 20px;
+}

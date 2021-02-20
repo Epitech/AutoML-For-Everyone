@@ -67,7 +67,18 @@ def get_dataset(path: Path, config: dict, mapping={}):
 
 
 @dask.delayed
-def get_dataset_visualization(path: Path, config: DatasetConfig = None):
+def generate_visulisation(dataset_path, vizualisation_path, options):
+    log.info("Viz not found. Loading dataset")
+    data = pd.read_csv(dataset_path, sep=None)
+    data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
+    log.info("Generating viz")
+    viz = sv.analyze(data, **options)
+    log.info(f"Saving viz to {vizualisation_path}")
+    viz.show_html(filepath=vizualisation_path, open_browser=False)
+
+
+def get_dataset_visualization(path: Path, dataset: Dataset,
+                              config: DatasetConfig = None):
     """Get or generate the SweetViz vizualisation"""
     if config is not None:
         viz_name = f"{path.name}-{config.id}-sweetviz.html"
@@ -77,18 +88,27 @@ def get_dataset_visualization(path: Path, config: DatasetConfig = None):
     log.info(f"Searching viz file {viz_path}")
     if viz_path.exists():
         log.info("Viz found")
-        return open(viz_path).read()
     else:
-        log.info("Viz not found. Loading dataset")
-        data = pd.read_csv(path, sep=None)
-        data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
-        log.info("Generating viz")
+        # data = pd.read_csv(path, sep=None)
+        # data.drop(data.filter(regex="Unname"), axis=1, inplace=True)
+        # log.info("Generating viz")
+        # if config is not None:
+        #     viz = sv.analyze(data, target_feat=config.label,
+        #                      feat_cfg=sv.FeatureConfig(force_num=[config.label]))
+        # else:
+        #     viz = sv.analyze(data)
+        # log.info(f"Saving viz to {viz_path}")
+        # viz.show_html(filepath=viz_path, open_browser=False)
         if config is not None:
-            viz = sv.analyze(data, target_feat=config.label,
-                             feat_cfg=sv.FeatureConfig(force_num=[config.label]))
+            options = {"target_feat": config.label,
+                       "feat_cfg": sv.FeatureConfig(force_num=[config.label])}
+            config.visualization_path = str(viz_path)
         else:
-            viz = sv.analyze(data)
-        log.info(f"Saving viz to {viz_path}")
-        viz.show_html(filepath=viz_path, open_browser=False)
+            options = {}
+            dataset.visualization_path = str(viz_path)
+
+        generate_visulisation(path, viz_path, options).compute()
+        dataset.save()
         log.info("Returning viz")
-        return open(viz_path).read()
+
+    return viz_path
