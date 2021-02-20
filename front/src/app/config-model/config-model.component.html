@@ -1,7 +1,7 @@
 <div class="rectangle">
     <div class="top-rectangle">
         <div class="row">
-            <div class="column">
+            <div class="column contain-opt">
                 <form class="example-form">
                     <mat-form-field class="example-full-width">
                         <mat-label>Generations</mat-label>
@@ -17,7 +17,7 @@
                     </mat-form-field>
                 </form>
             </div>
-            <div class="column">
+            <div class="column contain-opt">
                 <form class="example-form">
                     <mat-form-field class="example-full-width">
                         <mat-label>Mutation Rate</mat-label>
@@ -33,7 +33,7 @@
                     </mat-form-field>
                 </form>
             </div>
-            <div class="column">
+            <div class="column contain-opt">
                 <form class="example-form">
                     <mat-form-field class="example-full-width">
                         <mat-label>Early Stop</mat-label>
@@ -42,21 +42,21 @@
                     <mat-form-field appearance="fill">
                         <mat-label>Config Dict</mat-label>
                         <mat-select>
-                          <mat-option *ngFor="let food of foods" [value]="food.value">
-                            {{food.viewValue}}
+                          <mat-option *ngFor="let config of configDictOptions" [value]="config">
+                            {{config}}
                           </mat-option>
                         </mat-select>
                       </mat-form-field><mat-form-field appearance="fill">
                         <mat-label>Scoring</mat-label>
                         <mat-select>
-                          <mat-option *ngFor="let food of foods" [value]="food.value">
-                            {{food.viewValue}}
+                          <mat-option *ngFor="let config of scoringOptions" [value]="config">
+                            {{config}}
                           </mat-option>
                         </mat-select>
                       </mat-form-field>
                 </form>
             </div>
-                <button mat-flat-button matStepperNext color="primary">Create</button>
+            <button mat-flat-button matStepperNext color="primary">Create</button>
         </div>
     </div>
     <div class="bottom-rectangle">
@@ -64,8 +64,8 @@
             <mat-card-title>Select Model to use</mat-card-title>
         </mat-card-header>
         <mat-nav-list id="list">
-            <mat-list-item *ngFor="let food of foods; let index = index">
-            <a matLine href="...">{{index}} - {{ food.viewValue }}</a>
+            <mat-list-item *ngFor="let config of scoringOptions; let index = index">
+            <a matLine href="...">{{index}} - {{ config }}</a>
             <button mat-icon-button>
                     <!-- (click)="showInfo(food)" -->
                 <mat-icon>info</mat-icon>
@@ -74,7 +74,7 @@
                     <!-- (click)="showInfo(food)" -->
                     <mat-icon>delete_outline</mat-icon>
             </button>
-            <button mat-icon-button>
+            <button matStepperNext mat-icon-button>
                     <!-- (click)="showInfo(food)" -->
                     <mat-icon>keyboard_arrow_right</mat-icon>
             </button>

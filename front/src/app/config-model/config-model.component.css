@@ -72,3 +72,10 @@
     color: var(--docaposte-darkblue);
     font-size: larger;
   }
+
+.contain-opt {
+    left: 5%;
+    right: 5%;
+    top: 5%;
+    bottom: 5%;
+}
