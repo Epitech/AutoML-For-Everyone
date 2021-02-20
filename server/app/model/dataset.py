@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from mongoengine import Document, StringField, \
-    ListField, EmbeddedDocumentField, DictField
+    ListField, EmbeddedDocumentField, DictField, IntField
 from pathlib import Path
 from werkzeug.exceptions import NotFound
 import pandas as pd
@@ -42,6 +42,7 @@ class Dataset(Document):
         EmbeddedDocumentField(DatasetConfig), default=list)
 
     column_mapping = DictField()
+    size: int = IntField()
 
     visualization_path: str = StringField()
 
@@ -53,8 +54,12 @@ class Dataset(Document):
         df = pd.read_csv(path, sep=None, engine="python")
         column_mapping = mapping.create_column_mapping(df)
         column_mapping = mapping.encode_mapping(column_mapping)
+        try:
+            size = path.stat().st_size
+        except Exception:
+            size = None
         return Dataset(path=str(path), name=path.name, columns=df.columns,
-                       column_mapping=column_mapping)
+                       column_mapping=column_mapping, size=size)
 
     @staticmethod
     def from_id(id: str) -> Dataset:
@@ -99,6 +104,7 @@ class Dataset(Document):
         return {
             "name": self.name,
             "columns": self.columns,
+            "size": self.size,
             # "map_list": self.map_list,
             "configs": [str(c.id) for c in self.configs]
         }
