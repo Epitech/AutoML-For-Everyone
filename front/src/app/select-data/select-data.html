@@ -1,4 +1,5 @@
-<app-docaposte-list [list]="datasets" createTitle="Import dataset" createIcon="upload"
+<app-docaposte-list *ngIf="datasets" [list]="datasets | prop:'name'" createTitle="Import dataset" createIcon="upload"
     createText="Upload your files here" createButton="Import Data" [create]="create"
-    selectTitle="Select dataset from library" [select]="select" size="100kb" [remove]="remove">
+                    [size]="datasets | prop:'size'"
+                    selectTitle="Select dataset from library" [select]="select"  [remove]="remove">
 </app-docaposte-list>

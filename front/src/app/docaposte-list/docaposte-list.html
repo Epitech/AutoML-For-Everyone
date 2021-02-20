@@ -32,7 +32,9 @@
                                     <span class="name">{{item}}</span>
                                 </span>
                                 <span class="actions">
-                                    <span class="size">{{size}}</span>
+                                    <span *ngIf="size && size[index]" class="size">
+                                        {{size[index]! | filesize}}
+                                    </span>
                                     <button (click)="remove(item)" >
                                         <mat-icon>delete_outline</mat-icon>
                                     </button>

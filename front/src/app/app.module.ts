@@ -36,6 +36,8 @@ import { VisualiseDataComponent } from './visualise-data/visualise-data';
 import { ProgressionDataService } from './progression-data.service';
 import { DocaposteListComponent } from './docaposte-list/docaposte-list';
 import { SelectConfigComponent } from './select-config/select-config';
+import { PropPipe } from './prop.pipe';
+import { FilesizePipe } from './filesize.pipe';
 
 @NgModule({
   declarations: [
@@ -58,6 +60,8 @@ import { SelectConfigComponent } from './select-config/select-config';
     VisualiseDataComponent,
     DocaposteListComponent,
     SelectConfigComponent,
+    PropPipe,
+    FilesizePipe,
   ],
   imports: [
     BrowserModule,

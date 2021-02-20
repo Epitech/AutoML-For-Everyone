@@ -24,6 +24,7 @@ export type DatasetType = {
   columns: string[];
   configs: [];
   name: string;
+  size?: number;
 };
 
 export const get_dataset = (id: string): Promise<DatasetType> =>
@@ -39,6 +40,9 @@ export const post_dataset = (file: File) => {
 
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config));
+
+export const delete_dataset = (id: string) =>
+  api(`/dataset/${id}`, { method: 'DELETE' });
 
 export const delete_config = (id: string) =>
   api(`/config/${id}`, { method: 'DELETE' });

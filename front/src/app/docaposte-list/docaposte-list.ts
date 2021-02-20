@@ -20,7 +20,7 @@ export class DocaposteListComponent {
   @Input() selectTitle!: string;
   @Input() select!: callbackType;
 
-  @Input() size!: string;
+  @Input() size?: (number | undefined)[];
 
   @Input() remove!: callbackType;
 }
