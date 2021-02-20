@@ -12,6 +12,18 @@
     border-radius: 8px;
 }
 
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+.column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
 .top-rectangle {
     position: absolute;
     left: 10%;
