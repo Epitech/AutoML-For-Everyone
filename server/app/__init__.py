@@ -65,7 +65,9 @@ def create_app():
             if file.filename == "":
                 abort(400)
             filename = secure_filename(file.filename)
-            file.save(DATASETS_DIRECTORY / filename)
+            path = DATASETS_DIRECTORY / filename
+            file.save(path)
+            Dataset.create_from_path(path).save()
             return {"status": "ok"}, 201
         else:
             abort(400)
