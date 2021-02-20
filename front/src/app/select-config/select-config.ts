@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { get_dataset, DatasetType, post_config } from '../../api2';
+import {
+  get_dataset,
+  DatasetType,
+  post_config,
+  delete_config,
+} from '../../api2';
 
 import {
   DialogContentNewConfig,
@@ -25,11 +30,7 @@ export class SelectConfigComponent {
   ) {
     this.progressionData.getDataset().subscribe({
       next: (id) => {
-        if (id)
-          get_dataset(id).then((dataset) => {
-            console.log(dataset);
-            this.dataset = dataset;
-          });
+        this.updateData(id);
       },
     });
     this.progressionData.getConfig().subscribe({
@@ -39,13 +40,27 @@ export class SelectConfigComponent {
     });
   }
 
+  updateData(datasetId?: string): void {
+    if (datasetId) {
+      get_dataset(datasetId).then((dataset) => {
+        console.log(dataset);
+        this.dataset = dataset;
+      });
+    } else {
+      this.dataset = undefined;
+    }
+  }
+
   select: callbackType = (config) => {
     this.progressionData.setConfig(config);
   };
 
   remove: callbackType = (config) => {
     console.warn('todo: remove config');
-    if (config === this.config) this.progressionData.setConfig(undefined); // selected config was removed
+    delete_config(config).then(() => this.updateData(this.dataset?.name));
+    if (config === this.config) {
+      this.progressionData.setConfig(undefined);
+    } // selected config was removed
   };
 
   create: createType = () => {
@@ -57,9 +72,9 @@ export class SelectConfigComponent {
       .afterClosed()
       .subscribe((config) => {
         if (config)
-          post_config(this.dataset!.name, config).then(() => {
-            console.warn('todo: refresh UI');
-          });
+          post_config(this.dataset!.name, config).then(() =>
+            this.updateData(this.dataset?.name)
+          );
       });
   };
 }
