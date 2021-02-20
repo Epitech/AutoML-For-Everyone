@@ -1,3 +1,4 @@
+<input type="file" #file style="display: none" (change)="fileSelected()">
 <app-docaposte-list *ngIf="datasets" [list]="datasets | prop:'name'" createTitle="Import dataset" createIcon="upload"
     createText="Upload your files here" createButton="Import Data" [create]="create"
                     [size]="datasets | prop:'size'"

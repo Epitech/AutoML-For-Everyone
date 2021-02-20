@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 
 import {
   get_datasets,
   DatasetType,
   get_dataset,
   delete_dataset,
+  post_dataset,
 } from '../../api2';
 
 import { ProgressionDataService } from '../progression-data.service';
@@ -18,6 +19,7 @@ import { callbackType, createType } from '../docaposte-list/docaposte-list';
 export class SelectDataComponent {
   datasets?: DatasetType[];
   dataset?: string;
+  @ViewChild('file') file?: ElementRef<HTMLInputElement>;
 
   constructor(public progressionData: ProgressionDataService) {
     this.updateDatasets();
@@ -49,6 +51,21 @@ export class SelectDataComponent {
   };
 
   create: createType = () => {
-    console.warn('todo: file popup');
+    if (this.file) {
+      console.log(this.file);
+      this.file.nativeElement.click();
+      console.log('clicking');
+    }
   };
+
+  fileSelected(): void {
+    if (this.file && this.file.nativeElement.files) {
+      Promise.all(
+        Array.from(this.file.nativeElement.files).map((file) => {
+          console.log('Sending file', file);
+          post_dataset(file);
+        })
+      ).then(() => this.updateDatasets());
+    }
+  }
 }
