@@ -20,7 +20,15 @@ const with_body = (body: any): OptionsType => ({
 
 export const get_datasets = (): Promise<string[]> => api('/dataset');
 
-export const get_dataset = (id: string) => api(`/dataset/${id}`);
+export type DatasetType = {
+  columns: string[];
+  configs: [];
+  name: string;
+};
+
+export const get_dataset = (id: string): Promise<DatasetType> =>
+  api(`/dataset/${id}`);
+
 export const post_dataset = (file: File) => {
   const formData: FormData = new FormData();
   formData.append('file', file, file.name);
@@ -32,9 +40,11 @@ export const post_dataset = (file: File) => {
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config));
 
-export const delete_config = (id: string) => api(`/config/${id}`, { method: 'DELETE' });
+export const delete_config = (id: string) =>
+  api(`/config/${id}`, { method: 'DELETE' });
 
-export const delete_model = (id: string) => api(`/model/${id}`, { method: 'DELETE' });
+export const delete_model = (id: string) =>
+  api(`/model/${id}`, { method: 'DELETE' });
 
 export const post_lint = (id: string, config: any) =>
   api(`/dataset/${id}/config/lint`, with_body(config));
@@ -43,8 +53,10 @@ export const get_config = (id: string) => api(`/config/${id}`);
 
 export const get_lint = (id: string) => api(`/config/${id}/lint`);
 
-export const get_dataset_sweetviz_url = (id: string) => `${URL}/dataset/${id}/sweetviz`;
-export const get_config_sweetviz_url = (id: string) => `${URL}/config/${id}/sweetviz`;
+export const get_dataset_sweetviz_url = (id: string) =>
+  `${URL}/dataset/${id}/sweetviz`;
+export const get_config_sweetviz_url = (id: string) =>
+  `${URL}/config/${id}/sweetviz`;
 
 // MODEL
 
@@ -88,11 +100,7 @@ export const scoring_regression = [
   'r2',
 ];
 
-export const configDict = [
-    'TPOT light',
-    'TPOT MDR',
-    'TPOT sparse'
-];
+export const configDict = ['TPOT light', 'TPOT MDR', 'TPOT sparse'];
 
 export type ModelType = {
   [key: string]: string | number | undefined;
@@ -103,7 +111,9 @@ export type ModelType = {
   crossover_rate: number;
   subsample: number;
   early_stop: number;
-  scoring: typeof scoring_classification[number] | typeof scoring_regression[number];
+  scoring:
+    | typeof scoring_classification[number]
+    | typeof scoring_regression[number];
   config_dict?: typeof configDict[number];
 };
 

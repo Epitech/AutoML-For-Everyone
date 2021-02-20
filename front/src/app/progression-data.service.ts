@@ -16,4 +16,16 @@ export class ProgressionDataService {
   getDataset() {
     return this.dataset$.asObservable();
   }
+
+  private _config?: string = undefined;
+  private config$ = new BehaviorSubject(this._config);
+
+  setConfig(c?: string) {
+    this._config = c;
+    this.config$.next(this._config);
+  }
+
+  getConfig() {
+    return this.config$.asObservable();
+  }
 }

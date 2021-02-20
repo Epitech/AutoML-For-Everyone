@@ -35,6 +35,7 @@ import { SelectDataComponent } from './select-data/select-data';
 import { VisualiseDataComponent } from './visualise-data/visualise-data';
 import { ProgressionDataService } from './progression-data.service';
 import { DocaposteListComponent } from './docaposte-list/docaposte-list';
+import { SelectConfigComponent } from './select-config/select-config';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { DocaposteListComponent } from './docaposte-list/docaposte-list';
     SelectDataComponent,
     VisualiseDataComponent,
     DocaposteListComponent,
+    SelectConfigComponent,
   ],
   imports: [
     BrowserModule,

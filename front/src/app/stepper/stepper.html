@@ -18,6 +18,7 @@
     </mat-step>
 
     <mat-step label="Create Config" [completed]="createConfigDone">
+        <app-select-config></app-select-config>
         <button class="prev" mat-flat-button matStepperPrevious>Previous</button>
         <button class="next" mat-flat-button matStepperNext [disabled]="!createConfigDone">Next</button>
     </mat-step>
