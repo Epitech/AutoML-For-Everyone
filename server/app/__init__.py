@@ -70,6 +70,13 @@ def create_app():
         else:
             abort(400)
 
+    @app.route("/dataset/<id>", methods=["DELETE"])
+    def delete_dataset(id):
+        dataset = Dataset.from_id(id)
+        dataset.delete_data()
+        dataset.delete()
+        return {}
+
     @app.route("/dataset/<id>")
     def get_dataset(id):
         dataset = Dataset.from_id(id)
@@ -89,7 +96,8 @@ def create_app():
     @app.route("/dataset/<id>/sweetviz")
     def get_dataset_visualization(id):
         d = Dataset.from_id(id)
-        return dataset.get_dataset_visualization(Path(d.path)).compute()
+        path = dataset.get_dataset_visualization(Path(d.path), d)
+        return send_file(path)
 
     @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
@@ -123,7 +131,8 @@ def create_app():
     @app.route("/config/<id>/sweetviz")
     def get_config_visualization(id):
         config, d = Dataset.config_from_id(id)
-        return dataset.get_dataset_visualization(Path(d.path), config).compute()
+        path = dataset.get_dataset_visualization(Path(d.path), d, config)
+        return send_file(path)
 
     @app.route("/config/<id>/model", methods=["POST"])
     def create_model(id):
@@ -138,6 +147,7 @@ def create_app():
     def delete_config(id):
         app.logger.info(f"Removing config {id}")
         config, dataset = Dataset.config_from_id(id)
+        config.delete_data()
         dataset.configs = [c for c in dataset.configs if c.id != config.id]
         dataset.save()
         return jsonify({})
@@ -182,6 +192,8 @@ def create_app():
         model, _, _ = Dataset.model_from_id(id)
         if model.status != "done":
             return {"error": "Model is not trained"}, 409
+        if not model.confusion_matrix_path:
+            return {"error": "No confusion matrix available"}, 404
         return send_file(model.confusion_matrix_path, as_attachment=True)
 
     @app.route("/model/<id>/shap_value")
@@ -242,6 +254,7 @@ def create_app():
     def delete_model(id):
         app.logger.info(f"Removing model {id}")
         model, config, dataset = Dataset.model_from_id(id)
+        model.delete_data()
         config.models = [m for m in config.models if m.id != model.id]
         dataset.save()
         return jsonify({})
