@@ -1,17 +1,40 @@
 <mat-horizontal-stepper #stepper linear>
+
     <mat-step label="Start">
         <app-new-project></app-new-project>
+        <button class="next" mat-flat-button matStepperNext>Next</button>
     </mat-step>
+
     <mat-step label="Import Data" [completed]="selectDataDone">
         <app-select-data></app-select-data>
+        <button class="prev" mat-flat-button matStepperPrevious>Previous</button>
+        <button class="next" mat-flat-button matStepperNext [disabled]="!selectDataDone">Next</button>
     </mat-step>
+
     <mat-step label="Visualise Data">
         <app-visualise-data></app-visualise-data>
+        <button class="prev" mat-flat-button matStepperPrevious>Previous</button>
+        <button class="next" mat-flat-button matStepperNext>Next</button>
     </mat-step>
-    <mat-step label="Create Config" [completed]="createConfigDone"></mat-step>
-    <mat-step label="Configure Model"></mat-step>
-    <mat-step label="Train Model"></mat-step>
-    <mat-step label="Evaluate"></mat-step>
+
+    <mat-step label="Create Config" [completed]="createConfigDone">
+        <button class="prev" mat-flat-button matStepperPrevious>Previous</button>
+        <button class="next" mat-flat-button matStepperNext [disabled]="!createConfigDone">Next</button>
+    </mat-step>
+
+    <mat-step label="Configure Model">
+        <button class="prev" mat-flat-button matStepperPrevious>Previous</button>
+        <button class="next" mat-flat-button matStepperNext>Next</button>
+    </mat-step>
+
+    <mat-step label="Train Model">
+        <button class="prev" mat-flat-button matStepperPrevious>Previous</button>
+        <button class="next" mat-flat-button matStepperNext>Next</button>
+    </mat-step>
+
+    <mat-step label="Evaluate">
+        <button class="prev" mat-flat-button matStepperPrevious>Previous</button>
+    </mat-step>
 
     <!-- Icon overrides. -->
     <ng-template matStepperIcon="done"></ng-template> <!-- the previous ones -->

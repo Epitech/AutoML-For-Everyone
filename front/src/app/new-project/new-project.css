@@ -57,10 +57,3 @@
 .mat-card-title {
   font-size: 20px;
 }
-
-.mat-flat-button.mat-primary {
-  background-color: var(--docaposte-blue);
-  position: absolute;
-  right: 25px;
-  bottom: 20px;
-}

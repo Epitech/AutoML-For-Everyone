@@ -4,10 +4,3 @@ iframe {
   height: 650px;
   margin-top: 50px;
 }
-
-.mat-flat-button.mat-primary {
-  background-color: var(--docaposte-blue);
-  position: absolute;
-  right: 25px;
-  bottom: 20px;
-}
