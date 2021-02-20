@@ -32,6 +32,7 @@ import { SelectConfigComponent } from './select-config/select-config';
 import { PropPipe } from './prop.pipe';
 import { FilesizePipe } from './filesize.pipe';
 import { DialogContentNewData } from './dialog-new-data/dialog-new-data';
+import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model.component';
 
 @NgModule({
   declarations: [
@@ -49,6 +50,7 @@ import { DialogContentNewData } from './dialog-new-data/dialog-new-data';
     SelectConfigComponent,
     PropPipe,
     FilesizePipe,
+    DialogNewModelComponent,
   ],
   imports: [
     BrowserModule,

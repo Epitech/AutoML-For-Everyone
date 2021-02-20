@@ -1,17 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { configDict, scoring_classification, scoring_regression } from '../../api2';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
+import { callbackType, createType } from '../docaposte-list/docaposte-list';
 
 interface Food {
   value: string;
   viewValue: string;
 }
 
-// export type ModelDataType = {
-//   dispatch: (m: ModelType) => void;
-//   model: ModelType;
-//   type: any;
-// };
+import {
+  DialogNewModelComponent,
+} from '../dialog-new-model/dialog-new-model.component';
 
 @Component({
   selector: 'app-config-model',
@@ -28,29 +27,22 @@ export class ConfigModelComponent implements OnInit {
     {value: 'tacos-2', viewValue: 'Tacos'}
   ];
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
-  // changeKey(key: string, input: EventTarget | null, isNumber = true) {
-  //   if (!input) return;
-  //   const { value } = input as HTMLInputElement;
-  //   if (key === 'config_dict') {
-  //     this.setConfigDict(value);
-  //   } else {
-  //     this.data.model[key] = isNumber ? +value : value;
-  //   }
-  //   this.data.dispatch(this.data.model);
-  //   console.log(this.data.model);
-  // }
+  select: callbackType = (config) => {
+    
+  };
 
-  // setConfigDict(value: string) {
-  //   if (value === 'Default') {
-  //     this.data.model.config_dict = undefined;
-  //   } else {
-  //     this.data.model.config_dict = value;
-  //   }
-  // }
+  remove: callbackType = (config) => {
+    
+  };
+
+  create: createType = () => {
+    this.dialog
+      .open(DialogNewModelComponent)
+  };
 
 }
