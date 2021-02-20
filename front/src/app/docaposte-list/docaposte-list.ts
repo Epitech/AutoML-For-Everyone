@@ -12,9 +12,9 @@ export class DocaposteListComponent {
   @Input() list?: string[];
 
   @Input() createTitle!: string;
+  @Input() createIcon!: string;
   @Input() createText!: string;
   @Input() createButton!: string;
-  @Input() createIcon!: string;
   @Input() create!: createType;
 
   @Input() selectTitle!: string;
