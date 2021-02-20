@@ -1,0 +1,37 @@
+.table {
+  margin: 10px auto;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  width: 200px;
+  color: var(--docaposte-darkblue);
+}
+
+td {
+  text-align: center;
+  padding: 10px 0;
+}
+
+td,
+th {
+  border: black solid 1px;
+}
+
+.cancel {
+  color: white;
+  background-color: red;
+}
+
+.create {
+  color: white;
+  background-color: teal;
+}
+
+.create:disabled {
+  background-color: lightgrey;
+  cursor: initial;
+}

@@ -1,0 +1,32 @@
+<h2 mat-dialog-title>Create new config</h2>
+<mat-dialog-content>
+  <table class="table">
+    <thead>
+      <tr>
+        <th *ngFor="let title of ['Column', 'Enabled', 'Label']">
+          <h2>{{title}}</h2>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of config.columns | keyvalue">
+        <td>{{o.key}}</td>
+        <td>
+          <mat-checkbox [checked]="o.value" (change)="config.columns[o.key] = $event.checked"></mat-checkbox>
+        </td>
+        <td>
+          <mat-checkbox [checked]="o.key === config.label" *ngIf='o.value'
+            (change)="changeLabel(o.key, $event.checked)">
+          </mat-checkbox>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- classification <mat-slide-toggle [disabled]="!transit.dispatch" [checked]="transit.model_type === 'regression'"
+    (change)="changeType($event.checked)">regression</mat-slide-toggle> -->
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button class="cancel" mat-button mat-dialog-close>Cancel</button>
+  <button class="create" mat-button [mat-dialog-close]="config" [disabled]="!config.label">Create</button>
+</mat-dialog-actions>

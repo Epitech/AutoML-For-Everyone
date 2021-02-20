@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
-
-import { ProgressionDataService } from '../progression-data.service';
+import { MatDialog } from '@angular/material/dialog';
 
 import { get_dataset, DatasetType } from '../../api2';
 
+import {
+  DialogContentNewConfig,
+  DataType,
+} from '../dialog-new-config/dialog-new-config';
+import { ProgressionDataService } from '../progression-data.service';
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
 
 @Component({
@@ -15,7 +19,10 @@ export class SelectConfigComponent {
   dataset?: DatasetType;
   config?: string;
 
-  constructor(public progressionData: ProgressionDataService) {
+  constructor(
+    public progressionData: ProgressionDataService,
+    public dialog: MatDialog
+  ) {
     this.progressionData.getDataset().subscribe({
       next: (id) => {
         if (id)
@@ -42,6 +49,14 @@ export class SelectConfigComponent {
   };
 
   create: createType = () => {
-    console.warn('todo: config popup');
+    const data: DataType = {
+      columns: this.dataset!.columns,
+    };
+    this.dialog
+      .open(DialogContentNewConfig, { data })
+      .afterClosed()
+      .subscribe((ret) => {
+        console.warn('todo: create config', ret);
+      });
   };
 }
