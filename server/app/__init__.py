@@ -90,10 +90,13 @@ def create_app():
         dataset = Dataset.from_id(id)
         app.logger.info(
             f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
-        df = pd.read_csv(dataset.path, sep=None)
-        df = df[[k for k, v in config["columns"].items() if v]]
-        app.logger.info(f"Dataset columns: {df.columns}")
-        return linter.lint_dataframe(df, config["label"])
+        try:
+            df = pd.read_csv(dataset.path, sep=None)
+            df = df[[k for k, v in config["columns"].items() if v]]
+            app.logger.info(f"Dataset columns: {df.columns}")
+            return linter.lint_dataframe(df, config["label"])
+        except KeyError:
+            abort(400)
 
     @app.route("/dataset/<id>/sweetviz")
     def get_dataset_visualization(id):
@@ -104,9 +107,9 @@ def create_app():
     @app.route("/dataset/<id>/config", methods=["POST"])
     def set_dataset_config(id):
         result = Dataset.from_id(id)
-        columns = request.json["columns"]
-        label = request.json["label"]
-        model_type = request.json["model_type"]
+        columns = request.json.get("columns")
+        label = request.json.get("label")
+        model_type = request.json.get("model_type")
         config = DatasetConfig(
             columns=columns, label=label, model_type=model_type)
         result.configs.append(config)
@@ -125,10 +128,13 @@ def create_app():
         config, dataset = Dataset.config_from_id(id)
         app.logger.info(
             f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
-        df = pd.read_csv(dataset.path, sep=None)
-        df = df[[k for k, v in config["columns"].items() if v]]
-        app.logger.info(f"Dataset columns: {df.columns}")
-        return linter.lint_dataframe(df, config["label"])
+        try:
+            df = pd.read_csv(dataset.path, sep=None)
+            df = df[[k for k, v in config["columns"].items() if v]]
+            app.logger.info(f"Dataset columns: {df.columns}")
+            return linter.lint_dataframe(df, config["label"])
+        except KeyError:
+            abort(400)
 
     @app.route("/config/<id>/sweetviz")
     def get_config_visualization(id):
