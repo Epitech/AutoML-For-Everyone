@@ -18,6 +18,7 @@ export class HomeComponent {
   selectDataDone: boolean = false;
   createConfigDone: boolean = false;
   createModelDone: boolean = false;
+  modelTrainDone: boolean = false;
 
   constructor(public progressionData: ProgressionDataService) {
     this.progressionData.getDataset().subscribe({
@@ -30,9 +31,14 @@ export class HomeComponent {
         this.createConfigDone = id !== undefined;
       },
     });
-    this.progressionData.getConfig().subscribe({
+    this.progressionData.getModel().subscribe({
       next: (id) => {
         this.createModelDone = id !== undefined;
+      },
+    });
+    this.progressionData.getTrained().subscribe({
+      next: (trained) => {
+        this.modelTrainDone = !!trained;
       },
     });
   }

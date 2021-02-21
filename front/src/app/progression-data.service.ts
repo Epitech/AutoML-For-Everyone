@@ -5,40 +5,43 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class ProgressionDataService {
-  private _dataset?: string = undefined;
-  private dataset$ = new BehaviorSubject(this._dataset);
+  private dataset$ = new BehaviorSubject<string | undefined>(undefined);
+  private config$ = new BehaviorSubject<string | undefined>(undefined);
+  private model$ = new BehaviorSubject<string | undefined>(undefined);
+  private trained$ = new BehaviorSubject<boolean | undefined>(undefined);
 
   setDataset(d?: string) {
     this.setConfig(undefined);
-    this._dataset = d;
-    this.dataset$.next(this._dataset);
+    this.dataset$.next(d);
+  }
+
+  setConfig(c?: string) {
+    this.setModel(undefined);
+    this.config$.next(c);
+  }
+
+  setModel(m?: string) {
+    this.setTrained(undefined);
+    this.model$.next(m);
+  }
+
+  setTrained(t?: boolean) {
+    this.trained$.next(t);
   }
 
   getDataset() {
     return this.dataset$.asObservable();
   }
 
-  private _config?: string = undefined;
-  private config$ = new BehaviorSubject(this._config);
-
-  setConfig(c?: string) {
-    this._config = c;
-    this.config$.next(this._config);
-  }
-
   getConfig() {
     return this.config$.asObservable();
   }
 
-  private _model?: string = undefined;
-  private model$ = new BehaviorSubject(this._model);
-
-  setModel(c?: string) {
-    this._model = c;
-    this.model$.next(this._model);
-  }
-
   getModel() {
     return this.model$.asObservable();
+  }
+
+  getTrained() {
+    return this.trained$.asObservable();
   }
 }

@@ -47,7 +47,8 @@
         </button>
     </mat-step>
 
-    <mat-step label="Train Model">
+    <mat-step label="Train Model" [completed]="modelTrainDone">
+        <app-train-model></app-train-model>
         <button class="prev" mat-flat-button matStepperPrevious>
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>

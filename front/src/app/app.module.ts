@@ -34,6 +34,7 @@ import { FilesizePipe } from './filesize.pipe';
 import { DialogContentNewData } from './dialog-new-data/dialog-new-data';
 import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model.component';
 import { DialogContentLint } from './dialog-lint/dialog-lint';
+import { TrainModelComponent } from './train-model/train-model';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { DialogContentLint } from './dialog-lint/dialog-lint';
     PropPipe,
     FilesizePipe,
     DialogNewModelComponent,
+    TrainModelComponent,
   ],
   imports: [
     BrowserModule,

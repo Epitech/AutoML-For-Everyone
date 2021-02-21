@@ -65,7 +65,7 @@ export type PostLintType = {
 export const post_lint = (id: string, config: any): Promise<PostLintType> =>
   api(`/dataset/${id}/config/lint`, with_body(config));
 
-export const get_config = (id?: string) => api(`/config/${id}`);
+export const get_config = (id: string) => api(`/config/${id}`);
 
 export const get_lint = (id: string) => api(`/config/${id}/lint`);
 
@@ -141,7 +141,18 @@ export const get_model = (id: string) => api(`/model/${id}`);
 export const post_train = (id: string) =>
   api(`/model/${id}/train`, { method: 'POST' }, true);
 
-export const get_status = (id: string) => api(`/model/${id}/status`);
+export type StatusType =
+  | 'not started'
+  | 'starting'
+  | 'started'
+  | 'done'
+  | 'error';
+export type getStatusType = {
+  status: StatusType;
+  logs: string;
+};
+export const get_status = (id: string): Promise<getStatusType> =>
+  api(`/model/${id}/status`);
 
 export const get_export = (id: string) =>
   window.open(URL + `/model/${id}/export`);
