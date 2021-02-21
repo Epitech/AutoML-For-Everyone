@@ -25,7 +25,9 @@ export class DialogNewModelComponent implements OnInit {
   configure(key: string, input: EventTarget | null, isNumber = true) {
     if (!input) return;
     const { value } = input as HTMLInputElement;
+    console.log(key);
     if (key === 'config_dict') {
+      console.log(value);
       this.data.config_dict = value;
     } else {
       this.data.key = isNumber ? +value : value;
