@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
 
-import { delete_model, get_config, post_model, ModelType } from '../../api2';
+import { delete_model, get_config, post_model, ModelType, scoring_classification, scoring_regression, configDict } from '../../api2';
 
 import { ProgressionDataService } from '../progression-data.service';
 import { DialogNewModelComponent } from '../dialog-new-model/dialog-new-model.component';
@@ -16,6 +16,8 @@ export class ConfigModelComponent implements OnInit {
   model_list?: [];
   config?: string;
   model?: string;
+  model_type: string = "classification";
+
 
   constructor(
     public progressionData: ProgressionDataService,
@@ -35,8 +37,8 @@ export class ConfigModelComponent implements OnInit {
   updateList() {
     if (this.config)
       get_config(this.config).then((response) => {
-        console.log(response['models']);
         this.model_list = response['models'];
+        this.model_type = response['model_type'];
       });
     else this.model_list = undefined;
   }
@@ -61,8 +63,8 @@ export class ConfigModelComponent implements OnInit {
       crossover_rate: 1,
       subsample: 1,
       early_stop: 100,
-      scoring: 'classification', // NEED TO GET RIGHT TYPE
-      config_dict: undefined,
+      scoring: this.model_type,
+      config_dict: configDict[0]
     };
     this.dialog
       .open(DialogNewModelComponent, { data })

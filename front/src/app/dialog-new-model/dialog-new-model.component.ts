@@ -11,12 +11,14 @@ import { configDict, ModelType, scoring_classification, scoring_regression } fro
 export class DialogNewModelComponent implements OnInit {
 
   configDictOptions = configDict;
-  scoringOptions = true == true ? scoring_classification : scoring_regression;
+  scoringOptions = this.data.scoring === "classification" ? scoring_classification : scoring_regression;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ModelType,
     public dialog: MatDialog
   ) {
+    this.scoringOptions = this.data.scoring === "classification" ? scoring_classification : scoring_regression;
+    this.data.scoring = this.data.scoring === "classification" ? scoring_classification[0] : scoring_regression[0];
   }
 
   ngOnInit(): void {
@@ -27,7 +29,6 @@ export class DialogNewModelComponent implements OnInit {
     const { value } = input as HTMLInputElement;
     console.log(key);
     if (key === 'config_dict') {
-      console.log(value);
       this.data.config_dict = value;
     } else {
       this.data.key = isNumber ? +value : value;

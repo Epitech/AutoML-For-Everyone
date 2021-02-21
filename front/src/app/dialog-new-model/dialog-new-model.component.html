@@ -54,16 +54,16 @@
             <div class='row'>
                 <mat-form-field appearance="fill">
                     <mat-label>Config Dict</mat-label>
-                    <mat-select>
-                        <mat-option *ngFor="let config of configDictOptions" [value]="data.config_dict" (change)="configure('config_dict', $event.target)">{{config}}</mat-option>
+                    <mat-select value=data.config_dict>
+                        <mat-option *ngFor="let config of configDictOptions" value="data.config_dict" (change)="configure('config_dict', $event.target)">{{config}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
             <div class='row'>
                 <mat-form-field appearance="fill">
                     <mat-label>Scoring</mat-label>
-                    <mat-select>
-                        <mat-option *ngFor="let config of scoringOptions" [value]="data.scoring" (change)="configure('Scoring', $event.target)">{{config}}</mat-option>
+                    <mat-select value="data.scoring">
+                        <mat-option *ngFor="let config of scoringOptions" value="data.scoring" (change)="configure('Scoring', $event.target)">{{config}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
