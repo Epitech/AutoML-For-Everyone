@@ -38,14 +38,14 @@
                                     <button (click)="remove(item)">
                                         <mat-icon>delete_outline</mat-icon>
                                     </button>
-                                    <button (click)="select(item)">
-                                        <mat-icon *ngIf="selected===item; else notSelected">
-                                            check_box
-                                        </mat-icon>
-                                        <ng-template #notSelected>
+                                    <mat-icon *ngIf="selected===item; else notSelected">
+                                        check_box
+                                    </mat-icon>
+                                    <ng-template #notSelected>
+                                        <button (click)="select(item)">
                                             <mat-icon>check_box_outline_blank</mat-icon>
-                                        </ng-template>
-                                    </button>
+                                        </button>
+                                    </ng-template>
                                 </span>
                             </div>
                         </mat-list-item>
