@@ -13,6 +13,9 @@ export class DialogNewModelComponent implements OnInit {
   configDictOptions = configDict;
   scoringOptions = this.data.scoring === "classification" ? scoring_classification : scoring_regression;
 
+  isNegative = (v: number) => v <= 0;
+  isNotRatio = (v: number) => v < 0 || v > 1;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ModelType,
     public dialog: MatDialog
@@ -20,6 +23,15 @@ export class DialogNewModelComponent implements OnInit {
     this.scoringOptions = this.data.scoring === "classification" ? scoring_classification : scoring_regression;
     this.data.scoring = this.data.scoring === "classification" ? scoring_classification[0] : scoring_regression[0];
   }
+
+  wrong = (): boolean =>
+    this.isNegative(this.data.generations) ||
+    this.isNegative(this.data.population_size) ||
+    this.isNegative(this.data.offspring_size) ||
+    this.isNotRatio(this.data.mutation_rate) ||
+    this.isNotRatio(this.data.crossover_rate) ||
+    this.isNotRatio(this.data.subsample) ||
+    this.isNegative(this.data.early_stop);
 
   ngOnInit(): void {
   }
@@ -34,4 +46,5 @@ export class DialogNewModelComponent implements OnInit {
       this.data.key = isNumber ? +value : value;
     }
   }
+
 }

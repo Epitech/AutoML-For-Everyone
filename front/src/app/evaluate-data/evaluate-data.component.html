@@ -1,11 +1,10 @@
 <div class="row container">
-    <img src="https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg">
-    <img src="https://d1fmx1rbmqrxrr.cloudfront.net/cnet/optim/i/edit/2019/04/eso1644bsmall__w770.jpg">
+    <img [src]="matrix_image">
+    <img [src]="shap_image">
 </div>
 <div class="row">
-    <button mat-flat-button matStepperNext color="primary">Export Pipeline</button>
+    <div class="divider"></div>
+    <button mat-flat-button matStepperNext (click)="export()" color="primary">Export Pipeline</button>
     <div class="divider"></div>
     <button mat-flat-button matStepperNext color="primary">Predict with CSV</button>
-    <div class="divider"></div>
-    <button mat-flat-button matStepperNext color="primary">Suivant</button>
 </div>

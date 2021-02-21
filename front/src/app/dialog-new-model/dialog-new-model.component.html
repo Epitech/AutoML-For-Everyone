@@ -72,7 +72,7 @@
     <div class='column'>
         <div class='row'>
             <mat-dialog-actions align="end">
-                <button class="create" mat-button [mat-dialog-close]="data" color="primary">Create</button>
+                <button class="create" mat-button [mat-dialog-close]="data" color="primary" [disabled]="wrong()">Create</button>
             </mat-dialog-actions>
         </div>
     </div>
