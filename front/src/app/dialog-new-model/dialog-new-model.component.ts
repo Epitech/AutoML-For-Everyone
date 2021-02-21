@@ -15,6 +15,7 @@ export class DialogNewModelComponent implements OnInit {
 
   isNegative = (v: number) => v <= 0;
   isNotRatio = (v: number) => v < 0 || v > 1;
+  isTooMuch = (v1: number, v2:number) => v1 + v2 > 1;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ModelType,
@@ -31,7 +32,8 @@ export class DialogNewModelComponent implements OnInit {
     this.isNotRatio(this.data.mutation_rate) ||
     this.isNotRatio(this.data.crossover_rate) ||
     this.isNotRatio(this.data.subsample) ||
-    this.isNegative(this.data.early_stop);
+    this.isNegative(this.data.early_stop) ||
+    this.isTooMuch(this.data.crossover_rate, this.data.mutation_rate);
 
   ngOnInit(): void {
   }
@@ -42,8 +44,10 @@ export class DialogNewModelComponent implements OnInit {
     console.log(key);
     if (key === 'config_dict') {
       this.data.config_dict = value;
+    } else if (key === 'scoring') {
+        this.data.scoring = value;
     } else {
-      this.data.key = isNumber ? +value : value;
+      this.data[key] = isNumber ? +value : value;
     }
   }
 

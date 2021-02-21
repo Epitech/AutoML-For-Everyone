@@ -26,13 +26,13 @@
             <div class='row'>
                 <mat-form-field class="example-full-width">
                     <mat-label>Mutation Rate</mat-label>
-                    <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="Ex: 100" [value]="data.mutation_rate" (change)="configure('mutation_rate', $event.target)">
+                    <input min="0.0" max="1.0 - data.crossover_rate" step="0.1" type="number" matInput placeholder="Ex: 100" [value]="data.mutation_rate" (change)="configure('mutation_rate', $event.target)">
                 </mat-form-field>
             </div>
             <div class='row'>
                 <mat-form-field class="example-full-width">
                     <mat-label>Crossover Rate</mat-label>
-                    <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="Ex: 100" [value]="data.crossover_rate" (change)="configure('crossover_rate', $event.target)">
+                    <input min="0.0" max="1.0 - data.mutation_rate" step="0.1" type="number" matInput placeholder="Ex: 100" [value]="data.crossover_rate" (change)="configure('crossover_rate', $event.target)">
                 </mat-form-field>
             </div>
             <div class='row'>
@@ -63,7 +63,7 @@
                 <mat-form-field appearance="fill">
                     <mat-label>Scoring</mat-label>
                     <mat-select value="data.scoring">
-                        <mat-option *ngFor="let config of scoringOptions" value="data.scoring" (change)="configure('Scoring', $event.target)">{{config}}</mat-option>
+                        <mat-option *ngFor="let config of scoringOptions" value="data.scoring" (change)="configure('scoring', $event.target)">{{config}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
