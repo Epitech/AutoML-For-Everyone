@@ -133,7 +133,7 @@ export type ModelType = {
   config_dict?: typeof configDict[number];
 };
 
-export const post_model = (id: string, config: ModelType) =>
+export const post_model = (config: ModelType, id?: string) =>
   api(`/config/${id}/model`, with_body(config));
 
 export const get_model = (id: string) => api(`/model/${id}`);

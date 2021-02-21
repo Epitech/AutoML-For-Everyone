@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
 
-import { delete_model, get_config } from '../../api2';
+import { delete_model, get_config, post_model, ModelType } from '../../api2';
 
 import { ProgressionDataService } from '../progression-data.service';
 import {
@@ -17,6 +17,7 @@ import {
 export class ConfigModelComponent implements OnInit {
   model_list = [];
   config?: string;
+  model?: string;
 
 
   constructor(public progressionData: ProgressionDataService,
@@ -27,6 +28,9 @@ export class ConfigModelComponent implements OnInit {
           this.updateList();
         },
       });
+      this.progressionData.getModel().subscribe((m) => {
+        this.model = m;
+      })
     }
 
   updateList() {
@@ -46,16 +50,31 @@ export class ConfigModelComponent implements OnInit {
 
   remove: callbackType = (config) => {
     delete_model(config).then(() => {
-      get_config(this.config).then((response) => {
-        console.log(response['models']);
-        this.model_list = response['models']
-      });
+      this.updateList();
     });
   };
 
   create: createType = () => {
+    const data: ModelType = {
+      generations: 100,
+      population_size: 100,
+      offspring_size: 100,
+      mutation_rate: 1,
+      crossover_rate: 1,
+      subsample: 1,
+      early_stop: 100,
+      scoring: "classification", // NEED TO GET RIGHT TYPE
+      config_dict: undefined
+    };
     this.dialog
-      .open(DialogNewModelComponent)
+      .open(DialogNewModelComponent, { data })
+      .afterClosed()
+      .subscribe((model) => {
+        if (model)
+          post_model(model, this.config).then(() => {
+            this.updateList();
+          });
+      });
   };
 
 }

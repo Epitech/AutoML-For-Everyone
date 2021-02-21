@@ -37,7 +37,7 @@
         </button>
     </mat-step>
 
-    <mat-step label="Configure Model">
+    <mat-step label="Configure Model" [completed]="createModelDone">
         <app-config-model></app-config-model>
         <button class="prev" mat-flat-button matStepperPrevious>
             <mat-icon>keyboard_arrow_left</mat-icon>

@@ -17,6 +17,7 @@ import { ProgressionDataService } from '../progression-data.service';
 export class HomeComponent {
   selectDataDone: boolean = false;
   createConfigDone: boolean = false;
+  createModelDone: boolean = false;
 
   constructor(public progressionData: ProgressionDataService) {
     this.progressionData.getDataset().subscribe({
@@ -27,6 +28,11 @@ export class HomeComponent {
     this.progressionData.getConfig().subscribe({
       next: (id) => {
         this.createConfigDone = id !== undefined;
+      },
+    });
+    this.progressionData.getConfig().subscribe({
+      next: (id) => {
+        this.createModelDone = id !== undefined;
       },
     });
   }

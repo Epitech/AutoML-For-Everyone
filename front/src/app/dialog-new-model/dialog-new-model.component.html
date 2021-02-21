@@ -3,15 +3,15 @@
             <form class="example-form">
                 <mat-form-field class="example-full-width">
                     <mat-label>Generations</mat-label>
-                    <input matInput placeholder="Ex: 100" value="100">
+                    <input min="1" type="number" matInput placeholder="Ex: 100" value="data.generations" [value]="configure">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                     <mat-label>Population</mat-label>
-                    <input matInput placeholder="Ex: 100" value="100">
+                    <input min="0" type="number" matInput placeholder="Ex: 100" value="data.population_size" [value]="configure">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                     <mat-label>OffSpring</mat-label>
-                    <input matInput placeholder="Ex: 100" value="100">
+                    <input min="0" type="number" matInput placeholder="Ex: 100" value="data.offspring_size" [value]="configure">
                 </mat-form-field>
             </form>
         </div>
@@ -19,15 +19,15 @@
             <form class="example-form">
                 <mat-form-field class="example-full-width">
                     <mat-label>Mutation Rate</mat-label>
-                    <input matInput placeholder="Ex: 100" value="100">
+                    <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="Ex: 100" value="data.mutation_rate" [value]="configure">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                     <mat-label>Crossover Rate</mat-label>
-                    <input matInput placeholder="Ex: 100" value="100">
+                    <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="Ex: 100" value="data.crossover_rate" [value]="configure">
                 </mat-form-field>
                 <mat-form-field class="example-full-width">
                     <mat-label>Subsample</mat-label>
-                    <input matInput placeholder="Ex: 100" value="100">
+                    <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="Ex: 100" value="data.subsample" [value]="configure">
                 </mat-form-field>
             </form>
         </div>
@@ -35,7 +35,7 @@
             <form class="example-form">
                 <mat-form-field class="example-full-width">
                     <mat-label>Early Stop</mat-label>
-                    <input matInput placeholder="Ex: 100" value="100">
+                    <input min="0" [max]="data.generations" type="number" matInput placeholder="Ex: 100" value="data.early_stop" [value]="configure">
                 </mat-form-field>
                 <mat-form-field appearance="fill">
                     <mat-label>Config Dict</mat-label>
@@ -51,7 +51,7 @@
             </form>
         </div>
         <mat-dialog-actions align="end">
-            <button class="create" mat-button [mat-dialog-close]="configure" color="primary">Create</button>
+            <button class="create" mat-button [mat-dialog-close]="data" color="primary">Create</button>
         </mat-dialog-actions>
     </div>
 <!-- <div class="row">
