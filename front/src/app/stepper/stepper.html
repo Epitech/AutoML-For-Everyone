@@ -42,7 +42,7 @@
         <button class="prev" mat-flat-button matStepperPrevious>
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
-        <button class="next" mat-flat-button matStepperNext>
+        <button class="next" mat-flat-button matStepperNext [disabled]="!createModelDone">
             <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
     </mat-step>
@@ -52,7 +52,7 @@
         <button class="prev" mat-flat-button matStepperPrevious>
             <mat-icon>keyboard_arrow_left</mat-icon>
         </button>
-        <button class="next" mat-flat-button matStepperNext>
+        <button class="next" mat-flat-button matStepperNext [disabled]="!modelTrainDone">
             <mat-icon>keyboard_arrow_right</mat-icon>
         </button>
     </mat-step>
