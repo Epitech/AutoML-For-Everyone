@@ -19,10 +19,10 @@
   padding: 20px;
 }
 
-.trainButton {
+.trainContentElement {
   margin: auto;
 }
 
-.trainButtonContainer {
+.trainContent {
   display: flex;
 }

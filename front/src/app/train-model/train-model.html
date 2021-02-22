@@ -4,10 +4,37 @@
       <mat-card-header>
         <mat-card-title>Train Model</mat-card-title>
       </mat-card-header>
-      <mat-card-content class="trainButtonContainer">
-        <button class="trainButton" color="primary" mat-flat-button
-          [disabled]="model.status !== 'not started'&&model.status !== 'error'" (click)="train()">train
-          ({{model.status}})</button>
+      <mat-card-content class="trainContent">
+
+        <span class="trainContentElement" [ngSwitch]="model.status">
+
+          <button *ngSwitchCase="'not started'" color="primary" mat-flat-button (click)="train()">
+            Launch training
+          </button>
+
+          <div *ngSwitchCase="'starting'">
+            Training is starting ...
+          </div>
+
+          <div *ngSwitchCase="'started'">
+            Training in progress ...
+          </div>
+
+          <div *ngSwitchCase="'done'">
+            Model has done training.
+          </div>
+
+          <div *ngSwitchCase="'error'">
+            An error occured.
+            <button color="primary" mat-flat-button (click)="train()">Retry</button>
+          </div>
+
+          <div *ngSwitchDefault>
+            An error occured.
+          </div>
+
+        </span>
+
       </mat-card-content>
     </mat-card>
     <mat-card class="card mat-elevation-z0">
