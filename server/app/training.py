@@ -194,9 +194,8 @@ def train_model(model_id):
             matrix_res = dask.delayed(None)
 
         # Get the results of the exportation and model saving
-        _, _, analysis, _ = dask.compute(
-            save_res, export_res, analysis_res, matrix_res)
-        _ = dask.compute(image_res)
+        _, _, analysis, *_ = dask.compute(
+            save_res, export_res, analysis_res, matrix_res, image_res)
 
         # Update the model with the exported paths
         # and set the status as done
