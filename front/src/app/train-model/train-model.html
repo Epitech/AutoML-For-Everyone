@@ -1,5 +1,22 @@
-<ng-container *ngIf="model">
-        <button color="primary" mat-flat-button [disabled]="model.status !== 'not started'&&model.status !== 'error'"
-                (click)="train()">train ({{model.status}})</button>
-        <pre>{{logs}}</pre>
-</ng-container>
+<mat-card class="container" *ngIf="model">
+  <mat-card-content>
+    <mat-card class="card mat-elevation-z0">
+      <mat-card-header>
+        <mat-card-title>Train Model</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="trainButtonContainer">
+        <button class="trainButton" color="primary" mat-flat-button
+          [disabled]="model.status !== 'not started'&&model.status !== 'error'" (click)="train()">train
+          ({{model.status}})</button>
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="card mat-elevation-z0">
+      <mat-card-header>
+        <mat-card-title>Training Logs</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <pre class="logs">{{logs}}</pre>
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+</mat-card>

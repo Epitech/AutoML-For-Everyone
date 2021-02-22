@@ -43,12 +43,11 @@ export class TrainModelComponent {
 
   checkStatus() {
     get_status(this.model.id).then(({ status, logs }) => {
-      console.log(status);
       this.model.status = status;
       this.progressionData.setTrained(status === 'done');
       this.logs = logs;
       if (status === 'starting' || status === 'started')
-        setTimeout(() => this.checkStatus(), 2000, this);
+        setTimeout(() => this.checkStatus(), 5000, this);
     });
   }
 }

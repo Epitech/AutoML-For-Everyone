@@ -1,0 +1,28 @@
+.container {
+  width: 85%;
+  margin: auto;
+  height: 600px;
+  margin-top: 80px;
+}
+
+.card {
+  color: var(--docaposte-darkblue);
+  font-size: larger;
+}
+
+.logs {
+  background-color: black;
+  color: white;
+  white-space: pre-wrap;
+  height: 404px;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.trainButton {
+  margin: auto;
+}
+
+.trainButtonContainer {
+  display: flex;
+}
