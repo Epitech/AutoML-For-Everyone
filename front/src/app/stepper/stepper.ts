@@ -5,8 +5,8 @@ import { ProgressionDataService } from '../progression-data.service';
 
 @Component({
   selector: 'app-stepper',
-  templateUrl: './stepper.html',
-  styleUrls: ['./stepper.css'],
+  templateUrl: 'stepper.html',
+  styleUrls: ['stepper.css'],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
@@ -21,25 +21,17 @@ export class HomeComponent {
   modelTrainDone: boolean = false;
 
   constructor(public progressionData: ProgressionDataService) {
-    this.progressionData.getDataset().subscribe({
-      next: (id) => {
-        this.selectDataDone = id !== undefined;
-      },
+    this.progressionData.getDataset().subscribe((id) => {
+      this.selectDataDone = id !== undefined;
     });
-    this.progressionData.getConfig().subscribe({
-      next: (id) => {
-        this.createConfigDone = id !== undefined;
-      },
+    this.progressionData.getConfig().subscribe((id) => {
+      this.createConfigDone = id !== undefined;
     });
-    this.progressionData.getModel().subscribe({
-      next: (id) => {
-        this.createModelDone = id !== undefined;
-      },
+    this.progressionData.getModel().subscribe((id) => {
+      this.createModelDone = id !== undefined;
     });
-    this.progressionData.getTrained().subscribe({
-      next: (trained) => {
-        this.modelTrainDone = !!trained;
-      },
+    this.progressionData.getTrained().subscribe((trained) => {
+      this.modelTrainDone = !!trained;
     });
   }
 }

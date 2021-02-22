@@ -29,19 +29,8 @@ export class ProgressionDataService {
     this.trained$.next(t);
   }
 
-  getDataset() {
-    return this.dataset$.asObservable();
-  }
-
-  getConfig() {
-    return this.config$.asObservable();
-  }
-
-  getModel() {
-    return this.model$.asObservable();
-  }
-
-  getTrained() {
-    return this.trained$.asObservable();
-  }
+  getDataset = () => this.dataset$.asObservable();
+  getConfig = () => this.config$.asObservable();
+  getModel = () => this.model$.asObservable();
+  getTrained = () => this.trained$.asObservable();
 }

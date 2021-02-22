@@ -9,6 +9,7 @@ import {
   ColumnLintType,
   PostLintType,
 } from '../../api2';
+
 import {
   DialogContentLint,
   DataType as LinterDataType,
@@ -18,8 +19,8 @@ export type DataType = {
   dataset: string;
   columns: string[];
 };
-type ColumnsType = { [key: string]: boolean };
 
+type ColumnsType = { [key: string]: boolean };
 type NewConfigType = Omit<ApiNewConfigType, 'label'> & {
   label?: string;
 };

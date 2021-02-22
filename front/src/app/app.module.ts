@@ -25,14 +25,14 @@ import { NewProjectComponent } from './new-project/new-project';
 import { SelectDataComponent } from './select-data/select-data';
 import { VisualiseDataComponent } from './visualise-data/visualise-data';
 import { ProgressionDataService } from './progression-data.service';
-import { EvaluateDataComponent } from './evaluate-data/evaluate-data.component';
-import { ConfigModelComponent } from './config-model/config-model.component';
+import { EvaluateDataComponent } from './evaluate-data/evaluate-data';
+import { ConfigModelComponent } from './select-model/select-model';
 import { DocaposteListComponent } from './docaposte-list/docaposte-list';
 import { SelectConfigComponent } from './select-config/select-config';
 import { PropPipe } from './prop.pipe';
 import { FilesizePipe } from './filesize.pipe';
 import { DialogContentNewData } from './dialog-new-data/dialog-new-data';
-import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model.component';
+import { DialogNewModelComponent } from './dialog-new-model/dialog-new-model';
 import { DialogContentLint } from './dialog-lint/dialog-lint';
 import { TrainModelComponent } from './train-model/train-model';
 

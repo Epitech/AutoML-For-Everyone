@@ -27,10 +27,8 @@ export class SelectDataComponent {
     public dialog: MatDialog
   ) {
     this.updateDatasets();
-    this.progressionData.getDataset().subscribe({
-      next: (d) => {
-        this.dataset = d;
-      },
+    this.progressionData.getDataset().subscribe((d) => {
+      this.dataset = d;
     });
   }
 

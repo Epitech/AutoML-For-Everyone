@@ -5,6 +5,7 @@
     <ng-template #good>
         <mat-icon color="accent">done</mat-icon>
     </ng-template>
+
     {{lint[0]}}
 
     <button *ngIf="lint[2]" (click)="openHelp(lint[1])" matTooltip="Learn more" class="help">

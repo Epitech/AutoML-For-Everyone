@@ -14,22 +14,20 @@ export class TrainModelComponent {
   logs?: string;
 
   constructor(public progressionData: ProgressionDataService) {
-    this.progressionData.getModel().subscribe({
-      next: (id) => {
-        if (id) {
-          get_model(id).then((m) => {
-            this.model = m;
-            this.progressionData.setTrained(this.model.status === 'done');
-            this.checkStatus();
-          });
-        } else {
-          this.model = undefined;
-        }
-      },
+    this.progressionData.getModel().subscribe((id) => {
+      if (id) {
+        get_model(id).then((m) => {
+          this.model = m;
+          this.progressionData.setTrained(this.model.status === 'done');
+          this.checkStatus();
+        });
+      } else {
+        this.model = undefined;
+      }
     });
   }
 
-  train = () => {
+  train = () =>
     post_train(this.model!.id)
       .then(() => {
         this.model.status = 'starting';
@@ -39,9 +37,8 @@ export class TrainModelComponent {
         console.error(err);
         this.model.status = 'error';
       });
-  };
 
-  checkStatus() {
+  checkStatus = () =>
     get_status(this.model.id).then(({ status, logs }) => {
       this.model.status = status;
       this.progressionData.setTrained(status === 'done');
@@ -49,5 +46,4 @@ export class TrainModelComponent {
       if (status === 'starting' || status === 'started')
         setTimeout(() => this.checkStatus(), 5000, this);
     });
-  }
 }

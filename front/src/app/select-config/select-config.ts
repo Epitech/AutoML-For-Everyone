@@ -28,31 +28,21 @@ export class SelectConfigComponent {
     public progressionData: ProgressionDataService,
     public dialog: MatDialog
   ) {
-    this.progressionData.getDataset().subscribe({
-      next: (id) => {
-        this.updateData(id);
-      },
-    });
-    this.progressionData.getConfig().subscribe({
-      next: (c) => {
-        this.config = c;
-      },
+    this.progressionData.getDataset().subscribe((id) => this.updateData(id));
+    this.progressionData.getConfig().subscribe((c) => {
+      this.config = c;
     });
   }
 
   updateData(datasetId?: string): void {
-    if (datasetId) {
+    if (datasetId)
       get_dataset(datasetId).then((dataset) => {
         this.dataset = dataset;
       });
-    } else {
-      this.dataset = undefined;
-    }
+    else this.dataset = undefined;
   }
 
-  select: callbackType = (config) => {
-    this.progressionData.setConfig(config);
-  };
+  select: callbackType = (config) => this.progressionData.setConfig(config);
 
   remove: callbackType = (config) => {
     delete_config(config).then(() => this.updateData(this.dataset?.name));

@@ -16,14 +16,12 @@ export class VisualiseDataComponent {
     public progressionData: ProgressionDataService,
     private sanitizer: DomSanitizer
   ) {
-    this.progressionData.getDataset().subscribe({
-      next: (id) => {
-        this.url =
-          id &&
-          this.sanitizer.bypassSecurityTrustResourceUrl(
-            get_dataset_sweetviz_url(id)
-          );
-      },
+    this.progressionData.getDataset().subscribe((id) => {
+      this.url =
+        id &&
+        this.sanitizer.bypassSecurityTrustResourceUrl(
+          get_dataset_sweetviz_url(id)
+        );
     });
   }
 }

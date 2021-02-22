@@ -1,9 +1,6 @@
-.table {
-  margin: 10px auto;
-}
-
 table {
   border-collapse: collapse;
+  margin: 10px auto;
 }
 
 th {
@@ -28,7 +25,6 @@ th {
 .switch:disabled {
   text-decoration: underline;
   color: var(--docaposte-lightblue);
-
 }
 
 .cancel {

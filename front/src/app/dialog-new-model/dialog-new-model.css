@@ -1,0 +1,35 @@
+.content {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.example-form {
+  left: 5%;
+  right: 5%;
+  top: 5%;
+  bottom: 5%;
+}
+
+.mat-flat-button.mat-primary {
+  background-color: #0000ff;
+  height: 90%;
+  width: 20%;
+  margin-top: 10px;
+  padding: 12px 32px;
+  border-radius: 29px;
+}
+
+.pad {
+  left: 5%;
+  right: 5%;
+  top: 5%;
+  bottom: 5%;
+}
