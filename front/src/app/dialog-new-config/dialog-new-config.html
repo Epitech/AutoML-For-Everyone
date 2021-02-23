@@ -1,5 +1,9 @@
 <h2 mat-dialog-title>Create new config</h2>
 <mat-dialog-content>
+    <button class="switch" mat-button (click)="config.model_type = 'classification'"
+        [disabled]="config.model_type === 'classification'">Classification</button>
+    <button class="switch" mat-button (click)="config.model_type = 'regression'"
+        [disabled]="config.model_type === 'regression'">Regression</button>
     <table>
         <thead>
             <tr>
@@ -32,10 +36,6 @@
     </table>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <button class="switch" mat-button (click)="config.model_type = 'classification'"
-        [disabled]="config.model_type === 'classification'">Classification</button>
-    <button class="switch" mat-button (click)="config.model_type = 'regression'"
-        [disabled]="config.model_type === 'regression'">Regression</button>
     <button class="cancel" mat-button mat-dialog-close>Cancel</button>
     <button class="create" mat-button [mat-dialog-close]="config" [disabled]="!config.label">Create</button>
 </mat-dialog-actions>

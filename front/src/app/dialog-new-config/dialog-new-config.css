@@ -18,13 +18,15 @@ th {
   border: black solid 1px;
 }
 
-.switch:not([disabled]) {
-  color: lightgrey;
+.switch {
+  width: 50%;
+  color: var(--docaposte-darkblue);
+  background-color: white;
 }
 
 .switch:disabled {
-  text-decoration: underline;
-  color: var(--docaposte-lightblue);
+  color: white;
+  background-color: var(--docaposte-darkblue);
 }
 
 .cancel {
