@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ProgressionDataService } from '../progression-data.service';
 
 import { get_export } from '../../api2';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-evaluate-data',
@@ -15,10 +16,19 @@ export class EvaluateDataComponent {
   id!: string;
 
   constructor(public progressionData: ProgressionDataService) {
-    this.progressionData.getModel().subscribe((c) => {
-      if (c !== undefined) {
-        this.id = c;
+    combineLatest(
+      this.progressionData.getModel(),
+      this.progressionData.getTrained(),
+      (model, trained) => ({
+        model, trained
+      })
+    ).subscribe(({model, trained}) => {
+      if (model !== undefined && trained === true) {
+        this.id = model;
         this.updatePath();
+      } else {
+        this.shap_image = undefined;
+        this.matrix_image = undefined;
       }
     });
   }
