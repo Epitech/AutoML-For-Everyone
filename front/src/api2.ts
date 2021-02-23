@@ -116,7 +116,8 @@ export const scoring_regression = [
   'r2',
 ];
 
-export const configDict = ['TPOT light', 'TPOT MDR', 'TPOT sparse'];
+export const configDictDefault = 'Default';
+export const configDict = [configDictDefault, 'TPOT light', 'TPOT MDR', 'TPOT sparse'];
 
 export type ModelType = {
   [key: string]: string | number | undefined;

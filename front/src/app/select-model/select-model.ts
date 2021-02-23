@@ -63,7 +63,7 @@ export class ConfigModelComponent {
       subsample: 1,
       early_stop: 100,
       scoring: this.model_type,
-      config_dict: configDict[0],
+      config_dict: undefined,
     };
     this.dialog
       .open(DialogNewModelComponent, { data })
