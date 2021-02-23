@@ -253,8 +253,11 @@ def create_app():
         reply = {"status": model.status}
 
         if model.log_path:
-            with open(model.log_path) as f:
-                reply["logs"] = f.read()
+            try:
+                with open(model.log_path) as f:
+                    reply["logs"] = f.read()
+            except FileNotFoundError:
+                pass
 
         return reply
 
