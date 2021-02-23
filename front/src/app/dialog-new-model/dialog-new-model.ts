@@ -3,6 +3,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import {
   configDict,
+  configDictDefault,
   ModelType,
   scoring_classification,
   scoring_regression,
@@ -48,11 +49,22 @@ export class DialogNewModelComponent {
     this.isNegative(this.data.early_stop) ||
     this.isTooMuch(this.data.crossover_rate, this.data.mutation_rate);
 
-  configure(key: string, input: EventTarget | null, isNumber = true) {
+  configure(key: string, input: EventTarget | null) {
+    console.log('changing key ', key, input);
     if (!input) return;
     const { value } = input as HTMLInputElement;
-    if (key === 'config_dict') this.data.config_dict = value;
-    else if (key === 'scoring') this.data.scoring = value;
-    else this.data[key] = isNumber ? +value : value;
+    this.data[key] = +value;
+  }
+
+  configureConfigDict(value: string) {
+    if (value === configDictDefault) {
+      this.data.config_dict = undefined;
+    } else {
+      this.data.config_dict = value;
+    }
+  }
+
+  configureScoring(value: string) {
+    this.data.scoring = value;
   }
 }
