@@ -117,7 +117,12 @@ export const scoring_regression = [
 ];
 
 export const configDictDefault = 'Default';
-export const configDict = [configDictDefault, 'TPOT light', 'TPOT MDR', 'TPOT sparse'];
+export const configDict = [
+  configDictDefault,
+  'TPOT light',
+  'TPOT MDR',
+  'TPOT sparse',
+];
 
 export type ModelType = {
   [key: string]: string | number | undefined;
@@ -161,8 +166,6 @@ export const get_export = (id: string) =>
 export const get_predict = (id: string, data: any) =>
   api(`/model/${id}/predict`, with_body(data));
 
-export const get_matrix = (id: string) =>
-  api(`/model/${id}/confusion_matrix`, { method: 'GET' }, true);
-
-export const get_shap = (id: string) =>
-  api(`/model/${id}/shap_value`, { method: 'GET' }, true);
+export const get_conf_matrix_url = (id: string) =>
+  `${URL}/model/${id}/confusion_matrix`;
+export const get_shap_url = (id: string) => `${URL}/model/${id}/shap_value`;

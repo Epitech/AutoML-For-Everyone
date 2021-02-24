@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { ProgressionDataService } from '../progression-data.service';
 
-import { get_export } from '../../api';
+import { get_conf_matrix_url, get_export, get_shap_url } from '../../api';
 import { combineLatest } from 'rxjs';
 
 @Component({
@@ -20,9 +20,10 @@ export class EvaluateDataComponent {
       this.progressionData.getModel(),
       this.progressionData.getTrained(),
       (model, trained) => ({
-        model, trained
+        model,
+        trained,
       })
-    ).subscribe(({model, trained}) => {
+    ).subscribe(({ model, trained }) => {
       if (model !== undefined && trained === true) {
         this.id = model;
         this.updatePath();
@@ -36,7 +37,7 @@ export class EvaluateDataComponent {
   export = () => get_export(this.id);
 
   updatePath() {
-    this.matrix_image = `http://localhost:5000/model/${this.id}/confusion_matrix`;
-    this.shap_image = `http://localhost:5000/model/${this.id}/shap_value`;
+    this.matrix_image = get_conf_matrix_url(this.id);
+    this.shap_image = get_shap_url(this.id);
   }
 }
