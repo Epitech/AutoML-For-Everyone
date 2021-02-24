@@ -44,6 +44,14 @@ export type NewConfigType = {
   model_type: 'classification' | 'regression';
 };
 
+export type ConfigType = {
+  columns: { [key: string]: boolean };
+  id: string;
+  label: string;
+  model_type: 'classification' | 'regression';
+  models: string[];
+};
+
 export const post_config = (id: string, config: any) =>
   api(`/dataset/${id}/config`, with_body(config));
 
@@ -65,7 +73,7 @@ export type PostLintType = {
 export const post_lint = (id: string, config: any): Promise<PostLintType> =>
   api(`/dataset/${id}/config/lint`, with_body(config));
 
-export const get_config = (id: string) => api(`/config/${id}`);
+export const get_config = (id: string): Promise<ConfigType> => api(`/config/${id}`);
 
 export const get_lint = (id: string) => api(`/config/${id}/lint`);
 
