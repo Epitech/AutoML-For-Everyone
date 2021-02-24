@@ -5,8 +5,8 @@ import {
   delete_model,
   get_config,
   post_model,
-  ModelType,
-  configDict,
+  get_model,
+  ModelConfig,
 } from '../../api';
 
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
@@ -54,7 +54,7 @@ export class ConfigModelComponent {
   };
 
   create: createType = () => {
-    const data: ModelType = {
+    const data: ModelConfig = {
       generations: 100,
       population_size: 100,
       offspring_size: 100,

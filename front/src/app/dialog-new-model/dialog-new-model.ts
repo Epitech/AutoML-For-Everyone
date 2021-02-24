@@ -4,7 +4,7 @@ import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {
   configDict,
   configDictDefault,
-  ModelType,
+  ModelConfig,
   scoring_classification,
   scoring_regression,
 } from '../../api';
@@ -26,7 +26,7 @@ export class DialogNewModelComponent {
   isTooMuch = (v1: number, v2: number) => v1 + v2 > 1;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: ModelType,
+    @Inject(MAT_DIALOG_DATA) public data: ModelConfig,
     public dialog: MatDialog
   ) {
     this.scoringOptions =
@@ -52,7 +52,7 @@ export class DialogNewModelComponent {
   configure(key: string, input: EventTarget | null) {
     if (!input) return;
     const { value } = input as HTMLInputElement;
-    this.data[key] = +value;
+    (this as any).data[key] = +value;
   }
 
   configureConfigDict(value: string) {
