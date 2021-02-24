@@ -17,6 +17,8 @@
   height: 404px;
   overflow-y: auto;
   padding: 20px;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .trainContentElement {
