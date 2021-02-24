@@ -29,7 +29,14 @@
                             <div class="rowList listItem">
                                 <span>
                                     <h3 class="index">{{index}}</h3>
-                                    <span class="name">{{item}}</span>
+                                    <span *ngIf="titles && titles[index]; else elseBlock" class="name">
+                                        {{titles[index]}}
+                                    </span>
+                                    <ng-template #elseBlock>
+                                        <span class="name">
+                                            {{item}}
+                                        </span>
+                                    </ng-template>
                                 </span>
                                 <span class="actions">
                                     <span *ngIf="size && size[index]" class="size">

@@ -19,7 +19,8 @@ import { DialogNewModelComponent } from '../dialog-new-model/dialog-new-model';
   styleUrls: ['select-model.css'],
 })
 export class ConfigModelComponent {
-  model_list?: string[];
+  model_names?: string[];
+  model_ids?: string[];
   config?: string;
   model?: string;
   model_type: string = 'classification';
@@ -51,12 +52,13 @@ export class ConfigModelComponent {
             })
           )
         ).then((desc) => {
-          this.model_list = desc;
+          this.model_names = desc;
         });
+        this.model_ids = response.models;
         this.model_type = response.model_type;
       });
     } else {
-      this.model_list = undefined;
+      this.model_ids = undefined;
     }
   }
 

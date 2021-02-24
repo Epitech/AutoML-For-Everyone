@@ -10,6 +10,7 @@ export type createType = () => void;
 })
 export class DocaposteListComponent {
   @Input() list?: string[];
+  @Input() titles?: string[];
 
   @Input() createTitle!: string;
   @Input() createIcon!: string;

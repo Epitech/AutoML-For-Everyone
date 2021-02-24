@@ -1,4 +1,4 @@
-<app-docaposte-list *ngIf="configNames" [list]="configNames" createTitle="Create Config" createIcon="create"
+<app-docaposte-list *ngIf="dataset && configNames" [list]="dataset.configs" [titles]="configNames" createTitle="Create Config" createIcon="create"
     createText="Create a new config here" createButton="Create Config" [create]="create"
     selectTitle="Select config from library" [select]="select" [selected]="config" [remove]="remove">
 </app-docaposte-list>
