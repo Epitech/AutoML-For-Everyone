@@ -19,7 +19,7 @@ import { DialogNewModelComponent } from '../dialog-new-model/dialog-new-model';
   styleUrls: ['select-model.css'],
 })
 export class ConfigModelComponent {
-  model_list?: [];
+  model_list?: string[];
   config?: string;
   model?: string;
   model_type: string = 'classification';
