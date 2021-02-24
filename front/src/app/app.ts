@@ -5,5 +5,5 @@ import { Component } from '@angular/core';
   templateUrl: 'app.html',
 })
 export class AppComponent {
-  title = 'maquette-v2';
+  title = 'Docaposte: AutoML For Everyone';
 }

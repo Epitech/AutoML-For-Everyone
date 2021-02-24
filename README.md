@@ -7,7 +7,7 @@
 Install Docker on windows :
 * [Docker Desktop](https://docs.docker.com/docker-for-windows/install/)
 
-If you encounter a problem with the installation or launch of docker follow this [link](https://github.com/Epitech/docaposte/blob/master/INSTALLATION.md)
+If you encounter a problem with the installation or launch of docker follow this [link](./INSTALLATION.md)
 
 ## Linux
 
@@ -43,4 +43,4 @@ docker-compose up --build
 
 # How to use the platform ?
 
-To know how to use this web platform you will find user documentation via this [link](https://github.com/Epitech/docaposte/blob/figma/HOW_TO_USE.md)
+To know how to use this web platform you will find user documentation via this [link](./HOW_TO_USE.md)
