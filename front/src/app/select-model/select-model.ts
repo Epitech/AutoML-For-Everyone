@@ -37,13 +37,27 @@ export class ConfigModelComponent {
     });
   }
 
-  updateList() {
-    if (this.config)
+  updateList(): void {
+    if (this.config) {
       get_config(this.config).then((response) => {
-        this.model_list = response['models'];
-        this.model_type = response['model_type'];
+        Promise.all(
+          response.models.map((id) =>
+            get_model(id).then((model) => {
+              const res = `${model.model_config.config_dict ?? 'Default models'}, ${
+                model.model_config.scoring ?? 'Default scoring'
+              }`;
+              console.log(model, res);
+              return res;
+            })
+          )
+        ).then((desc) => {
+          this.model_list = desc;
+        });
+        this.model_type = response.model_type;
       });
-    else this.model_list = undefined;
+    } else {
+      this.model_list = undefined;
+    }
   }
 
   select: callbackType = (model) => this.progressionData.setModel(model);
