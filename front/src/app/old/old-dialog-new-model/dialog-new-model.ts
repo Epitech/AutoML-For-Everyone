@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { configDict, ModelType, scoring_classification, scoring_regression } from 'src/api2';
+import { configDict, ModelType, scoring_classification, scoring_regression } from 'src/api';
 
 export type ModelDataType = {
   dispatch: (m: ModelType) => void;

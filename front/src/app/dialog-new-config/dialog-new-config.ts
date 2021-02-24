@@ -8,7 +8,7 @@ import {
   LintType,
   ColumnLintType,
   PostLintType,
-} from '../../api2';
+} from '../../api';
 
 import {
   DialogContentLint,

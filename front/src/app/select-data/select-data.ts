@@ -7,7 +7,7 @@ import {
   get_dataset,
   delete_dataset,
   post_dataset,
-} from '../../api2';
+} from '../../api';
 
 import { ProgressionDataService } from '../progression-data.service';
 import { callbackType, createType } from '../docaposte-list/docaposte-list';

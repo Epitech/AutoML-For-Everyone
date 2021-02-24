@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { ProgressionDataService } from '../progression-data.service';
 
-import { get_export } from '../../api2';
+import { get_export } from '../../api';
 import { combineLatest } from 'rxjs';
 
 @Component({

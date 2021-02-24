@@ -7,7 +7,7 @@ import {
   ModelType,
   scoring_classification,
   scoring_regression,
-} from '../../api2';
+} from '../../api';
 
 @Component({
   selector: 'app-dialog-new-model',

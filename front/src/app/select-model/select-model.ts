@@ -7,7 +7,7 @@ import {
   post_model,
   ModelType,
   configDict,
-} from '../../api2';
+} from '../../api';
 
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
 import { ProgressionDataService } from '../progression-data.service';

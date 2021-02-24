@@ -19,7 +19,7 @@ import {
   get_predict,
   get_matrix,
   get_shap
-} from '../../../api2';
+} from '../../../api';
 import {
   DialogPredictComponent,
   PredictData,

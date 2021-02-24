@@ -6,7 +6,7 @@ import {
   DatasetType,
   post_config,
   delete_config,
-} from '../../api2';
+} from '../../api';
 
 import {
   DialogContentNewConfig,

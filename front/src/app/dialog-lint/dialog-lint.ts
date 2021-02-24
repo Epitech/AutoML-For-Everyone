@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { LintType } from '../../api2';
+import { LintType } from '../../api';
 
 export type DataType = {
   lints: LintType;

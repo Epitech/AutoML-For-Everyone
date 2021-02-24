@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { get_model, post_train, get_status } from '../../api2';
+import { get_model, post_train, get_status } from '../../api';
 
 import { ProgressionDataService } from '../progression-data.service';
 

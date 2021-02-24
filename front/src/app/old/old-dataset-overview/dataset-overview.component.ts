@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
-import { delete_config, get_dataset, post_config } from '../../../api2';
+import { delete_config, get_dataset, post_config } from '../../../api';
 import { DataType, EmittedType } from '../old-table/table.component';
 import { DialogContentNewConfig } from '../../dialog-new-config/dialog-new-config';
 

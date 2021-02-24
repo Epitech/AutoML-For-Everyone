@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 import { ProgressionDataService } from '../progression-data.service';
-import { get_dataset_sweetviz_url } from '../../api2';
+import { get_dataset_sweetviz_url } from '../../api';
 
 @Component({
   selector: 'app-visualise-data',
