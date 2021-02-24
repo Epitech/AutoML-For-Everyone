@@ -132,8 +132,8 @@ export const configDict = [
   'TPOT sparse',
 ];
 
-export type ModelType = {
-  [key: string]: string | number | undefined;
+export type ModelConfig = {
+  // [key: string]: string | number | undefined;
   generations: number;
   population_size: number;
   offspring_size: number;
@@ -147,10 +147,21 @@ export type ModelType = {
   config_dict?: typeof configDict[number];
 };
 
-export const post_model = (config: ModelType, id?: string) =>
+export type Model = {
+  analysis: {
+    f1_score: number;
+    testing_accuracy: number;
+    training_accuracy: number;
+  };
+  id: string;
+  model_config: ModelConfig;
+  status: string;
+}
+
+export const post_model = (config: ModelConfig, id?: string) =>
   api(`/config/${id}/model`, with_body(config));
 
-export const get_model = (id: string) => api(`/model/${id}`);
+export const get_model = (id: string): Promise<Model> => api(`/model/${id}`);
 
 export const post_train = (id: string) =>
   api(`/model/${id}/train`, { method: 'POST' }, true);

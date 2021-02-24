@@ -5,8 +5,8 @@ import {
   delete_model,
   get_config,
   post_model,
-  ModelType,
-  configDict,
+  get_model,
+  ModelConfig,
 } from '../../api';
 
 import { callbackType, createType } from '../docaposte-list/docaposte-list';
@@ -37,13 +37,27 @@ export class ConfigModelComponent {
     });
   }
 
-  updateList() {
-    if (this.config)
+  updateList(): void {
+    if (this.config) {
       get_config(this.config).then((response) => {
-        this.model_list = response['models'];
-        this.model_type = response['model_type'];
+        Promise.all(
+          response.models.map((id) =>
+            get_model(id).then((model) => {
+              const res = `${model.model_config.config_dict ?? 'Default models'}, ${
+                model.model_config.scoring ?? 'Default scoring'
+              }`;
+              console.log(model, res);
+              return res;
+            })
+          )
+        ).then((desc) => {
+          this.model_list = desc;
+        });
+        this.model_type = response.model_type;
       });
-    else this.model_list = undefined;
+    } else {
+      this.model_list = undefined;
+    }
   }
 
   select: callbackType = (model) => this.progressionData.setModel(model);
@@ -54,7 +68,7 @@ export class ConfigModelComponent {
   };
 
   create: createType = () => {
-    const data: ModelType = {
+    const data: ModelConfig = {
       generations: 100,
       population_size: 100,
       offspring_size: 100,
