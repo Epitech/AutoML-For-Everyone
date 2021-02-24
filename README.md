@@ -43,4 +43,4 @@ docker-compose up --build
 
 # How to use the platform ?
 
-To know how to use this web platform you will find user documentation via this [link](https://github.com/Epitech/docaposte/blob/master/HOW_TO_USE.md)
+To know how to use this web platform you will find user documentation via this [link](https://github.com/Epitech/docaposte/blob/figma/HOW_TO_USE.md)
