@@ -6,6 +6,7 @@ import {
   DatasetType,
   post_config,
   delete_config,
+  get_config,
 } from '../../api';
 
 import {
@@ -23,6 +24,7 @@ import { callbackType, createType } from '../docaposte-list/docaposte-list';
 export class SelectConfigComponent {
   dataset?: DatasetType;
   config?: string;
+  configNames?: string[];
 
   constructor(
     public progressionData: ProgressionDataService,
@@ -38,6 +40,15 @@ export class SelectConfigComponent {
     if (datasetId)
       get_dataset(datasetId).then((dataset) => {
         this.dataset = dataset;
+        Promise.all(
+          dataset.configs.map((id) =>
+            get_config(id).then(
+              (config) => `Predicting ${config.label} with ${config.model_type}`
+            )
+          )
+        ).then((names) => {
+          this.configNames = names;
+        });
       });
     else this.dataset = undefined;
   }
