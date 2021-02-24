@@ -71,6 +71,7 @@ export class DialogContentNewConfig {
 
   changeColumn = (column: string, checked: boolean) => {
     this.config.columns[column] = checked;
+    if (column === this.config.label && !checked) this.config.label = undefined;
     this.refreshLints();
   };
 
@@ -78,4 +79,8 @@ export class DialogContentNewConfig {
     this.config.label = checked ? col : undefined;
     this.refreshLints();
   };
+
+  lockCreate = (): boolean =>
+    !this.config.label ||
+    Object.values(this.config.columns).filter(Boolean).length < 2;
 }

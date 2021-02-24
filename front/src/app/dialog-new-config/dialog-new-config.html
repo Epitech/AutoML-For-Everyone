@@ -37,5 +37,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button class="cancel" mat-button mat-dialog-close>Cancel</button>
-    <button class="create" mat-button [mat-dialog-close]="config" [disabled]="!config.label">Create</button>
+    <button class="create" mat-button [mat-dialog-close]="config" [disabled]="lockCreate()">Create</button>
 </mat-dialog-actions>
