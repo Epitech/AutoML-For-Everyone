@@ -35,6 +35,9 @@
 
         </span>
 
+        <p *ngIf="['starting', 'started'].includes(model.status)">
+            <a href="http://localhost:8787/status">See Dask status</a>
+        </p>
       </mat-card-content>
     </mat-card>
     <mat-card class="card mat-elevation-z0">
