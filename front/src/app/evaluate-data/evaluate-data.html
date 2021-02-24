@@ -1,10 +1,12 @@
-<div class="row container">
-    <img [src]="matrix_image">
-    <img [src]="shap_image">
-</div>
-<div class="row">
-    <div class="divider"></div>
-    <button mat-flat-button matStepperNext (click)="export()" color="primary">Export Pipeline</button>
-    <div class="divider"></div>
-    <button mat-flat-button matStepperNext color="primary">Predict with CSV</button>
-</div>
+<ng-container *ngIf="id">
+    <div class="row container">
+        <img [src]="matrix_image">
+        <img [src]="shap_image">
+    </div>
+    <div class="row">
+        <div class="divider"></div>
+        <button mat-flat-button matStepperNext (click)="export()" color="primary">Export Pipeline</button>
+        <div class="divider"></div>
+        <button mat-flat-button matStepperNext (click)="predictCSV()" color="primary">Predict with CSV</button>
+    </div>
+</ng-container>

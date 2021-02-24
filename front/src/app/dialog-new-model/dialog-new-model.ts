@@ -50,7 +50,6 @@ export class DialogNewModelComponent {
     this.isTooMuch(this.data.crossover_rate, this.data.mutation_rate);
 
   configure(key: string, input: EventTarget | null) {
-    console.log('changing key ', key, input);
     if (!input) return;
     const { value } = input as HTMLInputElement;
     this.data[key] = +value;
