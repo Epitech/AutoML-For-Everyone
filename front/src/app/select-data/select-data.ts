@@ -34,7 +34,7 @@ export class SelectDataComponent {
 
   updateDatasets(): void {
     get_datasets().then((ds) => {
-      Promise.all(ds.map((d) => get_dataset(d))).then((datasets) => {
+      Promise.all(ds.filter(Boolean).map((d) => get_dataset(d))).then((datasets) => {
         this.datasets = datasets;
       });
     });
