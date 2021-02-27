@@ -18,8 +18,12 @@
   bottom: 5%;
 }
 
+.container {
+  padding: 10px 10px 10px 10px;
+}
+
 .mat-flat-button.mat-primary {
-  background-color: #0000ff;
+  background-color: var(--docaposte-blue);
   height: 90%;
   width: 20%;
   margin-top: 10px;
@@ -32,4 +36,13 @@
   right: 5%;
   top: 5%;
   bottom: 5%;
+}
+
+.create {
+  left: 10px;
+  background-color: #3775fc;
+  color: white;
+  height: 100%;
+  font-size: 28px;
+  padding: 92px 46px;
 }

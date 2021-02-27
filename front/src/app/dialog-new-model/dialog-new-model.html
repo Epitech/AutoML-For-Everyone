@@ -2,21 +2,21 @@
     <div class='column'>
         <form class="example-form">
             <div class='row'>
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="container">
                     <mat-label>Generations</mat-label>
                     <input min="1" type="number" matInput placeholder="Ex: 100" [value]="data.generations"
                         (change)="configure('generations', $event.target)">
                 </mat-form-field>
             </div>
             <div class='row'>
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="container">
                     <mat-label>Population</mat-label>
                     <input min="0" type="number" matInput placeholder="Ex: 100" [value]="data.population_size"
                         (change)="configure('population_size', $event.target)">
                 </mat-form-field>
             </div>
             <div class='row'>
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="container">
                     <mat-label>OffSpring</mat-label>
                     <input min="0" type="number" matInput placeholder="Ex: 100" [value]="data.offspring_size"
                         (change)="configure('offspring_size', $event.target)">
@@ -27,7 +27,7 @@
     <div class='column'>
         <form class="example-form">
             <div class='row'>
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="container" >
                     <mat-label>Mutation Rate</mat-label>
                     <input min="0.0" max="1.0 - data.crossover_rate" step="0.1" type="number" matInput
                         placeholder="Ex: 100" [value]="data.mutation_rate"
@@ -35,7 +35,7 @@
                 </mat-form-field>
             </div>
             <div class='row'>
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="container">
                     <mat-label>Crossover Rate</mat-label>
                     <input min="0.0" max="1.0 - data.mutation_rate" step="0.1" type="number" matInput
                         placeholder="Ex: 100" [value]="data.crossover_rate"
@@ -43,7 +43,7 @@
                 </mat-form-field>
             </div>
             <div class='row'>
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="container">
                     <mat-label>Subsample</mat-label>
                     <input min="0.0" max="1.0" step="0.1" type="number" matInput placeholder="Ex: 100"
                         [value]="data.subsample" (change)="configure('subsample', $event.target)">
@@ -54,14 +54,14 @@
     <div class='column'>
         <form class="example-form">
             <div class='row'>
-                <mat-form-field class="example-full-width">
+                <mat-form-field class="container">
                     <mat-label>Early Stop</mat-label>
                     <input min="0" [max]="data.generations" type="number" matInput placeholder="Ex: 100"
                         [value]="data.early_stop" (change)="configure('early_stop', $event.target)">
                 </mat-form-field>
             </div>
             <div class='row'>
-                <mat-form-field appearance="fill">
+                <mat-form-field class="container">
                     <mat-label>Config Dict</mat-label>
                     <mat-select (selectionChange)="configureConfigDict($event.value)">
                         <mat-option *ngFor="let config of configDictOptions" [value]="config">
@@ -71,7 +71,7 @@
                 </mat-form-field>
             </div>
             <div class='row'>
-                <mat-form-field appearance="fill">
+                <mat-form-field class="container">
                     <mat-label>Scoring</mat-label>
                     <mat-select (selectionChange)="configureScoring($event.value)">
                         <mat-option *ngFor="let scoring of scoringOptions" [value]="scoring">
