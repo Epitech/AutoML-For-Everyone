@@ -16,7 +16,30 @@
 }
 
 .divider {
-  width: 30%;
   height: auto;
   display: inline-block;
+}
+
+.prev {
+  color: white;
+  background-color: var(--docaposte-blue);
+  position: absolute;
+  left: 25px;
+  bottom: 20px;
+}
+
+.prev1 {
+  color: white;
+  background-color: var(--docaposte-blue);
+  position: absolute;
+  bottom: 20px;
+  left: 45%;
+}
+
+.prev2 {
+  color: white;
+  background-color: var(--docaposte-blue);
+  position: absolute;
+  bottom: 20px;
+  right: 25px;
 }
