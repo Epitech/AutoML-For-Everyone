@@ -43,3 +43,7 @@
   bottom: 20px;
   right: 25px;
 }
+
+#metricsTable td {
+  padding: 5px;
+}
