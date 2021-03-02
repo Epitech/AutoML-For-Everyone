@@ -38,6 +38,7 @@ def tpot_training(X: np.array, y: np.array, model_config: dict,
         log_file.unlink(missing_ok=True)
         with open(log_file, "w") as f, redirect_stdout(f):
             classifier.fit(X, y)
+            print("Generating visualizations...")
     else:
         classifier.fit(X, y)
     logger.info("Finished training")
