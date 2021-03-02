@@ -12,6 +12,7 @@ import pickle
 from dask.distributed import Client, fire_and_forget
 import pandas as pd
 import mongoengine
+import numpy as np
 
 import app.dataset as dataset
 import app.training as training
@@ -214,6 +215,8 @@ def create_app():
 
     @app.route("/model/<id>/predict", methods=["POST"])
     def predict_result(id):
+        dataset: Dataset
+        config: DatasetConfig
         model, config, dataset = Dataset.model_from_id(id)
 
         # Check if model is trained
@@ -225,11 +228,22 @@ def create_app():
         data = request.json
         app.logger.info(f"got data {data}")
         mapping = column_mapping.decode_mapping(dataset.column_mapping)
-        data = [[(mapping[k][line[k]] if k in mapping else float(line[k]))
-                 for k in sorted(line.keys())
-                 if k in config.columns
-                 and config.columns[k]
-                 and config.label != k] for line in data]
+        for line in data:
+            for k in line.keys():
+                if k in mapping:
+                    line[k] = mapping[k][line[k]]
+                else:
+                    line[k] = float(line[k])
+        app.logger.info(f"Decoded data {data}")
+        columns_order = [col
+                         for col in dataset.columns
+                         if col in config.columns
+                         and config.columns[col]
+                         and col != config.label]
+        app.logger.info(f"columns order {columns_order}")
+        data = np.array([[
+            line[col] for col in columns_order
+        ] for line in data])
         app.logger.info(f"sorted data {data}")
         with open(model.pickled_model_path, "rb") as f:
             pipeline = pickle.load(f)
