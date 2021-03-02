@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { combineLatest } from 'rxjs';
+import { MatTable } from '@angular/material/table';
+import { BehaviorSubject, combineLatest } from 'rxjs';
 
 import {
   get_conf_matrix_url,
@@ -9,10 +10,17 @@ import {
   get_predict,
   get_config,
   ConfigType,
+  get_model,
+  Model,
 } from '../../api';
 
 import { DialogContentNewData } from '../dialog-new-data/dialog-new-data';
 import { ProgressionDataService } from '../progression-data.service';
+
+type Metric = {
+  metric: string;
+  value: number;
+};
 
 @Component({
   selector: 'app-evaluate-data',
@@ -24,21 +32,34 @@ export class EvaluateDataComponent {
   matrix_image?: string;
   id?: string;
   config?: ConfigType;
+  model?: Model;
+  dataset?: string;
+
+  metricsColumnsToDisplay = ['metric', 'value'];
+  metrics = new BehaviorSubject<Metric[]>([]);
 
   constructor(
     public progressionData: ProgressionDataService,
     public dialog: MatDialog
   ) {
     combineLatest(
+      this.progressionData.getDataset(),
       this.progressionData.getModel(),
       this.progressionData.getTrained(),
       this.progressionData.getConfig(),
-      (model, trained, config) => ({ model, trained, config })
-    ).subscribe(({ model, trained, config }) => {
+      (dataset, model, trained, config) => ({ dataset, model, trained, config })
+    ).subscribe(({ dataset, model, trained, config }) => {
       if (config)
         get_config(config).then((config) => {
           this.config = config;
         });
+      if (model) {
+        get_model(model).then((model) => {
+          this.model = model;
+          this.createMetrics(model);
+        });
+      }
+      this.dataset = dataset;
       this.id = model;
       if (model && trained) {
         this.matrix_image = get_conf_matrix_url(model);
@@ -48,6 +69,23 @@ export class EvaluateDataComponent {
         this.matrix_image = undefined;
       }
     });
+  }
+
+  createMetrics(model: Model) {
+    let metrics: Metric[] = [];
+    const addMetric = (metric: string, value?: number) => {
+      if (value) {
+        metrics.push({
+          metric,
+          value,
+        });
+      }
+    };
+    addMetric('Training accuracy', model.analysis.training_accuracy);
+    addMetric('Testing accuracy', model.analysis.testing_accuracy);
+    addMetric('F1 score', model.analysis.f1_score);
+    console.log('Metrics', metrics);
+    this.metrics.next(metrics);
   }
 
   export = () => get_export(this.id!);

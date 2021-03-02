@@ -16,6 +16,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
 
 import { AppComponent } from './app';
 import { TopbarComponent } from './header/header';
@@ -74,6 +75,7 @@ import { TrainModelComponent } from './train-model/train-model';
     MatDividerModule,
     MatListModule,
     MatSelectModule,
+    MatTableModule,
   ],
   providers: [ProgressionDataService],
   bootstrap: [AppComponent],

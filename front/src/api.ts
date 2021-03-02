@@ -149,14 +149,14 @@ export type ModelConfig = {
 
 export type Model = {
   analysis: {
-    f1_score: number;
-    testing_accuracy: number;
-    training_accuracy: number;
+    f1_score?: number;
+    testing_accuracy?: number;
+    training_accuracy?: number;
   };
   id: string;
   model_config: ModelConfig;
   status: string;
-}
+};
 
 export const post_model = (config: ModelConfig, id?: string) =>
   api(`/config/${id}/model`, with_body(config));

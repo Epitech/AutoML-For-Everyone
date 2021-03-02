@@ -1,3 +1,22 @@
+<div class="row" *ngIf="dataset && config && model">
+    <h2>Results of training</h2>
+
+    <p>The model trained on dataset <em>{{dataset}}</em> and achieved theses results:</p>
+    <table mat-table [dataSource]="metrics.asObservable()">
+        <ng-container matColumnDef="metric">
+            <th mat-header-cell *matHeaderCellDef> Metric </th>
+            <td mat-cell *matCellDef="let element"> {{element.metric}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="value">
+            <th mat-header-cell *matHeaderCellDef> Value </th>
+            <td mat-cell *matCellDef="let element"> {{element.value | number}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="metricsColumnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: metricsColumnsToDisplay;"></tr>
+    </table>
+</div>
 <ng-container *ngIf="id">
     <div class="row container">
         <img [src]="matrix_image">
