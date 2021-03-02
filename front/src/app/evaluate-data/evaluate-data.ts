@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { BehaviorSubject, combineLatest } from 'rxjs';
+import * as Papa from 'papaparse';
 
 import {
   get_conf_matrix_url,
@@ -21,6 +22,8 @@ type Metric = {
   metric: string;
   value: number;
 };
+
+type CsvRow = { [key: string]: string };
 
 @Component({
   selector: 'app-evaluate-data',
@@ -95,56 +98,66 @@ export class EvaluateDataComponent {
       .open(DialogContentNewData)
       .afterClosed()
       .subscribe((file: File) => {
-        if (!file) return;
+        if (!file || !this.config) {
+          return;
+        }
 
-        const fd = new FileReader();
-        fd.onload = () => {
-          if (!fd.result) return alert('file error');
+        const config: ConfigType = this.config;
+        const expectedColumns: string[] = Object.keys(
+          this.config.columns
+        ).filter(
+          (key) => config.columns[key] && key !== config.label
+        );
+        console.log(expectedColumns);
 
-          const lines = fd.result.toString().split('\n');
+        // Clean a row by selecting only columns used in the config
+        function cleanRow(row: CsvRow): CsvRow | undefined {
+          const cleanedRow: CsvRow = {};
 
-          if (lines.length < 2) return alert('file is invalid');
-
-          const names = lines.shift()!.split(',');
-          const predictData: {
-            [key: string]: string;
-          }[] = [];
-
-          lines.forEach((line) => {
-            if (!line.length) return;
-            const cols = line.split(',');
-            const data: { [key: string]: string } = {};
-
-            names.forEach((c, i) => {
-              if (this.config!.columns[c]) data[c] = cols[i];
-            });
-
-            predictData.push(data);
-          });
-          get_predict(this.id!, predictData).then(
-            (result: { [key: string]: any }[]) => {
-              const text = result
-                .map((obj_result, i) => ({
-                  ...predictData[i],
-                  ...obj_result,
-                }))
-                .map((obj) => Object.values(obj).join(','))
-                .join('\n');
-
-              var element = document.createElement('a');
-              element.setAttribute(
-                'href',
-                'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+          for (const key of expectedColumns) {
+            if (row[key]) {
+              cleanedRow[key] = row[key];
+            } else {
+              alert(
+                'Missing at least one of required columns in the csv file:' +
+                  ` ${expectedColumns}`
               );
-              element.setAttribute('download', 'result_'.concat(file.name));
-              element.style.display = 'none';
-              document.body.appendChild(element);
-              element.click();
-              document.body.removeChild(element);
+              return;
             }
-          );
-        };
-        fd.readAsText(file);
+          }
+          return cleanedRow;
+        }
+
+        Papa.parse(file, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (result: { data: CsvRow[] }) => {
+            // Get the prediction from the server
+            const cleaned = result.data.map(cleanRow);
+            get_predict(this.id!, cleaned).then(
+              (predictions: { [key: string]: any }[]) => {
+                const newData = predictions.map((prediction, i) => ({
+                  ...result.data[i],
+                  ...prediction,
+                }));
+                // Transform back the data into CSV
+                const newCsv = Papa.unparse(newData);
+
+                // Open a browser download dialog for the user to save the result
+                const element = document.createElement('a');
+                element.setAttribute(
+                  'href',
+                  'data:text/plain;charset=utf-8,' + encodeURIComponent(newCsv)
+                );
+                element.setAttribute('download', 'result_'.concat(file.name));
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+              }
+            );
+          },
+        });
       });
   };
 }
