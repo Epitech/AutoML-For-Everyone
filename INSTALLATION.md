@@ -2,9 +2,8 @@
 
 If you encounter a problem similar to the screenshot below, check that virtualization is enabled in the bios.
 
-```
-Image 1
-```
+![alt text](./assets_docs/problem.png)
+
 Follow these instructions : 
 
 1. In the case the problem persists, start a powershell as administrator.
