@@ -45,5 +45,6 @@ docker-compose up --build
 
 To know how to use this web platform you will find user documentation via this [link](./HOW_TO_USE.md)
 
+# Credits
 
-Made with :heart: by [PoC](http://poc-innovation.com)
+Made with :heart: by [PoC](https://poc-innovation.fr)
