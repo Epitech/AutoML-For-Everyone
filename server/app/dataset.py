@@ -53,7 +53,7 @@ def create_initial_dataset_config(path: Path):
     }
 
 
-def get_dataset(path: Path, config: dict, mapping={}):
+def get_dataset(path: Path, config: dict, mapping={}, all=False):
     """Load and configure a dataset from disk"""
     data = pd.read_csv(path, sep=None)
     data = column_mapping.convert_with_column_mapping(data, mapping)
@@ -61,6 +61,8 @@ def get_dataset(path: Path, config: dict, mapping={}):
     label = config["label"]
     columns.remove(label)
     print(columns, label)
+    if all:
+        return data
     X = data[columns]
     y = data[label]
     return X, y

@@ -15,6 +15,7 @@ import mongoengine
 import numpy as np
 
 import app.dataset as dataset
+from app.dataset import get_dataset
 import app.training as training
 import app.linter as linter
 from app.model.dataset import Dataset
@@ -81,7 +82,7 @@ def create_app():
         return {}
 
     @app.route("/dataset/<id>")
-    def get_dataset(id):
+    def route_get_dataset(id):
         dataset = Dataset.from_id(id)
         return dataset.to_json()
 
@@ -92,9 +93,10 @@ def create_app():
         app.logger.info(
             f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
         try:
-            df = pd.read_csv(dataset.path, sep=None)
-            df = df[[k for k, v in config["columns"].items() if v]]
+            mapping = column_mapping.decode_mapping(dataset.column_mapping)
+            df = get_dataset(dataset.path, config, mapping, True)
             app.logger.info(f"Dataset columns: {df.columns}")
+            app.logger.info(f"Linting dataset {df}")
             return linter.lint_dataframe(df, config["label"])
         except KeyError:
             abort(400)
