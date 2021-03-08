@@ -86,12 +86,9 @@ def create_app():
         dataset = Dataset.from_id(id)
         return dataset.to_json()
 
-    @app.route("/dataset/<id>/config/lint", methods=["POST"])
-    def lint_config_directly(id):
-        config = request.json
-        dataset = Dataset.from_id(id)
+    def lint_config(config, dataset):
         app.logger.info(
-            f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
+            f"Linting Config: {config} parent {dataset.to_json()} path {dataset.path}")
         try:
             mapping = column_mapping.decode_mapping(dataset.column_mapping)
             df = get_dataset(dataset.path, config, mapping, True)
@@ -100,6 +97,12 @@ def create_app():
             return linter.lint_dataframe(df, config["label"])
         except KeyError:
             abort(400)
+
+    @app.route("/dataset/<id>/config/lint", methods=["POST"])
+    def lint_config_from_request(id):
+        config = request.json
+        dataset = Dataset.from_id(id)
+        return lint_config(config, dataset)
 
     @app.route("/dataset/<id>/sweetviz")
     def get_dataset_visualization(id):
@@ -127,17 +130,9 @@ def create_app():
         return config.to_json()
 
     @app.route("/config/<id>/lint", methods=["GET"])
-    def lint_config(id):
+    def lint_config_from_db(id):
         config, dataset = Dataset.config_from_id(id)
-        app.logger.info(
-            f"Config: {config} parent {dataset.to_json()} path {dataset.path}")
-        try:
-            df = pd.read_csv(dataset.path, sep=None)
-            df = df[[k for k, v in config["columns"].items() if v]]
-            app.logger.info(f"Dataset columns: {df.columns}")
-            return linter.lint_dataframe(df, config["label"])
-        except KeyError:
-            abort(400)
+        return lint_config(config, dataset)
 
     @app.route("/config/<id>/sweetviz")
     def get_config_visualization(id):
