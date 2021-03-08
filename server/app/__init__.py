@@ -96,8 +96,7 @@ def create_app():
             mapping = column_mapping.decode_mapping(dataset.column_mapping)
             df = get_dataset(dataset.path, config, mapping, True)
             app.logger.info(f"Dataset columns: {df.columns}")
-            app.logger.info(f"Linting dataset {df}")
-            return linter.lint_dataframe(df, config["label"])
+            return linter.lint_dataframe(df, config["label"], config['model_type'])
         except KeyError:
             abort(400)
 
@@ -135,7 +134,7 @@ def create_app():
             df = pd.read_csv(dataset.path, sep=None)
             df = df[[k for k, v in config["columns"].items() if v]]
             app.logger.info(f"Dataset columns: {df.columns}")
-            return linter.lint_dataframe(df, config["label"])
+            return linter.lint_dataframe(df, config["label"], config['model_type'])
         except KeyError:
             abort(400)
 

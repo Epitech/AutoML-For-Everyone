@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import pandas as pd
 from sklearn.feature_selection import SelectKBest, chi2, f_regression
 from sklearn.ensemble import ExtraTreesClassifier, RandomForestRegressor
@@ -16,7 +17,7 @@ def lint_column(col, df):
     return [[res, "", True] for linter in linters_list if (res := linter(df[col])) is not None]
 
 
-def lint_dataframe(df: pd.DataFrame, target, *, use_dask=False):
+def lint_dataframe(df: pd.DataFrame, target, type_model: str, *, use_dask=False):
     json = {
         "lints": {
             col: lints
@@ -25,16 +26,19 @@ def lint_dataframe(df: pd.DataFrame, target, *, use_dask=False):
         }
     }
     try:
+        df = df.dropna(axis=0)
         X = df.drop([target], axis=1)
         Y = df[target]
-        json = regression(X, Y, json)
-        #json = classification(X, Y, json)
+        if type_model == "classification":
+            json = classification(X, Y, json)
+        else:
+            json = regression(X, Y, json)
         return json
     except ValueError:
-        print("Found a value who is not an integer")
+        sys.stderr.write("Found a value who is not an integer")
         return json
     except:
-        print("Unexpected error")
+        sys.stderr.write("Unexpected error")
         return json
 
 def regression(X, Y, json):
@@ -99,15 +103,15 @@ def unnamed_column(col: pd.Series):
 @score_classification
 def check_score_class_classification(X, Y):
     list_string = []
-    bestF = SelectKBest(score_func=chi2, k=X.shape[1])
+    bestF = SelectKBest(k=2)
     fit = bestF.fit(X, Y)
     total = 0
     for value in fit.scores_:
         total += value
     percent = total / 100
     for idx in range(0, fit.scores_.shape[0]):
-        if fit.scores_[idx] < percent * 1.5:
-            list_string.append([f"{X.columns[idx]}", "https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest", True])
+        if fit.scores_[idx] < percent * 3:
+            list_string.append([f"According to Feature Selection f-test ANOVA this feature is not useful in the prediction", "https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest", True])
         else:
             list_string.append("")
     return list_string
