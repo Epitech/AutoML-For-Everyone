@@ -29,6 +29,7 @@ def lint_dataframe(df: pd.DataFrame, target, type_model: str, *, use_dask=False)
         df = df.dropna(axis=0)
         X = df.drop([target], axis=1)
         Y = df[target]
+        # print(f"MODEL TYPE {type_model}", file=sys.stderr)
         if type_model == "classification":
             json = classification(X, Y, json)
         else:
@@ -103,13 +104,16 @@ def unnamed_column(col: pd.Series):
 @score_classification
 def check_score_class_classification(X, Y):
     list_string = []
-    bestF = SelectKBest(k=2)
+    bestF = SelectKBest(k=X.shape[1])
     fit = bestF.fit(X, Y)
     total = 0
     for value in fit.scores_:
         total += value
     percent = total / 100
     for idx in range(0, fit.scores_.shape[0]):
+        # print(X.columns[idx], file=sys.stderr)
+        # print(fit.scores_[idx], file=sys.stderr)
+        # print(percent * 3, file=sys.stderr)
         if fit.scores_[idx] < percent * 3:
             list_string.append([f"According to Feature Selection f-test ANOVA this feature is not useful in the prediction", "https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest", True])
         else:

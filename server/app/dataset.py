@@ -59,10 +59,10 @@ def get_dataset(path: Path, config: dict, mapping={}, all=False):
     data = column_mapping.convert_with_column_mapping(data, mapping)
     columns = [k for k, v in config["columns"].items() if v]
     label = config["label"]
-    columns.remove(label)
-    print(columns, label)
     if all:
         return data
+    columns.remove(label)
+    print(columns, label)
     X = data[columns]
     y = data[label]
     return X, y
