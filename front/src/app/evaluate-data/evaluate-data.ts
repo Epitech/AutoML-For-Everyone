@@ -7,6 +7,7 @@ import * as Papa from 'papaparse';
 import {
   get_conf_matrix_url,
   get_export,
+  get_pickle,
   get_shap_url,
   get_predict,
   get_config,
@@ -92,6 +93,7 @@ export class EvaluateDataComponent {
   }
 
   export = () => get_export(this.id!);
+  export_pickle = () => get_pickle(this.id!);
 
   predictCSV = () => {
     this.dialog

@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
 }
 
 .container {
@@ -33,7 +34,15 @@
   background-color: var(--docaposte-blue);
   position: absolute;
   bottom: 20px;
-  left: 45%;
+  left: 30%;
+}
+
+.prev15 {
+  color: white;
+  background-color: var(--docaposte-blue);
+  position: absolute;
+  bottom: 20px;
+  left: 60%;
 }
 
 .prev2 {

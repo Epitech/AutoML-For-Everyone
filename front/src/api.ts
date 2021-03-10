@@ -182,6 +182,9 @@ export const get_status = (id: string): Promise<getStatusType> =>
 export const get_export = (id: string) =>
   window.open(URL + `/model/${id}/export`);
 
+export const get_pickle = (id: string) =>
+  window.open(URL + `/model/${id}/pickle`);
+
 export const get_predict = (id: string, data: any) =>
   api(`/model/${id}/predict`, with_body(data));
 
